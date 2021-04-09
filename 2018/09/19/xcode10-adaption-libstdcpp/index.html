@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jason">
+
+
+
+    <meta name="description" content="技术博客">
+
+
+
+<title>iOS开发：Xcode10兼容libstdc++ | { }</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jason&#39;s blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jason&#39;s blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">iOS开发：Xcode10兼容libstdc++</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jason</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">September 19, 2018</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/其他/">其他</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Xcode10正式版已发布，苹果在Xcode10中已移除了对libstdc++的支持。本文主要介绍临时处理方案。</p>
+<a id="more"></a>
+<p>编译失败，会提示：</p>
+<blockquote>
+<p>library not found for -libstdc++.6.0.9</p>
+</blockquote>
+<p>解决编译的问题，主要是解决符号搜索路径的问题。</p>
+<p>10.0版本之前Xcode支持libstdc++，可以将旧版本的libstdc++的tbd拷贝到新Xcode的SDK目录下即可通过编译。<br>其中，ARM架构SDK目录是<code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/</code>，x86架构SDK目录是<code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/</code>。将两个SDK目录下的libstdc++相关tbd文件拷贝到新Xcode目录下即可编译成功。</p>
+<p>此时运行iOS12模拟器，会提示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dyld: Library not loaded: /usr/lib/libstdc++.6.dylib</span><br><span class="line">  Referenced from: /Users/Jetsam/Library/Developer/CoreSimulator/Devices/C9E3FE9D-8B51-48A9-AFD6-D72BBA24B1A3/data/Containers/Bundle/Application/F179D341-324B-4D84-BDC3-A96FA82FD993/Demo.app/Demo</span><br><span class="line">  Reason: no suitable image found.  Did find:</span><br><span class="line">/usr/lib/libstdc++.6.dylib: mach-o, but not built for iOS simulator</span><br></pre></td></tr></table></figure></p>
+<p>这是因为iOS12的模拟器运行时找不到libstdc++动态库，其路径为链接时所指定的/usr/lib/libstdc++.6.dylib。<br>解决方法是，将x86架构的dylib拷贝到新Xcode的iOS12模拟器运行时相应目录下即可。具体目录是：<code>/Users/Jetsam/Downloads/Software/Xcode/10.0/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/usr/lib</code>（请替换Xcode10安装路径）。</p>
+<p>上述处理之后，重新运行即可。<br>建议先clean一下工程并删除模拟器上旧包。否则可能会出现类似这样的报错（报错为开启了address sanitize）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dyld: lazy symbol binding failed: Symbol not found: ___asan_version_mismatch_check_apple_1000</span><br><span class="line">  Referenced from: /Users/Jetsam/Library/Developer/CoreSimulator/Devices/C9E3FE9D-8B51-48A9-AFD6-D72BBA24B1A3/data/Containers/Bundle/Application/FFFF8E2F-6C9D-4A9E-9BC5-AA2B489E5E9A/Demo.app/Demo</span><br><span class="line">  Expected in: /Users/Jetsam/Library/Developer/CoreSimulator/Devices/C9E3FE9D-8B51-48A9-AFD6-D72BBA24B1A3/data/Containers/Bundle/Application/FFFF8E2F-6C9D-4A9E-9BC5-AA2B489E5E9A/Demo.app/Frameworks/libclang_rt.asan_iossim_dynamic.dylib</span><br><span class="line"></span><br><span class="line">  ...</span><br></pre></td></tr></table></figure></p>
+<p>当然了，最好是及时从libstdc++迁移到libc++了，具体步骤不赘述。附苹果的Xcode发布日志：</p>
+<blockquote>
+<p>Building with libstdc++ was deprecated with Xcode 8 and is not supported in Xcode 10 when targeting iOS. C++ projects must now migrate to libc++ and are recommended to set a deployment target of iOS 7 or later. Besides changing the C++ Standard Library build setting, developers should audit hard-coded linker flags and target dependencies to remove references to libstdc++ (including -lstdc++, -lstdc++.6.0.9, libstdc++.6.0.9.tbd, and libstdc++.6.0.9.dylib). Project dependencies such as static archives that were built against libstdc++ will also need to be rebuilt against libc++. (40885260)</p>
+</blockquote>
+<p>对于本文的trick，苹果的工程师这样说：</p>
+<blockquote>
+<p>libstdc++ was deprecated 5 years ago. Apple’s more recent platforms (tvOS and watchOS) don’t support it.<br>Support was removed from the iOS 12.0 Simulator runtime, but it remains in the iOS 12.0 (device) runtime for binary compatibility with shipping apps.<br>You should update your project to use libc++ rather than libstdc++ by setting the CLANG_CXX_LIBRARY build setting (“C++ Standard Library”) to libc++.<br>If you have any static libraries that depend on libstdc++.tbd, you can workaround it for now by copying the file from the SDKs in Xcode 9.4 (and libstdc++.*.dylib in the iOS simulator runtime), but that is not a long term solution. You should contact the provider of those libraries and request versions built using libc++.</p>
+</blockquote>
+<p>最后附上脚本：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 请替换新旧版本Xcode安装路径</span></span><br><span class="line">XCODE_9_PATH="/Users/cc/Downloads/Software/Xcode/9.1/Xcode9.1.app"</span><br><span class="line">XCODE_10_PATH="/Users/cc/Downloads/Software/Xcode/Xcode.app"</span><br><span class="line"></span><br><span class="line">IPHONE_SDK_SUFFIX="/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib"</span><br><span class="line">SIMULATOR_SDK_SUFFIX="/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib"</span><br><span class="line">RUNTIME_SUFFIX="/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/usr/lib"</span><br><span class="line"></span><br><span class="line">cp -R "$&#123;XCODE_9_PATH&#125;$&#123;IPHONE_SDK_SUFFIX&#125;/"libstdc++.* "$&#123;XCODE_10_PATH&#125;$&#123;IPHONE_SDK_SUFFIX&#125;/"</span><br><span class="line">cp -R "$&#123;XCODE_9_PATH&#125;$&#123;SIMULATOR_SDK_SUFFIX&#125;"/libstdc++.* "$&#123;XCODE_10_PATH&#125;$&#123;SIMULATOR_SDK_SUFFIX&#125;/"</span><br><span class="line">cp -R "$&#123;XCODE_9_PATH&#125;$&#123;RUNTIME_SUFFIX&#125;"/libstdc++.* "$&#123;XCODE_10_PATH&#125;$&#123;RUNTIME_SUFFIX&#125;/"</span><br></pre></td></tr></table></figure></p>
+<p>对于一些旧项目，或所依赖的第三方库有链接libstdc++动态库的项目，必须替换为libc++才可正常编译运行。<br>还是建议及时跟进更新。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/随想/"># 随想</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2018/10/11/how-to-write-a-sdk/">如何写一个可用的SDK？</a>
+            
+            
+            <a class="next" rel="next" href="/2018/08/13/fsck-disk-rescue/">技术碎片：一条命令"拯救"移动硬盘</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        Copyright <span>© Jason 2021. Powered by <a href="https://tech.kernelflow.com" target="_blank">Hexo</a>.</span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

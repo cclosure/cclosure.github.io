@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jason">
+
+
+
+    <meta name="description" content="技术博客">
+
+
+
+<title>iOS开发：关于模块化与路由 | { }</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jason&#39;s blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jason&#39;s blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">iOS开发：关于模块化与路由</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jason</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 3, 2016</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/iOS/">iOS</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>说一下iOS应用开发中的模块化跟路由的事情。<br><a id="more"></a></p>
+<p>前一段时间，一位同事一直怂我折腾这件事，关于组件化。组件化成了今年的热门，然后还有瓜。我大概也看了FRDIntent的邮件的探讨，挺有意思的。</p>
+<p>我觉得大家也都认同一点，没有任何一套程序架构是通用的。大家都在谈组件化或者模块化（下文统一用”模块化”），瓜吃到了最后的时候，我觉得争辩的时候都混淆这个了——他们讨论的原本不是同一件事情。一个在说模块化怎么解耦，一个在说路由。</p>
+<p>路由是路由，模块化是模块化。二者并不对立。</p>
+<h3 id="关于路由"><a href="#关于路由" class="headerlink" title="关于路由"></a>关于路由</h3><p><strong>路由</strong>本来就是一个提供寻址的功能，你可以使用路由表（或其他映射手段），来减少调用路径的硬编码；如果没有路由，顶多也就是手动写死功能调用的逻辑。但毕竟使用路由，还是可以通过注册/回调来减少一些麻烦。假如用推送的场景举个例子：</p>
+<p>在推送的payload中使用一个<code>action</code>的字段来标记推送业务类别，那么可以将各个不同业务的推送消息的处理逻辑，分别抽离成一个个单独的<code>service</code>（遵循特定的推送处理接口），并建立映射表<code>action</code>-&gt;<code>service</code> 。当接收到推送时，按约定的格式打包好数据，查找对应的<code>service</code>进行处理即可。</p>
+<p>我们建立的映射表也是一种路由。这样的好处是，无论是否添加新的推送业务，推送的核心处理模块无需修改，只需要新增相应的<code>service</code>即可。这是一层解耦。再有，如果旧版客户端接收到了一个新的推送业务，因为映射表查找不到相应的<code>service</code>可以直接忽略了也不会有其他并发症。</p>
+<p>跟原先的做法相比，可维护性提高，易于动态调用，并且单独的业务便于测试。</p>
+<h3 id="关于模块化"><a href="#关于模块化" class="headerlink" title="关于模块化"></a>关于模块化</h3><p>再说到<strong>模块化</strong>。大家的标题都是“组件化”，但是实际讨论的貌似是“业务模块”或者说“功能模块”？“组件”，Components，更偏向于独立、可重用的系统“零部件”，所以个人觉得业务层面或许称之为“模块”更合适些。按照分层架构，业务模块层会基于下层的基础服务（组件）进行开发。组件处于纵向的层级中，组件的职责相对单一，对上层不能有依赖关系；而业务模块是在整个架构的最上层，模块间存在横向的关系——某种程度来说，业务间存在无可避免的耦合。这个逻辑依赖关系，是业务内置的，是没办法通过软件工程的手段去除的。</p>
+<p>这样模块化就更好理解了。要尽量做到高内聚。要面向接口编程，提供接口、依赖接口，尽可能将耦合度降低到内在要求。路由当然也会起到一部分解耦的功用。</p>
+<p>说到底，都是通过增加”间接层”来实现。</p>
+<blockquote>
+<p>There is no problem in computer science that can’t be solved by adding another level of indirection.</p>
+</blockquote>
+<p>显式的命名为“Mediator”也好，还是实现成一个“Router”也好，其实不重要。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/iOS/"># iOS</a>
+                    
+                        <a href="/tags/架构/"># 架构</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2017/02/19/ios-safari-cookie/">iOS开发：跨开发商的应用数据共享</a>
+            
+            
+            <a class="next" rel="next" href="/2016/11/06/ios-view-transitioning-animation/">iOS开发：自定义转场动画</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        Copyright <span>© Jason 2021. Powered by <a href="https://tech.kernelflow.com" target="_blank">Hexo</a>.</span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jason">
+
+
+
+    <meta name="description" content="技术博客">
+
+
+
+<title>iOS开发：苹果内购组件 | { }</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jason&#39;s blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jason&#39;s blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">iOS开发：苹果内购组件</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jason</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 18, 2019</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>苹果内购代码组件的重构。</p>
+<a id="more"></a>
+<p>在iOS众多系统框架中，StoreKit算是被诟病得够多的了。StoreKit的设计，要求App来确保交易的最后交付——从苹果的生态来讲，这是可以理解的；但是交易流程中的错误，却很少返回有意义的错误码，“无法连接到iTunes Connect”成了无法明确的错误描述。</p>
+<p>本文主要是组件代码重构的一个说明。</p>
+<h3 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h3><p>内购的交互/交易流程如下图所示：</p>
+<p><img src="https://docs-assets.developer.apple.com/published/27c644a426/54baa6a8-c720-4fa3-85f9-94757bfb8fcf.png" alt></p>
+<p>IAP相关的其他背景知识，不做具体介绍，</p>
+<ul>
+<li>App内购买项目配置流程，请参考<a href="https://help.apple.com/app-store-connect/#/devb57be10e7" target="_blank" rel="noopener">官网</a>；</li>
+<li>订单凭据校验，请参考<a href="https://developer.apple.com/documentation/storekit/in-app_purchase/validating_receipts_with_the_app_store" target="_blank" rel="noopener">官网</a>；</li>
+<li>App内购买测试，请参考<a href="https://developer.apple.com/documentation/storekit/in-app_；purchase/testing_in-app_purchase_transactions" target="_blank" rel="noopener">官网</a>；</li>
+<li>苹果的官方<a href="https://developer.apple.com/library/archive/technotes/tn2387/_index.html#//apple_ref/doc/uid/DTS40014795" target="_blank" rel="noopener">示例</a>；</li>
+<li>有疑问请参考<a href="https://developer.apple.com/library/archive/technotes/tn2413/_index.html#//apple_ref/doc/uid/DTS40016228" target="_blank" rel="noopener">FAQ</a>；</li>
+</ul>
+<p>需要说明的几点是：</p>
+<ul>
+<li><code>Transaction</code>必须关闭，无论成功或失败。<code>Transaction</code>关闭后，App必须负责确保完成业务端的交易流程；</li>
+<li>需要考虑订单持久化问题；</li>
+<li>业务端的订单生成与校验逻辑；</li>
+</ul>
+<h3 id="任务"><a href="#任务" class="headerlink" title="任务"></a>任务</h3><p>方案的设定，我们把每一次发起的交易作为一个任务，加入到任务队列，生命周期完成后移出队列。这样设计，一是可以保证各个任务（的处理逻辑）是独立的、生命周期是完整的，二是任务队列可以协调任务的并发情况。</p>
+<p>任务的模型设计如下：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">HLTPaymentTask</span> : <span class="title">NSOperation</span>&lt;<span class="title">HLTOrderConfiguration</span>&gt;</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">@protected</span></span><br><span class="line">    HLTOrderModel *_order;</span><br><span class="line">    HLTPaymentCompletion _completion;</span><br><span class="line">    <span class="built_in">NSTimeInterval</span> _startTime;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 任务状态</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>) HLTTaskStatus   taskStatus;;</span><br><span class="line"><span class="comment">// 事件代理</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">weak</span>) <span class="keyword">id</span>&lt;HLTPaymentTaskDelegate&gt; delegate;</span><br><span class="line"><span class="comment">// 商品ID</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>,<span class="keyword">readonly</span>) <span class="built_in">NSString</span> *productId;</span><br><span class="line"><span class="comment">// 订单信息</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>,<span class="keyword">readonly</span>,<span class="keyword">nullable</span>) HLTOrderModel *order;</span><br><span class="line"><span class="comment">// 任务开始时间</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>,<span class="keyword">readonly</span>) <span class="built_in">NSTimeInterval</span> startTime;</span><br><span class="line"><span class="comment">// 商品（查询到商品信息后可取）</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>,<span class="keyword">readonly</span>,<span class="keyword">nullable</span>) <span class="built_in">SKProduct</span> *skProduct;</span><br><span class="line"><span class="comment">// 订单生成器</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">weak</span>) <span class="keyword">id</span>&lt;HLTOrderGenerator&gt; orderGenerator;</span><br><span class="line"><span class="comment">// 订单校验器</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">weak</span>) <span class="keyword">id</span>&lt;HLTOrderVerifier&gt; orderVerifier;</span><br><span class="line"><span class="comment">// 用户自定义信息</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>) <span class="built_in">NSDictionary</span> *userInfo;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>) <span class="built_in">NSObject</span> *userInfoObject;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">instancetype</span>)initWithProductId:(<span class="built_in">NSString</span> *)productId completion:(HLTPaymentCompletion)completion;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>可以看到，<code>Task</code>维护了自身的<code>taskStatus</code>，它本身可以做状态流转的校验。</p>
+<p><code>Task</code>持有的订单模型<code>HLTOrderModel</code>，如下：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">HLTOrderModel</span> : <span class="title">NSObject</span> &lt;<span class="title">NSSecureCoding</span>, <span class="title">HLTOrderConfiguration</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 商品id</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>) <span class="built_in">NSString</span> *productId;</span><br><span class="line"><span class="comment">// 订单id</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>) <span class="built_in">NSString</span> *orderId;</span><br><span class="line"><span class="comment">// 用户标志</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>) <span class="built_in">NSString</span> *userIdentifier;</span><br><span class="line"><span class="comment">// 订单来源</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>) HLTOrderSource orderSource;</span><br><span class="line"><span class="comment">// IAP交易状态</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>) HLTOrderStatus orderStatus;</span><br><span class="line"><span class="comment">// 订单创建时间</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>) <span class="built_in">NSTimeInterval</span> createdTime;</span><br><span class="line"><span class="comment">// IAP交易开始时间</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>) <span class="built_in">NSTimeInterval</span> iapBeginTime;</span><br><span class="line"><span class="comment">// IAP交易成功时间</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>) <span class="built_in">NSTimeInterval</span> iapFinishTime;<span class="comment">// todo iap transaction 超时</span></span><br><span class="line"><span class="comment">// 订单验证此次数</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>) <span class="built_in">NSInteger</span> receiptVerifyCount;</span><br><span class="line"><span class="comment">// 提示信息（预警等）</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>) <span class="built_in">NSString</span> *hint;</span><br><span class="line"><span class="comment">// 交易信息（用于备份）</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>,<span class="keyword">readonly</span>) HLTOrderTransaction *transaction;</span><br><span class="line"><span class="comment">// IAP交易信息</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>,<span class="keyword">readonly</span>) <span class="built_in">SKPaymentTransaction</span> *skTransaction;</span><br><span class="line"><span class="comment">// 更新时间</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>,<span class="keyword">readonly</span>) <span class="built_in">NSTimeInterval</span> updateTime;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 用户自定义信息</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>) <span class="built_in">NSDictionary</span> *userInfo;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>) <span class="built_in">NSObject</span> *userInfoObject;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">instancetype</span>)initWithProductId:(<span class="built_in">NSString</span> *)productId;</span><br><span class="line">- (<span class="built_in">BOOL</span>)isEqualToOrder:(HLTOrderModel *)other;</span><br><span class="line">- (<span class="keyword">void</span>)updateWithTransaction:(HLTOrderTransaction *)transaction;</span><br><span class="line">- (<span class="built_in">BOOL</span>)isOrderIdValid;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p><code>Order</code>作为贯穿整个交易流程的状态集合，</p>
+<p>① 是需要持久化到本地的；</p>
+<p>② 可以携带业务定义数据，这个是必然的；</p>
+<p>这两点都实现了。</p>
+<h3 id="业务逻辑注入"><a href="#业务逻辑注入" class="headerlink" title="业务逻辑注入"></a>业务逻辑注入</h3><p>IAP内部的交易流程，业务方其实是不太关注的。业务方关注的是，它用这个组件的时候，如何根据业务定制“订单生成/验证”的逻辑，如何获取交易流程的状态回调。</p>
+<p>① 状态回调，其实在<code>Task</code>的定义中可以看到，是提供了事件代理的。</p>
+<p>② 业务定制，<code>Task</code>提供了<code>orderGenerator</code>与<code>orderVerifier</code>作为业务逻辑注入的入口，实现接口就可以了；</p>
+<h3 id="外部入口"><a href="#外部入口" class="headerlink" title="外部入口"></a>外部入口</h3><p>业务层看到的入口：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">HLTStoreKit</span> : <span class="title">NSObject</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 订单生成器</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>) <span class="keyword">id</span>&lt;HLTOrderGenerator&gt; orderGenerator;</span><br><span class="line"><span class="comment">// 订单校验器</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>) <span class="keyword">id</span>&lt;HLTOrderVerifier&gt; orderVerifier;</span><br><span class="line"><span class="comment">// 持久化处理器</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>) <span class="keyword">id</span>&lt;HLTOrderPersistence&gt; orderPersistence;</span><br><span class="line"></span><br><span class="line">+ (<span class="keyword">instancetype</span>)defaultStore;</span><br><span class="line">- (<span class="built_in">NSTimeInterval</span>)launchTime;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> mark - Configuration</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> 设置日志处理器</span></span><br><span class="line"><span class="comment"> @param logger 日志处理器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">+ (<span class="keyword">void</span>)setLogger:(<span class="keyword">void</span> (^)(<span class="built_in">NSDictionary</span> *params, <span class="built_in">NSString</span> *format, ...))logger;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> mark - Transaction</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> 开始/结束 监听IAP交易回调</span></span><br><span class="line"><span class="comment"> @note 建议启动后开始监听</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">- (<span class="keyword">void</span>)startObservingTransaction;</span><br><span class="line">- (<span class="keyword">void</span>)stopObservingTransaction;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> 购买商品</span></span><br><span class="line"><span class="comment"> @note 错误信息请见`HLTPaymentErrorCode`</span></span><br><span class="line"><span class="comment"> </span></span><br><span class="line"><span class="comment"> @param productId 商品ID</span></span><br><span class="line"><span class="comment"> @param completion 完成回调</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">- (<span class="keyword">void</span>)purchase:(<span class="built_in">NSString</span> *)productId configuration:(HLTOrderConfigurationBlock __<span class="keyword">nullable</span>)configuration completion:(HLTPaymentCompletion __<span class="keyword">nullable</span>)completion;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> 重试订单（主要是verify）</span></span><br><span class="line"><span class="comment"> @param order 订单</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">- (<span class="keyword">void</span>)tryRetrievalOrder:(HLTOrderModel *)order;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>继续完善。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/iOS/"># iOS</a>
+                    
+                        <a href="/tags/IAP/"># IAP</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/03/30/ios-lib-notification/">iOS开发：自定义通知横幅</a>
+            
+            
+            <a class="next" rel="next" href="/2019/02/21/ios-lib-router/">iOS开发：路由组件</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        Copyright <span>© Jason 2021. Powered by <a href="https://tech.kernelflow.com" target="_blank">Hexo</a>.</span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

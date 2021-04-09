@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jason">
+
+
+
+    <meta name="description" content="技术博客">
+
+
+
+<title>初识Shark——SQLite在iOS上的ORM实现 | { }</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jason&#39;s blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jason&#39;s blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">初识Shark——SQLite在iOS上的ORM实现</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jason</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">July 20, 2016</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/iOS/">iOS</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <blockquote>
+<p>也许生活就是这样，并不存在决然真实的界限。重要的不是发生了什么事，而是怎样对自己叙述这些事。——木遥</p>
+</blockquote>
+<p>Shark是我觉得目前最好用的SQLite在iOS上的ORM实现。<br><a id="more"></a><br><img src="http://static.nautil.us/7869_398024cb5e21d749d728926a28b19d00.jpg" alt="live"></p>
+<h3 id="我的选择"><a href="#我的选择" class="headerlink" title="我的选择"></a>我的选择</h3><p>一直以来，iOS上的数据库ORM实现方案都不太合我意。大家主流用到的数据库存储方案大多如下：</p>
+<ul>
+<li>CoreData</li>
+<li>FMDB的衍生类库</li>
+<li>Realm</li>
+<li>NSCoding序列化</li>
+<li>Plist序列化</li>
+</ul>
+<p>项目中我用比较多的是CoreData及FMDB，Realm因为是新生数据库引擎、尚在demo/调研阶段，keyarchived以及plist已经不作为主要持久化手段了。</p>
+<p><a href="(https://developer.apple.com/library/watchos/documentation/Cocoa/Conceptual/CoreData/index.html)">CoreData</a>是苹果在iOS3.0（那些说5.0引入的[微笑]）引入的数据持久化框架，虽然支持使用SQLite作为存储后端，但它事实上不是为SQLite而来的；CoreData在设计上就有着存储后端、存储协调、对象上下文、对象模型明确分层的结构，奔着对象图管理（Object-Graph-Management）而非ORM的目标来实现。</p>
+<p>Realm是从YC孵化团队推出的自称跨平台（SQLite不跨平台吗？）、高效、使用简单的用于替代CoreData/SQLite的移动数据库引擎，声称比SQLite要快。因为没看到他的评测报告也没了解实现细节（引擎核心还是闭源，据说使用mmap），其他就不说了。但跨线程处理貌似还不如CoreData、模型对象不可跨线程传递就瞬间无爱，暂且略过。</p>
+<p>而FMDB实际上仅仅是一个SQLite Wrapper，把C/C++的sqlite接口转换为OC接口而已。所以实际很多人是FMDBxModel(runtime)模型化或者FMDBxMantle直接对接JSON。之前项目中虽然不是基于FMDB但也是基于SQLite+runtime做了property-&gt;sqlite.table的映射，这样本已可以满足一般的数据存储需求了。</p>
+<p>当初放弃FMDBx系列是状态同步、数据唯一性问题。<br>先以微信业务举个栗子，个人详情页面修改了备注昵称，我期望的是能以数据驱动的方式驱动通信录、会话列表、聊天页面所涉及个人昵称/备注的UI显示数据的修改，方案要求同一条数据库记录在内存中应该是同一个实例。而以当时的方案来说（包括FMDBx系列以及现在Shark）并没能支持，查询的结果集中每一个都是在内存中新创建的一个实例。结果就是，那时(2014-15)简直是通知乱飞的时代（要不就是一条巨长的delegate调用链、壮观的场面）。<br>想象一下，一条数据河流主干（我们假设为数据存储控制中心）、若干二/三级支流（业务层），当业务层引起数据变动时，“通知”意味着杂乱穿插水管引流到各个与之有关联的其他支流。而直观来看，数据从支流回到主干、再流动到其他分支是否更合理（也就是，业务层驱动数据/存储层变动，再通知数据管理层及其他业务层）</p>
+<p>至于准备放弃CoreData。。是因为旧项目CoreData操作太过繁琐，而多线程处理上经常挖坑埋坑。顺便，CoreData的多线程上，在两三年前大神就指出了Context Stack的方式效率还不如Context Merge；Magical Record似乎没有很好的处理到，最近发现了个比较有趣的第三方库Core Store，但旧项目主Objc就用不上了。<br>算下来当下已经没几个适合用的了，然后就发现了Shark。除了对象唯一性问题，Shark算是满足我的大部分需求了。</p>
+<h3 id="DBAccess-Shark的前世"><a href="#DBAccess-Shark的前世" class="headerlink" title="DBAccess: Shark的前世"></a>DBAccess: Shark的前世</h3><p>DBAccess，作者Adrian Herridge，一年前在github开放使用（非开源）。按github上的介绍，DBAccess甚至提供了CoreData数据迁移方法。我竟然一直没听说过这个库。。囧。<br>目前<a href="http://www.db-access.org/" target="_blank" rel="noopener">官网</a>上已声明废弃、替代品为Shark。</p>
+<h3 id="Shark"><a href="#Shark" class="headerlink" title="Shark"></a>Shark</h3><p>官网: <a href="http://sharkorm.com" target="_blank" rel="noopener">http://sharkorm.com</a></p>
+<p>算是因缘巧合，在Info上恰巧看到<a href="http://www.infoq.com/cn/news/2016/07/shark-open-source-orm-ios?utm_campaign=rightbar_v2&amp;utm_source=infoq&amp;utm_medium=news_link&amp;utm_content=link_text" target="_blank" rel="noopener">采访稿</a><br>按作者的说法Shark具有与DBAccess近乎一致的操作规范，由于公司高层不同意开源DBAccess暴露业务逻辑，才在DBAccess上进行重构开源的Shark。DBAccess作为一个闭源的framework，根据<a href="https://cocoapods.org/pods/DBAccess" target="_blank" rel="noopener">CocoaPods</a>的统计总下载量达到近9k，采用的app有135个(160720)。也是不错的成绩了。<br>（Realm已经下载220+w次，App安装接近4w，Star8.2k，不容忽略=.=）</p>
+<p>Shark根据目前<a href="https://cocoapods.org/pods/SharkORM" target="_blank" rel="noopener">CocoaPods</a>上面的统计，目前总下载量166，app使用数目35，star为29。</p>
+<p>今天简单写了个Shark的demo，使用还是相当简便的！</p>
+<ul>
+<li>简单测试CURD</li>
+<li>简单测试多线程：Object传递、存储</li>
+<li>简单测试事务操作</li>
+</ul>
+<p>需要说明（跟进）的问题有：</p>
+<ul>
+<li>数据表唯一键的问题，组合primary key貌似没找到说明</li>
+<li>多线程传递Object是安全的！</li>
+<li>多线程操作Object最终的结果仅依赖于提交的次序</li>
+<li>嵌套事务存在bug：如果同一个对象在不同transaction中被提交，将会产生多条数据库记录。【待修复】</li>
+<li>我希望添加的特性：Context维护数据的唯一性，目前实现是每个Object都有内部关联一个context！</li>
+</ul>
+<p>demo待补充上传，其他留坑待填。。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/iOS/"># iOS</a>
+                    
+                        <a href="/tags/SQLite/"># SQLite</a>
+                    
+                        <a href="/tags/Shark/"># Shark</a>
+                    
+                        <a href="/tags/SharkORM/"># SharkORM</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2016/07/23/des-illustrated-translated/">DES算法阐释（The DES Algorithm Illustrated）</a>
+            
+            
+            <a class="next" rel="next" href="/2016/07/17/much-to-be-done/">Much To Be Done</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        Copyright <span>© Jason 2021. Powered by <a href="https://tech.kernelflow.com" target="_blank">Hexo</a>.</span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

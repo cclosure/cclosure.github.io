@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jason">
+
+
+
+    <meta name="description" content="技术博客">
+
+
+
+<title>Core Data 数据版本/迁移 | { }</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jason&#39;s blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jason&#39;s blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Core Data 数据版本/迁移</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jason</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">August 8, 2016</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/iOS/">iOS</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>CoreData基本入坑攻略</p>
+<a id="more"></a>
+<h4 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h4><p>开发中使用Core Data的确是要配置挺多内容的，首先要配置Model-Context-Coordinator-Store、配置Store的数据迁移策略(以及可能的数据迁移)，还要处理多线程读写的问题。想用CoreData但又不想写太多这样业务无关代码时，MagicalRecord算是一个不错的选择。但像我这样用上了Core Data但没用（或者不想用）MagicalRecord之类的工具库时，做数据版本迁移是迟早的事情嘛。</p>
+<p>使用Core Data，基本问题涉及数据模型定义、Model-Context-Coordinator-Store配置、CURD操作，还有现在要说的数据版本/迁移，以后要说的多线程问题。最近刚好处理版本迁移问题，简单记录下，基本配置以及多线程等问题迟些再补充。</p>
+<p>关于Core Data以及它的数据版本迁移，可以先看下以下资料：</p>
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreData/index.html#//apple_ref/doc/uid/TP40001075" title="Core Data Programming Guide" target="_blank" rel="noopener">Core Data Programming Guide</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/cocoa/conceptual/CoreDataVersioning/Articles/Introduction.html#//apple_ref/doc/uid/TP40004399-CH1-SW1" title="Core Data Migration Programming Guide" target="_blank" rel="noopener">Core Data版本/数据迁移 Programming Guide</a></li>
+<li><a href="http://objccn.io/issue-4-7" title="objc.io文章" target="_blank" rel="noopener">自定义Core Data迁移（<strong>objc.io</strong>好文）</a></li>
+</ul>
+<h4 id="数据模型版本-映射模型"><a href="#数据模型版本-映射模型" class="headerlink" title="数据模型版本/映射模型"></a>数据模型版本/映射模型</h4><h5 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h5><p>Xcode可以直接在模型文件上创建不同版本的模型定义。</p>
+<ol>
+<li>定义新版本：选中.xcdatamodeld模型文件（其实是文件夹），菜单Editor-&gt;Add Model Version，可选择基于当前特定版本的模型创建新版本的模型定义；创建后，.xcdatamodeld文件夹下增加.xcdatamodel的模型文件（其实也是文件夹）；</li>
+<li>指定使用版本：选中.xcdatamodeld模型文件，在Xcode右侧工具栏中，Model Version可以选择模型所使用的版本，选中的版本带有绿色勾选高亮；</li>
+</ol>
+<p>sublime打开.xcdatamodeld目录可以一窥CoreData的模型文件（都提供给IDE使用）：<br>首先是增加了一个.xccurrentversion的plist版本记录文件，内容很简单，仅是用一个key来表明当前所选的model文件：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">plist</span> <span class="meta-keyword">PUBLIC</span> <span class="meta-string">"-//Apple//DTD PLIST 1.0//EN"</span> <span class="meta-string">"http://www.apple.com/DTDs/PropertyList-1.0.dtd"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plist</span> <span class="attr">version</span>=<span class="string">"1.0"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>_XCCurrentVersionName<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>XXXModel_v2.xcdatamodel<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plist</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>.xcdatamodel/contents则是模型定义的xml文件（仅作示例）：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">model</span> <span class="attr">userDefinedModelVersionIdentifier</span>=<span class="string">""</span> <span class="attr">type</span>=<span class="string">"com.apple.IDECoreDataModeler.DataModel"</span> <span class="attr">documentVersion</span>=<span class="string">"1.0"</span> <span class="attr">lastSavedToolsVersion</span>=<span class="string">"10171"</span> <span class="attr">systemVersion</span>=<span class="string">"15D21"</span> <span class="attr">minimumToolsVersion</span>=<span class="string">"Xcode 7.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">entity</span> <span class="attr">name</span>=<span class="string">"FDMessage"</span> <span class="attr">representedClassName</span>=<span class="string">"FDMessage"</span> <span class="attr">syncable</span>=<span class="string">"YES"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"clientID"</span> <span class="attr">optional</span>=<span class="string">"YES"</span> <span class="attr">attributeType</span>=<span class="string">"Integer 32"</span> <span class="attr">defaultValueString</span>=<span class="string">"0"</span> <span class="attr">syncable</span>=<span class="string">"YES"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"content"</span> <span class="attr">optional</span>=<span class="string">"YES"</span> <span class="attr">attributeType</span>=<span class="string">"String"</span> <span class="attr">syncable</span>=<span class="string">"YES"</span>/&gt;</span></span><br><span class="line">      	<span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"draft"</span> <span class="attr">optional</span>=<span class="string">"YES"</span> <span class="attr">maxCount</span>=<span class="string">"1"</span> <span class="attr">deletionRule</span>=<span class="string">"Nullify"</span> <span class="attr">destinationEntity</span>=<span class="string">"XXXXPostDraft"</span> <span class="attr">inverseName</span>=<span class="string">"game"</span> <span class="attr">inverseEntity</span>=<span class="string">"IMPPostDraft"</span> <span class="attr">syncable</span>=<span class="string">"YES"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">entity</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">elements</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">element</span> <span class="attr">name</span>=<span class="string">"FDMessage"</span> <span class="attr">positionX</span>=<span class="string">"-63"</span> <span class="attr">positionY</span>=<span class="string">"-18"</span> <span class="attr">width</span>=<span class="string">"128"</span> <span class="attr">height</span>=<span class="string">"180"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">elements</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">model</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>内容除了记录编辑器的一些信息，主要还是模型信息，且基本与Xcode上可视化的配置是对应的。</p>
+<ul>
+<li><code>elements</code>包含模型文件中的实体(Entity)列表，<code>positionX</code>、<code>positionY</code>、<code>width</code>、<code>height</code>暂未去探讨实际意义(可能是跟序列化过程中的数据布局相关)；</li>
+<li><code>entity</code>则是每个实体的配置信息，包括普通属性<code>attribute</code>、关系(属性)<code>relationship</code>（当然还有fetched property此处未有）。<code>name</code>是实体名称，<code>representedClassName</code>则是类名（syncable是iCloud相关?）；可以看到Core Data实体名称跟类名是可以独立的，这也是我们项目重构时可以利用的特性（已有开源库）。<ul>
+<li><code>attribute</code>属性，包含属性名<code>name</code>、是否可选<code>optional</code>、属性类型<code>attributeType</code>、默认值<code>defaultValueString</code>、syncable未知特性</li>
+<li><code>relationship</code>关系，包含关系名<code>name</code>、是否可选<code>optional</code>、<strong>关联数</strong><code>maxCount</code>（一对多|一对一）、<strong>删除规则</strong><code>deleteRule</code>、目标实体<code>destinationEntity</code>、本实体在目标实体中的关系名<code>inverseName</code>、<code>inverseEntity</code>，<code>syncable</code></li>
+</ul>
+</li>
+</ul>
+<p>这些模型定义配置文件由Xcode编译后，会在.app目录下生成CoreData运行时使用的模型定义文件（夹）XXXModel.momd。</p>
+<p>对于单一版本的模型文件，.momd中包含二进制格式XXXModel.mom模型定义以及一个biplist格式的版本信息文件VersionInfo.plist。对于多版本的模型文件.momd中则对应每个版本的模型定义生成一个.mom，以及.omo文件。你可能会好奇mom文件是什么呀可以逆向么？Xcode5之后， .xcdatamodel &gt; Editor &gt; Import可以完全复原数据模型的定义。。苹果你这样真的好么！是觉着iOS不能越狱还是咋滴🙄。。额.omo又是什么呢，其实是当前版本模型定义数据的另一种格式，stackoverflow上已经有回答了：</p>
+<blockquote>
+<p>At WWDC this year I talked to the Core Data engineers in the labs and they told me that the <code>.omo</code>file is just an optimized version of the <code>.mom</code> file. The <code>.mom</code> file is a binary plist while the <code>.omo</code> is some other sort of format that’s faster to load.</p>
+<p>They told me that you could safely remove the <code>.omo</code> file and Core Data would load from the—slightly slower—<code>.mom</code> file instead. They told me that doing so would only result in an additional few milliseconds of load time (which begs the question of why they bothered to optimize it in the first place).  —<a href="http://stackoverflow.com/questions/12136253/whats-core-datas-omo-file-is-it-required" target="_blank" rel="noopener">stackoverflow</a> by Ben Dolman, Jun 9’ 14</p>
+</blockquote>
+<p>转换一下格式<code>plutil -convert xml1 VersionInfo.plist -o Version.plist</code>可以看到VersionInfo.plist记录的是模型各个版本文件中实体配置的哈希：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">plist</span> <span class="meta-keyword">PUBLIC</span> <span class="meta-string">"-//Apple//DTD PLIST 1.0//EN"</span> <span class="meta-string">"http://www.apple.com/DTDs/PropertyList-1.0.dtd"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plist</span> <span class="attr">version</span>=<span class="string">"1.0"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>NSManagedObjectModel_CurrentVersionName<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>XXXXModel_v2<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>NSManagedObjectModel_VersionHashes<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">key</span>&gt;</span>XXXXModel<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>XXXXPostBar<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">data</span>&gt;</span></span><br><span class="line">			a6XkvwC0MIm1elA5eYd4uA3FzntU+vPOhevcQSaRZao=</span><br><span class="line">			<span class="tag">&lt;/<span class="name">data</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>XXXXPostBarItem<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">data</span>&gt;</span></span><br><span class="line">			Xn+9Y8VANgNRE9ErKE4Y817NpeG65zjH+9sZC3oN1vc=</span><br><span class="line">			<span class="tag">&lt;/<span class="name">data</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">key</span>&gt;</span>XXXXModel_v2<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>XXXXPostBar<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">data</span>&gt;</span></span><br><span class="line">			10VLx7aAOrS8fdqu9Nb8GYyUpkjJt+Z7J/7ZaiqPYXE=</span><br><span class="line">			<span class="tag">&lt;/<span class="name">data</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>XXXXPostBarItem<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">data</span>&gt;</span></span><br><span class="line">			Xn+9Y8VANgNRE9ErKE4Y817NpeG65zjH+9sZC3oN1vc=</span><br><span class="line">			<span class="tag">&lt;/<span class="name">data</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plist</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>可以看到在v2版本中实体XXXXPostBar改变了。CoreData将对发生改变的实体、依赖版本间映射关系进行数据迁移。（p.s .xcdatamodel文件Xcode不支持直接delete，可以尝试对.xcdatamodeld先remove reference，手动删除.xcdatamodel，再重新将.xcdatamodel添加到project）</p>
+<h5 id="映射模型"><a href="#映射模型" class="headerlink" title="映射模型"></a>映射模型</h5><p>不同版本的数据迁移，需要知道模型版本间的数据关系，Xcode使用.xcmappingmodel来编辑记录这种映射关系。.xcmappingmodel同样是一文件夹，包含xcmapping.xml。.xcmapping.xml内容示例如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" standalone="no"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">database</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">"file:///System/Library/DTDs/CoreData.dtd"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">database</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">databaseInfo</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>134481920<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">UUID</span>&gt;</span>701B3B37-7743-4E35-8C9C-CA081667974B<span class="tag">&lt;/<span class="name">UUID</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">nextObjectID</span>&gt;</span>114<span class="tag">&lt;/<span class="name">nextObjectID</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">metadata</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plist</span> <span class="attr">version</span>=<span class="string">"1.0"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">key</span>&gt;</span>NSPersistenceFrameworkVersion<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">integer</span>&gt;</span>641<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">key</span>&gt;</span>NSStoreModelVersionHashes<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">key</span>&gt;</span>XDDevAttributeMapping<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">data</span>&gt;</span>0plcXXRN7XHKl5CcF+fwriFmUpON3ZtcI/AfK748aWc=<span class="tag">&lt;/<span class="name">data</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">key</span>&gt;</span>XDDevEntityMapping<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">data</span>&gt;</span>qeN1Ym3TkWN1G6dU9RfX6Kd2ccEvcDVWHpd3LpLgboI=<span class="tag">&lt;/<span class="name">data</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">key</span>&gt;</span>XDDevMappingModel<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">data</span>&gt;</span>EqtMzvRnVZWkXwBHu4VeVGy8UyoOe+bi67KC79kphlQ=<span class="tag">&lt;/<span class="name">data</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">key</span>&gt;</span>XDDevPropertyMapping<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">data</span>&gt;</span>XN33V44TTGY4JETlMoOB5yyTKxB+u4slvDIinv0rtGA=<span class="tag">&lt;/<span class="name">data</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">key</span>&gt;</span>XDDevRelationshipMapping<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">data</span>&gt;</span>akYY9LhehVA/mCb4ATLWuI9XGLcjpm14wWL1oEBtIcs=<span class="tag">&lt;/<span class="name">data</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">key</span>&gt;</span>NSStoreModelVersionHashesVersion<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">integer</span>&gt;</span>3<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">key</span>&gt;</span>NSStoreModelVersionIdentifiers<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">string</span>&gt;</span><span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plist</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">metadata</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">databaseInfo</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">object</span> <span class="attr">type</span>=<span class="string">"XDDEVENTITYMAPPING"</span> <span class="attr">id</span>=<span class="string">"z102"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"sourcename"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>IMPRecent<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"mappingtypename"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>Undefined<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"mappingnumber"</span> <span class="attr">type</span>=<span class="string">"int16"</span>&gt;</span>2<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"destinationname"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>IMPRecent<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"autogenerateexpression"</span> <span class="attr">type</span>=<span class="string">"bool"</span>&gt;</span>1<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"mappingmodel"</span> <span class="attr">type</span>=<span class="string">"1/1"</span> <span class="attr">destination</span>=<span class="string">"XDDEVMAPPINGMODEL"</span> <span class="attr">idrefs</span>=<span class="string">"z113"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"attributemappings"</span> <span class="attr">type</span>=<span class="string">"0/0"</span> <span class="attr">destination</span>=<span class="string">"XDDEVATTRIBUTEMAPPING"</span> <span class="attr">idrefs</span>=<span class="string">"z110 z104 z107"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"relationshipmappings"</span> <span class="attr">type</span>=<span class="string">"0/0"</span> <span class="attr">destination</span>=<span class="string">"XDDEVRELATIONSHIPMAPPING"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">object</span> <span class="attr">type</span>=<span class="string">"XDDEVATTRIBUTEMAPPING"</span> <span class="attr">id</span>=<span class="string">"z103"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>segments<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"entitymapping"</span> <span class="attr">type</span>=<span class="string">"1/1"</span> <span class="attr">destination</span>=<span class="string">"XDDEVENTITYMAPPING"</span> <span class="attr">idrefs</span>=<span class="string">"z106"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">object</span> <span class="attr">type</span>=<span class="string">"XDDEVATTRIBUTEMAPPING"</span> <span class="attr">id</span>=<span class="string">"z104"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>draft<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"entitymapping"</span> <span class="attr">type</span>=<span class="string">"1/1"</span> <span class="attr">destination</span>=<span class="string">"XDDEVENTITYMAPPING"</span> <span class="attr">idrefs</span>=<span class="string">"z102"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">object</span> <span class="attr">type</span>=<span class="string">"XDDEVATTRIBUTEMAPPING"</span> <span class="attr">id</span>=<span class="string">"z105"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>nodisturb<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"entitymapping"</span> <span class="attr">type</span>=<span class="string">"1/1"</span> <span class="attr">destination</span>=<span class="string">"XDDEVENTITYMAPPING"</span> <span class="attr">idrefs</span>=<span class="string">"z114"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">object</span> <span class="attr">type</span>=<span class="string">"XDDEVENTITYMAPPING"</span> <span class="attr">id</span>=<span class="string">"z106"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"sourcename"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>IMPChatSession<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"mappingtypename"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>Undefined<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"mappingnumber"</span> <span class="attr">type</span>=<span class="string">"int16"</span>&gt;</span>3<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"destinationname"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>IMPChatSession<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"autogenerateexpression"</span> <span class="attr">type</span>=<span class="string">"bool"</span>&gt;</span>1<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"mappingmodel"</span> <span class="attr">type</span>=<span class="string">"1/1"</span> <span class="attr">destination</span>=<span class="string">"XDDEVMAPPINGMODEL"</span> <span class="attr">idrefs</span>=<span class="string">"z113"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"attributemappings"</span> <span class="attr">type</span>=<span class="string">"0/0"</span> <span class="attr">destination</span>=<span class="string">"XDDEVATTRIBUTEMAPPING"</span> <span class="attr">idrefs</span>=<span class="string">"z109 z108 z103"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"relationshipmappings"</span> <span class="attr">type</span>=<span class="string">"0/0"</span> <span class="attr">destination</span>=<span class="string">"XDDEVRELATIONSHIPMAPPING"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">object</span> <span class="attr">type</span>=<span class="string">"XDDEVATTRIBUTEMAPPING"</span> <span class="attr">id</span>=<span class="string">"z107"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>lastChatTime<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"entitymapping"</span> <span class="attr">type</span>=<span class="string">"1/1"</span> <span class="attr">destination</span>=<span class="string">"XDDEVENTITYMAPPING"</span> <span class="attr">idrefs</span>=<span class="string">"z102"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">object</span> <span class="attr">type</span>=<span class="string">"XDDEVATTRIBUTEMAPPING"</span> <span class="attr">id</span>=<span class="string">"z108"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>contactID<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"entitymapping"</span> <span class="attr">type</span>=<span class="string">"1/1"</span> <span class="attr">destination</span>=<span class="string">"XDDEVENTITYMAPPING"</span> <span class="attr">idrefs</span>=<span class="string">"z106"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">object</span> <span class="attr">type</span>=<span class="string">"XDDEVATTRIBUTEMAPPING"</span> <span class="attr">id</span>=<span class="string">"z109"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>unreadCount<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"entitymapping"</span> <span class="attr">type</span>=<span class="string">"1/1"</span> <span class="attr">destination</span>=<span class="string">"XDDEVENTITYMAPPING"</span> <span class="attr">idrefs</span>=<span class="string">"z106"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">object</span> <span class="attr">type</span>=<span class="string">"XDDEVATTRIBUTEMAPPING"</span> <span class="attr">id</span>=<span class="string">"z110"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>contactID<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"entitymapping"</span> <span class="attr">type</span>=<span class="string">"1/1"</span> <span class="attr">destination</span>=<span class="string">"XDDEVENTITYMAPPING"</span> <span class="attr">idrefs</span>=<span class="string">"z102"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">object</span> <span class="attr">type</span>=<span class="string">"XDDEVATTRIBUTEMAPPING"</span> <span class="attr">id</span>=<span class="string">"z111"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>contactID<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"entitymapping"</span> <span class="attr">type</span>=<span class="string">"1/1"</span> <span class="attr">destination</span>=<span class="string">"XDDEVENTITYMAPPING"</span> <span class="attr">idrefs</span>=<span class="string">"z114"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">object</span> <span class="attr">type</span>=<span class="string">"XDDEVATTRIBUTEMAPPING"</span> <span class="attr">id</span>=<span class="string">"z112"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>saveInContact<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"entitymapping"</span> <span class="attr">type</span>=<span class="string">"1/1"</span> <span class="attr">destination</span>=<span class="string">"XDDEVENTITYMAPPING"</span> <span class="attr">idrefs</span>=<span class="string">"z114"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">object</span> <span class="attr">type</span>=<span class="string">"XDDEVMAPPINGMODEL"</span> <span class="attr">id</span>=<span class="string">"z113"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"sourcemodelpath"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>FMDBDemo/Models/IMPlayer.xcdatamodeld/IMPlayer.xcdatamodel<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"sourcemodeldata"</span> <span class="attr">type</span>=<span class="string">"binary"</span>&gt;</span>YnBsaXN0MDDUAAEAAgADAAQABQAGDssOzFgkdmVyc2lvblgkb2JqZWN0c1kkYXJjaGl2ZXJUJHRv (...)</span><br><span class="line">        <span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"destinationmodelpath"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>FMDBDemo/Models/IMPlayer.xcdatamodeld/IMPlayer_v2.xcdatamodel<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"destinationmodeldata"</span> <span class="attr">type</span>=<span class="string">"binary"</span>&gt;</span>YnBsaXN0MDDUAAEAAgADAAQABQAGDssOzFgkdmVyc2lvblgkb2JqZWN0c1kkYXJjaGl2ZXJUJHRv (...)</span><br><span class="line">        <span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"entitymappings"</span> <span class="attr">type</span>=<span class="string">"0/0"</span> <span class="attr">destination</span>=<span class="string">"XDDEVENTITYMAPPING"</span> <span class="attr">idrefs</span>=<span class="string">"z114 z102 z106"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">object</span> <span class="attr">type</span>=<span class="string">"XDDEVENTITYMAPPING"</span> <span class="attr">id</span>=<span class="string">"z114"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"sourcename"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>IMPChatSetting<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"mappingtypename"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>Undefined<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"mappingnumber"</span> <span class="attr">type</span>=<span class="string">"int16"</span>&gt;</span>1<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"destinationname"</span> <span class="attr">type</span>=<span class="string">"string"</span>&gt;</span>IMPChatSetting<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"autogenerateexpression"</span> <span class="attr">type</span>=<span class="string">"bool"</span>&gt;</span>1<span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"mappingmodel"</span> <span class="attr">type</span>=<span class="string">"1/1"</span> <span class="attr">destination</span>=<span class="string">"XDDEVMAPPINGMODEL"</span> <span class="attr">idrefs</span>=<span class="string">"z113"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"attributemappings"</span> <span class="attr">type</span>=<span class="string">"0/0"</span> <span class="attr">destination</span>=<span class="string">"XDDEVATTRIBUTEMAPPING"</span> <span class="attr">idrefs</span>=<span class="string">"z105 z112 z111"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relationship</span> <span class="attr">name</span>=<span class="string">"relationshipmappings"</span> <span class="attr">type</span>=<span class="string">"0/0"</span> <span class="attr">destination</span>=<span class="string">"XDDEVRELATIONSHIPMAPPING"</span>&gt;</span><span class="tag">&lt;/<span class="name">relationship</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">database</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><code>databaseInfo</code>记录了数据库元信息，metadata中包含了持久化框架版本(CoreData)、存储版本哈希（包括涉及的Attribute、Entity、MappingModel、Property、Relation）；<code>object</code>包含好几种不同<code>type</code>的信息，如<code>XDDEVENTITYMAPPING</code>、<code>XDDEVATTRIBUTEMAPPING</code>、<code>XDDEVMAPPINGMODEL</code>等，<code>XDDEVMAPPINGMODEL</code>包含了映射源模型及目标模型的model文件路径、model二进制数据（大概是为了分离datamodel与mappingmodel；</p>
+<p><code>databaseInfo</code>中的meta字段sqlite中<code>SELECT Z_PLIST FROM Z_METADATA;</code>比较类似；可通过以下方法获取元数据：<code>-[[NSPersistentStoreCoordinator metadataForPersistentStoreOfType:nilURL:urlerror:]</code>，读取结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    NSPersistenceFrameworkVersion = 641;</span><br><span class="line">    NSStoreModelVersionHashes =     &#123;</span><br><span class="line">        IMPChatSession = &lt;1d1f9997 5ad2eb64 ed28853b 255c3384 f4978d43 6b54119f bc37776f 9382a644&gt;;</span><br><span class="line">        IMPChatSetting = &lt;8d414f3c c71afbf6 cf2e7a9e d42e548c 24dfe5ff 8fd299a9 c57881d6 70d2ba2f&gt;;</span><br><span class="line">        IMPRecent = &lt;05593ecc 8e61b083 71b8f5a0 2c97d873 4db29dd6 5a63ffb8 968bf814 c7bf6304&gt;;</span><br><span class="line">    &#125;;</span><br><span class="line">    NSStoreModelVersionHashesVersion = 3;</span><br><span class="line">    NSStoreModelVersionIdentifiers =     (</span><br><span class="line">        &quot;&quot;</span><br><span class="line">    );</span><br><span class="line">    NSStoreType = SQLite;</span><br><span class="line">    NSStoreUUID = &quot;1AAFEF41-289B-4F22-BBD7-E05796B3B651&quot;;</span><br><span class="line">    &quot;_NSAutoVacuumLevel&quot; = 2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>.xcmappingmodel经Xcode编译后在.app目录中生成.cdm文件。</p>
+<h4 id="轻量级数据迁移"><a href="#轻量级数据迁移" class="headerlink" title="轻量级数据迁移"></a>轻量级数据迁移</h4><p>当数据模型的改变仅是实体或属性重命名、增删实体属性、属性可选特性更改或定义默认值等改变时(所有支持类型看<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreDataVersioning/Articles/vmLightweightMigration.html#//apple_ref/doc/uid/TP40004399-CH4-SW2" target="_blank" rel="noopener">这里</a>)，使用轻量级数据迁移即可；NSPersistentStoreCoordinator 会自动推断出mapping model(因为VersionInfo及mom中包含了足够的信息)，实现代码寥寥数行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">NSError *error = nil;</span><br><span class="line">NSURL *storeURL = &lt;#The URL of a persistent store#&gt;;</span><br><span class="line">NSPersistentStoreCoordinator *psc = &lt;#The coordinator#&gt;;</span><br><span class="line">NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:</span><br><span class="line">    [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,</span><br><span class="line">    [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];</span><br><span class="line"> </span><br><span class="line">BOOL success = [psc addPersistentStoreWithType:&lt;#Store type#&gt;</span><br><span class="line">                    configuration:&lt;#Configuration or nil#&gt; URL:storeURL</span><br><span class="line">                    options:options error:&amp;error];</span><br><span class="line">if (!success) &#123;</span><br><span class="line">    // Handle the error.</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>只需要添加持久化存储时添加选项支持自动推断mappingModel进行数据迁移即可。虽然可以手动迁移数据，苹果还是推荐尽可能利用自动推断方式进行迁移：</p>
+<blockquote>
+<p>A further advantage of using lightweight migration—beyond the fact that you don’t need to create the mapping model yourself—is that if you use an inferred model and you use the SQLite store, then Core Data can perform the migration in situ (solely by issuing SQL statements). This can represent a significant performance benefit as Core Data doesn’t have to load any of your data. Because of this, you are encouraged to use inferred migration where possible, even if the mapping model you might create yourself would be trivial.</p>
+</blockquote>
+<p>另外，要支持lightwight的方式，Core Data必须要能在运行时找得到源模型及(迁移)目标模型，这个搜索路径默认是<code>[NSBundle allBundles]</code>以及<code>[NSBundle allFrameworks]</code>，模型文件存放在此外的需要使用Migration manager，见<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreDataVersioning/Articles/vmLightweightMigration.html#//apple_ref/doc/uid/TP40004399-CH4-SW3" target="_blank" rel="noopener">此处</a>说明。</p>
+<h4 id="自定义数据迁移"><a href="#自定义数据迁移" class="headerlink" title="自定义数据迁移"></a>自定义数据迁移</h4><p>&lt;未完&gt;</p>
+<p>参考资料：</p>
+<p>1、<a href="http://osdir.com/ml/general/2013-06/msg34547.html" target="_blank" rel="noopener">http://osdir.com/ml/general/2013-06/msg34547.html</a></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/iOS/"># iOS</a>
+                    
+                        <a href="/tags/CoreData/"># CoreData</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2016/10/23/ios-animation-mediatiming/">iOS开发：CAMediaTiming与动画</a>
+            
+            
+            <a class="next" rel="next" href="/2016/08/03/translated-gcd-in-depth-i/">Grand Central Dispatch in depth(part-1)</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        Copyright <span>© Jason 2021. Powered by <a href="https://tech.kernelflow.com" target="_blank">Hexo</a>.</span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jason">
+
+
+
+    <meta name="description" content="技术博客">
+
+
+
+<title>JSON Web Token | { }</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jason&#39;s blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jason&#39;s blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">JSON Web Token</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jason</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 10, 2020</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>本文介绍一下JSON Web Token。</p>
+<a id="more"></a>
+<p>第三方平台授权登录，是当下互联网产品的标配支持。</p>
+<p>但是OAuth2在移动端实践是不安全的——有不少的产品，反正我见过国内一个2亿多用户量的App，为了实现的方便，将client_id跟client_secret保存在客户端。通常一个反编译查找下字符串可以找到了，或者Charles抓包一下，一览无遗。暴露了没关系的话就不要说了。多的不说，股价扛不住媒体的叨叨。</p>
+<p>怎么规避这种问题？</p>
+<p>Sign In With Apple在WWDC2019推出后，今年几乎是强制性的接入（发觉并没有什么反抗？），我觉得今年之后苹果的生态会更深入人心了。面对千万级别以上的开发者，苹果怎么从技术方案上保证数据安全呢？苹果使用的是JSON Web Token。</p>
+<h3 id="JSON-Web-Token概念"><a href="#JSON-Web-Token概念" class="headerlink" title="JSON Web Token概念"></a>JSON Web Token概念</h3><p>JSON Web Token（简称JWT）的规范性文件请看<a href="https://tools.ietf.org/html/rfc7519" target="_blank" rel="noopener">RFC-7519</a>。让我们看看IETF的对JWT的简介：</p>
+<blockquote>
+<p>JSON Web Token (JWT) is a compact, URL-safe means of representing<br>claims to be transferred between two parties.  The claims in a JWT<br>are encoded as a JSON object that is used as the payload of a JSON<br>Web Signature (JWS) structure or as the plaintext of a JSON Web<br>Encryption (JWE) structure, enabling the claims to be digitally<br>signed or integrity protected with a Message Authentication Code<br>(MAC) and/or encrypted.</p>
+</blockquote>
+<p>claim是一种对所有权的宣示。JWT主要是通过对claims做签名，来保证这种所有权的有效性。</p>
+<h3 id="JSON-Web-Token结构"><a href="#JSON-Web-Token结构" class="headerlink" title="JSON Web Token结构"></a>JSON Web Token结构</h3><p>那么JWT是什么样子呢？我们看一个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1MjAyMDAxMDEiLCJuYW1lIjoiSmFzb24gQ2hhbiIsImlhdCI6MTU3Nzg4MjUxMH0.kB8ZprG8nGbNhR7AgcBoHOJaI1NucNMheN9IzoVdJK4</span><br></pre></td></tr></table></figure>
+<p>可以看到JWT令牌是一个字符串，并且由<code>.</code>点号分隔为3段。</p>
+<p>解码后可以看到：（先不管是什么解码的啦！😂）<br>第一部分是：（Header）</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"alg"</span>: <span class="string">"HS256"</span>,</span><br><span class="line">  <span class="attr">"typ"</span>: <span class="string">"JWT"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第二部分是：（Payload）</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"sub"</span>: <span class="string">"u20200101"</span>,</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"Jason Chan"</span>,</span><br><span class="line">  <span class="attr">"iat"</span>: <span class="number">1577882510</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第三部分是：（Signature）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fͅhZ#Snp!xH΅]$</span><br></pre></td></tr></table></figure>
+<p>事实上，一个JWT就是由三部分组成：头部、有效载荷、签名。格式是<code>Header.Payload.Signature</code>，三部分通过点号连接。</p>
+<p>以上是做了Base64编码，详细可以看JWT的规范里的说明。</p>
+<p><strong>Header</strong>中指定了签名的散列算法，<code>alg</code>为算法的缩写，比如<code>RS256</code>、<code>HS256</code>。例子中是<code>HS256</code>，也就是HMAC SHA256）。<code>typ</code>为类型的缩写，可选的有[<a href="https://tools.ietf.org/html/rfc7519#ref-JWS" target="_blank" rel="noopener">JWS</a>] 与 [<a href="https://tools.ietf.org/html/rfc7519#ref-JWE" target="_blank" rel="noopener">JWE</a>]。对于非对称加密签名的算法，可能有<code>kid</code>字段。</p>
+<p><strong>Payload</strong>是包含声明的有效载荷。声明是关于实体（比如用户）与其他元数据。有特定的声明字段，规范里的声明字段有：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&quot;iss&quot; (Issuer) Claim</span><br><span class="line">&quot;sub&quot; (Subject) Claim</span><br><span class="line">&quot;aud&quot; (Audience) Claim</span><br><span class="line">&quot;exp&quot; (Expiration Time) Claim</span><br><span class="line">&quot;nbf&quot; (Not Before) Claim</span><br><span class="line">&quot;iat&quot; (Issued At) Claim</span><br><span class="line">&quot;jti&quot; (JWT ID) Claim</span><br></pre></td></tr></table></figure>
+<p>主题<code>sub</code>是主要的声明。</p>
+<p>也可以有自定义的声明字段。</p>
+<p><strong>Signature</strong>签名部分，根据header中指定的算法进行签名。比如例子中的<code>HS256</code>，是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">HMACSHA256(</span><br><span class="line">	base64Encode(header) + &quot;.&quot; + base64Encode(payload),</span><br><span class="line">  secret)</span><br></pre></td></tr></table></figure>
+<p>签名算法一般是<code>RS256</code>、<code>HS256</code>。前者是<code>RSA</code>非对称加密的私钥签名，后者则是<code>HMAC</code>的对称加密。其他签名算法此处不表。</p>
+<h3 id="JSON-Web-Token的潜在风险"><a href="#JSON-Web-Token的潜在风险" class="headerlink" title="JSON Web Token的潜在风险"></a>JSON Web Token的潜在风险</h3><p>我们需要理解JWT的设计初衷。JWT不是作为一个数据加密的用途的，它的头部及有效载荷实际是明文传输的。JWT主要是验证数据的有效性，避免被篡改。</p>
+<p>潜在的问题包括：</p>
+<ul>
+<li>敏感信息泄露</li>
+<li>JWT的重放风险</li>
+<li>算法修改攻击</li>
+<li>对称加密签名密钥破解</li>
+</ul>
+<p>数据的传输阶段，有效载荷是明文的，所以不要传输敏感信息。而作为身份验证的一种手段，JWT存在伪造身份恶意攻击的风险。比如JWT的重放风险，虽然这个用其他的身份验证方式同样存在的。另一种问题是算法修改攻击，校验方应该限定<strong>Header</strong>中的<code>sig</code>，谨慎使用JWT库。如果JWT支持none算法，可能直接跳过签名的认证；或者攻击时将RS256修改为HS256，同样有签名验证的漏洞。可以参考这篇<a href="https://www.sjoerdlangkemper.nl/2016/09/28/attacking-jwt-authentication/" target="_blank" rel="noopener">文章</a>。</p>
+<p>本文参考：<a href="https://jwt.io/introduction/" target="_blank" rel="noopener">Introduction to JSON Web Tokens</a></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/JWT/"># JWT</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/03/17/blog-backup/">DNSPod换成了Cloudflare</a>
+            
+            
+            <a class="next" rel="next" href="/2019/11/13/gitlab-hiring-ban/">Gitlab的招聘条例</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        Copyright <span>© Jason 2021. Powered by <a href="https://tech.kernelflow.com" target="_blank">Hexo</a>.</span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jason">
+
+
+
+    <meta name="description" content="技术博客">
+
+
+
+<title>Flutter上手指南（环境搭建） | { }</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jason&#39;s blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jason&#39;s blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Flutter上手指南（环境搭建）</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jason</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 15, 2019</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>“Write once, run anywhere”，在移动互联网时代是一个难以抗拒的诱惑。</p>
+<a id="more"></a>
+<p>自2018年2月27日发布Beta版以来，Flutter在国内移动端的「讨论」越来越活跃。再加之咸鱼团队的押注加持，越来越多的团队开始打起了Flutter的主意。</p>
+<p>是的，”Write once, run anywhere”，在移动互联网时代是一个难以抗拒的诱饵。接入端的分化，对服务商是一个成本问题，产品亦在朝着淡化接入端的差异性的方向发展。H5、React Native、Weex、Lua、Xamarin都不失为一种值得考虑的方案。而小程序这两年的强势突进，各个互联网Giant不得不警惕和防守。而对开发人员来说，又是另一抉问题的抉择了。</p>
+<p>Flutter不是第一个跨平台开发的框架，当然也不会是最后一个。与上述提到的方案不同的是，Flutter不是对原生平台底层框架的桥接，而是另起炉灶基于Skia引擎进行渲染。但毕竟UI只是业务开发的一部分，具体还看性能及框架提供的能力。</p>
+<p>本文先介绍上手指南之环境搭建（Mac平台），再来简单看看Flutter的基础原理知识。</p>
+<!-- more -->
+<h4 id="环境要求"><a href="#环境要求" class="headerlink" title="# 环境要求"></a># 环境要求</h4><ul>
+<li>Mac OS 64位 </li>
+<li>磁盘空间700MB（不包括IDE </li>
+<li>命令行工具：bash、curl、git、mkdir、rm、unzip、which </li>
+<li>Xcode 9.0+(请确保xcode-select指向正确的版本)</li>
+</ul>
+<h4 id="下载SDK"><a href="#下载SDK" class="headerlink" title="# 下载SDK"></a># 下载SDK</h4><p>下载地址可在<a href="https://flutter.dev/docs/get-started/install/macos" target="_blank" rel="noopener">官网</a>获取，本次使用地址：<a href="https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_v1.7.8+hotfix.3-stable.zip" target="_blank" rel="noopener">v1.7.8</a>（约600M） </p>
+<p>下载完成后解压缩SDK到工作目录。可考虑预加载依赖项、执行命令flutter precache 。</p>
+<h4 id="环境配置"><a href="#环境配置" class="headerlink" title="# 环境配置"></a># 环境配置</h4><p>终端执行flutter doctor检查环境，检查是否需要安装其他依赖项来完成。</p>
+<p>可能遇到报错： </p>
+<blockquote>
+<p>GIH-D-11754% flutter doctor        </p>
+<p>Doctor summary (to see all details, run flutter doctor -v): </p>
+<p>[✓] Flutter (Channel stable, v1.7.8+hotfix.3, on Mac OS X 10.13.6 17G65, locale </p>
+<p>​    zh-Hans-CN) </p>
+<p>[✗] Android toolchain - develop for Android devices </p>
+<p>​    ✗ Unable to locate Android SDK. </p>
+<p>​     …</p>
+<p>​      If the Android SDK has been installed to a custom location, set </p>
+<p>​      ANDROID_HOME to that location. </p>
+<p>​      You may also want to add it to your PATH environment variable. </p>
+<p>⣟ideviceinfo returned an error: </p>
+<p>ERROR: Could not connect to lockdownd, error code -17 </p>
+</blockquote>
+<p>修改bash配置，将flutter的可执行文件路径配置到PATH中： </p>
+<blockquote>
+<p>export PATH=/Users/cc/Kernel/0xFlutter/flutter/bin:$PATH </p>
+<p>export PUB_HOSTED_URL=<a href="https://pub.flutter-io.cn" target="_blank" rel="noopener">https://pub.flutter-io.cn</a> </p>
+<p>export FLUTTER_STORAGE_BASE_URL=<a href="https://storage.flutter-io.cn" target="_blank" rel="noopener">https://storage.flutter-io.cn</a> </p>
+</blockquote>
+<p>后面两个是避免网络环境问题，可使用国内站点。</p>
+<p>若已安装Android Studio，配置：</p>
+<blockquote>
+<p>export ANDROID_HOME=/Users/cc/DevEnv/Android/sdk </p>
+<p>#Android 模拟器路径 </p>
+<p>export PATH=${PATH}:${ANDROID_HOME}/emulator </p>
+<p>#Android tools 路径 </p>
+<p>export PATH=${PATH}:${ANDROID_HOME}/tools </p>
+<p>#Android 平台工具路径 </p>
+<p>export PATH=${PATH}:${ANDROID_HOME}/platform-tools </p>
+<p>#Android NDK路径 </p>
+<p>export ANDROID_NDK_HOME=/Users/cc/DevEnv/Android/ndk/android-ndk-r10e </p>
+</blockquote>
+<p>若暂时不使用Android开发，可暂不安装Android Studio（而且这货也挺大的） 。</p>
+<h4 id="创建Demo"><a href="#创建Demo" class="headerlink" title="# 创建Demo"></a># 创建Demo</h4><p>终端运行：flutter create</p>
+<p>可能会遇到失败的情况： </p>
+<blockquote>
+<p>…</p>
+<p>All done! </p>
+<p>ideviceinfo returned an error: </p>
+<p>ERROR: Could not connect to lockdownd, error code -17 </p>
+</blockquote>
+<p>继续。</p>
+<p>安装将flutter安装到设备的工具：（官方） </p>
+<blockquote>
+<p>brew install –HEAD libimobiledevice </p>
+<p>brew install ideviceinstaller ios-deploy cocoapods</p>
+<p>#注：若已安装旧版本可能有不兼容情况，删除重装</p>
+</blockquote>
+<p>安装libimobiledevice失败，需要安装usbmuxd：（若原已安装，可以先brew unlink usbmuxd ） </p>
+<blockquote>
+<p>brew install –HEAD usbmuxd</p>
+<p>重新安装工具：</p>
+<p>brew install –HEAD usbmuxd </p>
+<p>brew link usbmuxd </p>
+<p>brew install –HEAD libimobiledevice </p>
+<p>brew install ideviceinstaller ios-deploy cocoapods </p>
+</blockquote>
+<p>此时，flutter run 是成功的了，可以跑demo。</p>
+<p>（在启动模拟器后可以运行，若存在多台设备，需要-d指定；若需真机调试，需要确保设备id已加入调试设备列表） </p>
+<h4 id="IDE及配置"><a href="#IDE及配置" class="headerlink" title="# IDE及配置"></a># IDE及配置</h4><p>一般建议使用VS Code，上面也有很多相关插件，比如Dart、Flutter这些是必装的。看自己喜好。</p>
+<h4 id="Flutter基本知识"><a href="#Flutter基本知识" class="headerlink" title="# Flutter基本知识"></a># Flutter基本知识</h4><p>基本环境配置完，可以来了解一下Flutter基本知识了。以下是Flutter官方给出的系统架构图：</p>
+<p><img src="flutter-arch.png" alt></p>
+<p>可以看出Flutter框架分为三层：Framework层、Engine层和Embedder层。</p>
+<p>Embedder层是平台相关的实现，主要包括事件循环、打包、线程设置、原生插件、渲染相关；</p>
+<p>Engine层则是Flutter的核心，使用C++开发的，主要包括Skia渲染引擎、Dart 虚拟机、文本布局渲染等；</p>
+<p>Framework层是Dart语言实现的应用层。最顶层是Material与Cupertino两种Widge，往下则是渲染、绘画、动画、手势等基础功能的封装了。</p>
+<p>那Flutter是怎么渲染的呢？可以看看官方提供的流程图：</p>
+<p><img src="flutter-render.png" alt></p>
+<h5 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h5><p>关于后续。个人感觉按目前单凭宣称的内置Skia渲染引擎不足以撬动整块大石头。何况Dart是单线程执行模型，很多以前遇见的问题，换成Flutter依然需要解决。热加载不一定一直试一直爽。而且Flutter需要学习新的语言及框架，相对RN等等的门槛还是提高了一点。</p>
+<p>建议就是，不妨跟进与关注吧。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Flutter/"># Flutter</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/01/18/docker-basic/">Docker：基本知识</a>
+            
+            
+            <a class="next" rel="next" href="/2018/11/29/mac-software-list/">Mac常用软件推荐</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        Copyright <span>© Jason 2021. Powered by <a href="https://tech.kernelflow.com" target="_blank">Hexo</a>.</span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

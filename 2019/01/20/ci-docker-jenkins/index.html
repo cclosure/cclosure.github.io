@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jason">
+
+
+
+    <meta name="description" content="技术博客">
+
+
+
+<title>持续集成：搭建Jenkins | { }</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jason&#39;s blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jason&#39;s blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">持续集成：搭建Jenkins</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jason</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 20, 2019</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>本文主要介绍在Mac上使用Docker的方式搭建Jenkins CI工具的过程。</p>
+<a id="more"></a>
+<p>持续集成（Continuous Integration，简称CI）是满足产品的快速迭代需求的一种技术支持。</p>
+<p>产品需求在持续快速变更，怎么在快速实现的同时保证交付的质量，目前在业界已经有了标准的流程：持续集成、持续交付以及持续部署。CI是一种降低风险、减少人力的手段。常见的CI构建工具有：</p>
+<ul>
+<li>Jenkins</li>
+<li>Travis CI</li>
+<li>Gitlab-CI</li>
+</ul>
+<p>Jenkins是一款广为人知、成熟的工具，功能完整，插件丰富。Jenkins<a href="http://jenkins.io/zh/doc/pipeline/tour/getting-started/" target="_blank" rel="noopener">官网</a>对Jenkins有一些基本介绍。</p>
+<p><img src="docker-man.jpg" alt></p>
+<h3 id="安装Jenkins"><a href="#安装Jenkins" class="headerlink" title="安装Jenkins"></a>安装Jenkins</h3><p>安装镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull jenkins</span><br></pre></td></tr></table></figure></p>
+<p>启动服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 8080:8080 -p 50000:50000 jenkins/jenkins:lts</span><br></pre></td></tr></table></figure></p>
+<p>如果想指定Jenkins中的数据挂载到宿主机的目录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker run -d </span><br><span class="line">	-p 8080:8080 -p 50000:50000</span><br><span class="line">	-v /Users/ryan/DevEnv/Jenkins/Volumes/home:/var/jenkins_home </span><br><span class="line">	jenkins/jenkins:lts</span><br></pre></td></tr></table></figure></p>
+<p>请注意安装完成后，terminal提示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">*************************************************************</span><br><span class="line">Jenkins initial setup is required. An admin user has been created and a password generated.</span><br><span class="line">Please use the following password to proceed to installation:</span><br><span class="line"></span><br><span class="line">00f490545a0******9a754564ab1481f1</span><br><span class="line"></span><br><span class="line">This may also be found at: /var/jenkins_home/secrets/initialAdminPassword</span><br><span class="line">*************************************************************</span><br></pre></td></tr></table></figure></p>
+<p>Jenkins已启动，浏览器打开<a href="http://localhost:8080" target="_blank" rel="noopener"> http://localhost:8080</a> (默认端口)，输入admin用户跟密码（即上面提示的密码），进入初始配置。按推荐装好插件，创建好新的管理员帐号，就可以进入Jenkins的前端页面了。</p>
+<h4 id="添加插件"><a href="#添加插件" class="headerlink" title="添加插件"></a>添加插件</h4><p>建议先进入「管理Jenkins」/「管理插件」，选择「高级」，修改插件更新源，可使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Jenkins 中文社区</span><br><span class="line">https://updates.jenkins-zh.cn/update-center.json</span><br><span class="line">清华大学</span><br><span class="line">https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json</span><br><span class="line">华为开源镜像站</span><br><span class="line">https://mirrors.huaweicloud.com/jenkins/updates/update-center.json</span><br></pre></td></tr></table></figure>
+<p>在「可选插件」一栏，可以勾选比如Git相关的、SSH相关的、Sonar相关的，Xcode相关的，按需安装。</p>
+<h4 id="添加Credential"><a href="#添加Credential" class="headerlink" title="添加Credential"></a>添加Credential</h4><p>对于Git仓库或者打包机，需要配置SSH访问的Credential。</p>
+<p>对于Git仓库，比如是托管在Gitlab的代码仓库，一般是将生成的SSH的RSA密钥串的公钥配置到Gitlab上，私钥保存在开发机/打包机。把私钥copy配置到Jenkins上的Credential即可。</p>
+<p>对于作为执行任务的打包机Slaver（下一节讲到），Jenkins需要通过SSH的方式访问打包机，因此打包机需要配置启动sshd服务。需要将访问slaver的公钥配置到authorized_keys，sshd的配置不赘述。</p>
+<h3 id="添加节点"><a href="#添加节点" class="headerlink" title="添加节点"></a>添加节点</h3><p>因为Docker安装的Jenkins是处于隔离的容器环境的，如果需要使用Xcode或者Node的环境来打包，是需要添加其他机器作为Jenkins的节点来执行任务的，Jenkins运行机器作为Master，其他节点作为Slaver。</p>
+<p>确定好要执行任务的机器，配置并添加节点。</p>
+<h4 id="Slaver环境配置"><a href="#Slaver环境配置" class="headerlink" title="Slaver环境配置"></a>Slaver环境配置</h4><p>根据执行任务的需要来配置Slaver节点的环境。比如Mac节点执行iOS项目的打包任务，需要安装好基础的软件，比如：Xcode、CocoaPods、JDK等。</p>
+<p>打开终端查找JDK路径：<code>/usr/libexec/java_home -V</code>，若未安装JDK，可以使用homebrew安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install homebrew/cask/java</span><br></pre></td></tr></table></figure>
+<p>安装JDK后建议将JAVA_HOME的路径配置到Slaver的.bash_profile文件中。</p>
+<p>若CocoaPods在系统更新后失效，可以尝试重装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gem install -n /usr/<span class="built_in">local</span>/bin cocoapods</span><br></pre></td></tr></table></figure>
+<h4 id="Jenkins添加节点"><a href="#Jenkins添加节点" class="headerlink" title="Jenkins添加节点"></a>Jenkins添加节点</h4><p>进入「管理Jenkins」/「节点管理」，新建节点：</p>
+<p><img src="jenkins-slaver.png" alt></p>
+<p>启动方式可以选择SSH登录的方式，使用配置好的<strong>Credential</strong>即可（上一小节已说明）。</p>
+<p>勾选工具位置，填好相关工具（主要是Git）在slaver的位置。勾选环境变量，配置好JDK的位置（JAVA_HOME）。</p>
+<p>最好配置一下<strong>标签</strong>，后续配置任务的时候可以指定特定标签的机器来执行。</p>
+<p>添加完节点后，可以回到节点列表，如果没有提示错误表明配置成功，可以使用该节点来执行任务了；如果有报错，则查看并根据具体的错误来修正。</p>
+<h3 id="打包任务"><a href="#打包任务" class="headerlink" title="打包任务"></a>打包任务</h3><p>对于iOS打包任务，主要包括：</p>
+<ul>
+<li>配置Git仓库</li>
+<li>参数化配置</li>
+<li>打包脚本</li>
+<li>Sonar Scanner</li>
+</ul>
+<p>网上也有比较多介绍，不赘述。签名相关的问题，请参考「证书管理」。</p>
+<h3 id="证书管理"><a href="#证书管理" class="headerlink" title="证书管理"></a>证书管理</h3><p>请参考：Jenkins的<a href="https://plugins.jenkins.io/kpp-management-plugin/" target="_blank" rel="noopener">Keychains and Provisionning Profiles Management</a>插件。</p>
+<p>如果确实有问题，需要访问打包机的keychain，可以：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">security unlock-keychain -p <span class="string">"login pwd"</span> ~/Library/Keychains/login.keychain</span><br></pre></td></tr></table></figure>
+<p>可以在Keychain Access中，新建一个新的Keychain组方便任务使用。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>安装过程中有遇到问题，可以到Jenkins<a href="https://jenkins.io/zh/doc/book/installing/" target="_blank" rel="noopener">官网</a>查看有无解决方案。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/docker/"># docker</a>
+                    
+                        <a href="/tags/jenkins/"># jenkins</a>
+                    
+                        <a href="/tags/ci/"># ci</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/01/21/ci-docker-gitlab/">持续集成：搭建Gitlab</a>
+            
+            
+            <a class="next" rel="next" href="/2019/01/18/docker-basic/">Docker：基本知识</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        Copyright <span>© Jason 2021. Powered by <a href="https://tech.kernelflow.com" target="_blank">Hexo</a>.</span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jason">
+
+
+
+    <meta name="description" content="技术博客">
+
+
+
+<title>VPS搭建博客——购买及环境配置(2018) | { }</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jason&#39;s blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jason&#39;s blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">VPS搭建博客——购买及环境配置(2018)</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jason</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 17, 2017</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>作为软件研发人员，我们对国外优秀技术平台、技术资源是有一定偏好跟需求的。搭梯子是一个非常规操作，这里按下不表。本文主要介绍VPS购买及基础环境配置，后文还有介绍搭建博客的过程。躺了坑也公开说一下，方便后来人。</p>
+<a id="more"></a>
+<h3 id="VPS是什么？"><a href="#VPS是什么？" class="headerlink" title="VPS是什么？"></a>VPS是什么？</h3><p>VPS全称 <strong>Virtual Private Server</strong>。虚拟专用服务器技术，是将一台服务器分隔成多个虚拟专享服务器的服务。每个VPS可配置独立公网IP、操作系统、内存、CPU资源和系统配置的隔离，为用户模拟出”独占”计算资源的体验。简单可以理解VPS是一台拥有公网IP的服务器。</p>
+<p>VPS提供商有很多，譬如Vultr、Digital Ocean、Linode等等。本文将介绍的是Vultr，它的费用最低甚至到每月<u>2.5美元</u>（只能IPv6），对于搭建博客及学习是足够的。学习的话，虽然现在使用docker同样方便的，但对于需要公网访问的服务，比如捣鼓点个人项目时，就需要VPS了。<del><em>当然，也有人拿来学习sock5协议，这不在本文介绍范围内</em>。</del></p>
+<h3 id="购买及部署VPS"><a href="#购买及部署VPS" class="headerlink" title="购买及部署VPS"></a>购买及部署VPS</h3><p><a href="https://www.vultr.com/?ref=7194342" target="_blank" rel="noopener">Vultr</a>  提供多个地区的节点，按时间计费，并且根据选定的配置有费用上限。性价比较高，服务也比较稳定，在我使用这么长时间以来，暂时还没发现博客无法访问的情况。</p>
+<p>创建帐号等流程就不用多说了，访问<a href="https://www.vultr.com/?ref=7194342" target="_blank" rel="noopener">Vultr</a>注册帐号即可。可以使用我的推荐链接，<a href="https://www.vultr.com/?ref=7194342，优惠时时变、可以关注一下官方说明。" target="_blank" rel="noopener">https://www.vultr.com/?ref=7194342，优惠时时变、可以关注一下官方说明。</a></p>
+<blockquote>
+<p>利益相关：推荐链接可能给双方带来优惠，如果不需要刻意直接打开 <a href="https://www.vultr.com" target="_blank" rel="noopener">https://www.vultr.com</a> 。</p>
+</blockquote>
+<p>注册完成后，会弹出Billing账单支付页面，其实就是预充值的意思，避免后续部署流程中断、推倒重来较为麻烦。建议先充值最低$10即可。</p>
+<p>支付方式目前支持PayPal、Bitcoin、支付宝以及微信支付等。我个人选择是使用PayPal，这个无所谓的，后续也可以修改。选择PayPal主要是自动扣费，免得有时懒或者忘记了~~~</p>
+<p><img src="vultr-pricing.png" alt></p>
+<p>登录之后，选择<strong>Products</strong>，点击右侧加号（Deploy New Server）。</p>
+<p><img src="vultr-deploy.png" alt></p>
+<p><strong>Choose Server</strong>选择<strong>Cloud Compute</strong>。<strong>Server Location</strong>就个人喜好了，我选择<strong>Los Angeles</strong>的。<strong>Server Type</strong>个人喜好，我选择<strong>CentOS</strong>。<strong>Server Size</strong>个人喜好，我选择<strong>$5/m</strong>的，搭建博客、科学上网都是够的。<strong>Server Hostname</strong>是管理后台别名的，如果有多台机器实例，方便区分而已。</p>
+<p><strong>SSH Keys</strong>的步骤需要将你访问终端也就是你电脑上的SSH公钥（一般是.ssh目录下.pub文件，譬如id_rsa.pub）配置上去，可以参考<a href="https://www.vultr.com/docs/how-do-i-generate-ssh-keys/" target="_blank" rel="noopener">这里</a>。</p>
+<p>如果你机器配置了多个SSH的密钥的话，可以单独创建一个公私钥对：</p>
+<blockquote>
+<p>ssh-keygen -f id_rsa_vultr -C “SSH_GIT_ON_MBP”</p>
+</blockquote>
+<p>建议配置一下.ssh目录下的confg文件，譬如</p>
+<blockquote>
+<p>Host vultr</p>
+<p>​    HostName XX.XX.XX.XXX # 注：VPS的IP</p>
+<p>​    User git #请使用实际登录帐户，如root</p>
+<p>​    PreferredAuthentications publickey</p>
+<p>​    IdentityFile ~/.ssh/id_rsa_vultr</p>
+<p>​    IdentitiesOnly yes</p>
+<p>​    AddKeysToAgent yes</p>
+</blockquote>
+<p>之后就可以 ssh git@vultr 来免密登录服务器了。</p>
+<p>然后点击Deploy部署，等待部署完毕即可。</p>
+<h3 id="登录VPS"><a href="#登录VPS" class="headerlink" title="登录VPS"></a>登录VPS</h3><p>在<a href="https://www.vultr.com/?ref=7194342" target="_blank" rel="noopener">Vultr</a>上选择Products，Instance栏下可以看到刚才创建的实例：</p>
+<p><img src="vultr-instance.png" alt></p>
+<p>点击进入服务器信息页面：</p>
+<p><img src="vultr-setting.png" alt></p>
+<p>可以看到页面显示该VPS的IP地址、Username、Password等。</p>
+<p>打开终端登录该服务器即可。(若VPS上未配置好SSH免密登录，需要输入上述管理后台记录的密码)</p>
+<p>登录之后，可以学习操作的东西就比较多了，，这个看个人兴趣了。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>Vultr支持一键备份、恢复，好处是：更换IP！建议全部配置完成后，做一次Snapshot保存一下。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/VPS/"># VPS</a>
+                    
+                        <a href="/tags/博客/"># 博客</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2017/03/20/vps-hexo-blogging/">VPS搭建博客——不完全指南</a>
+            
+            
+            <a class="next" rel="next" href="/2017/03/14/lua-basic/">Lua语言入门基础</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        Copyright <span>© Jason 2021. Powered by <a href="https://tech.kernelflow.com" target="_blank">Hexo</a>.</span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

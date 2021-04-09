@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jason">
+
+
+
+    <meta name="description" content="技术博客">
+
+
+
+<title>iOS开发：路由组件 | { }</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jason&#39;s blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jason&#39;s blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">iOS开发：路由组件</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jason</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">February 21, 2019</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>一个轮子的说明。</p>
+<p>项目组旧项目改造的需要，重新捣弄了路由的代码，抽离出来便成了个「路由组件」。其实其他的开源也差不多可以用了，就是还是想加上些别的特性，比如拦截器。关于模块化与路由，以前有简单表达过自己的观点，原文在<a href="https://tech.kernelflow.com/2016/12/03/ios-modularization-router/">这儿</a>。</p>
+<a id="more"></a>
+<p>这个轮子也不是平地起高楼，有些东西有的热门库已经实现了的，我直接拿来用了。小修小改，改成了自己想用的样子🤪。</p>
+<h3 id="想要什么？"><a href="#想要什么？" class="headerlink" title="想要什么？"></a>想要什么？</h3><p>实话说，Scheme的分离也好、参数的解析也好，JLRoutes满足了大部分的需求了。</p>
+<h4 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h4><p>场景挺常见的。</p>
+<p>拦截器接口定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">typedef void(^HTRouteInterceptorResultBlock)(BOOL pass, id&lt;HTRouteRequestProtocol&gt;_Nullable  redirectRequest);</span><br><span class="line"></span><br><span class="line">//! 路由拦截器</span><br><span class="line">@protocol HTRouteInterceptorProtocol &lt;NSObject&gt;</span><br><span class="line"></span><br><span class="line">- (NSInteger)interceptorLevel;</span><br><span class="line">//! 拦截器的意义要求此方法须同步方式执行</span><br><span class="line">- (void)onRoute:(id&lt;HTRouteDefinitionProtocol&gt;)route request:(id&lt;HTRouteRequestProtocol&gt;)request result:(HTRouteInterceptorResultBlock)result;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>对于一个可路由的<code>URL</code>，在发起路由请求后、实际执行路由前，我们提供拦截的机会：</p>
+<ol>
+<li>中断路由</li>
+<li>延迟路由</li>
+<li>转发路由</li>
+</ol>
+<p>拦截器由业务方定义的，只要遵循接口并在运行时注入到路由系统即可。</p>
+<p>中断路由，是对于一些极端情况处理；延迟路由比较常见，比如对于用户未登录的情况，需要跳转到登录页面执行完登录流程后，再执行路由；转发路由也比较容易理解。</p>
+<h4 id="路由定义"><a href="#路由定义" class="headerlink" title="路由定义"></a>路由定义</h4><p>想要支持</p>
+<ul>
+<li>多路径匹配，也就需要允许匹配一个路由后，可以允许继续进行后续的匹配；</li>
+<li>匹配模式，是否严格匹配、或是允许fallback；</li>
+<li>数据响应，允许返回Object；</li>
+</ul>
+<p>以下是路由的定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">//! 路由定义</span><br><span class="line">@protocol HTRouteDefinitionProtocol &lt;NSObject&gt;</span><br><span class="line"></span><br><span class="line">@property (nonatomic, assign) HTRouteMatchMode matchMode;// 匹配模式</span><br><span class="line">@property (nonatomic, assign) BOOL continueNext;// 匹配成功后是否允许后续匹配</span><br><span class="line">@property (nonatomic, assign) CGFloat priority;// 优先级</span><br><span class="line">@property (nonatomic, assign) BOOL skipInterception;// 拦截器</span><br><span class="line"></span><br><span class="line">@property (nonatomic, copy, readonly) NSString *scheme;</span><br><span class="line">@property (nonatomic, copy, readonly) NSString *pattern;</span><br><span class="line">@property (nonatomic, copy, readonly) NSArray &lt;NSString *&gt; *patternPathComponents;</span><br><span class="line">@property (nonatomic, copy, readonly) HTRouteHandlerBlock handlerBlock;</span><br><span class="line">@property (nonatomic, copy, readonly) HTRouteObjectBlock objectBlock;// 待定</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithRoutePattern:(NSString *)pattern handlerBlock:(HTRouteHandlerBlock)handlerBlock;</span><br><span class="line">- (instancetype)initWithRoutePattern:(NSString *)pattern objectBlock:(HTRouteObjectBlock)objectBlock;</span><br><span class="line"></span><br><span class="line">- (id&lt;HTRouteResponseProtocol&gt;)routeResponseForRequest:(id&lt;HTRouteRequestProtocol&gt;)request;</span><br><span class="line">- (BOOL)executeWithResponse:(id&lt;HTRouteResponseProtocol&gt;)response callback:(HTRouteCompletionBlock)callback;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<h4 id="动态配置"><a href="#动态配置" class="headerlink" title="动态配置"></a>动态配置</h4><p>指的是，可以在添加路由时，单独针对单个路由动态配置。</p>
+<p>接口定义如下：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//! 路由请求配置</span></span><br><span class="line"><span class="class"><span class="keyword">@protocol</span> <span class="title">HTRouterConfigurationProtocol</span> &lt;<span class="title">NSObject</span>, <span class="title">NSCopying</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>, <span class="keyword">readonly</span>) <span class="keyword">id</span>&lt;HTRouterConfigurationProtocol&gt; _Nonnull (^match)(HTRouteMatchMode matchMode);</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>, <span class="keyword">readonly</span>) <span class="keyword">id</span>&lt;HTRouterConfigurationProtocol&gt; _Nonnull (^prefer)(HTRoutePreferOption preferOption);</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>, <span class="keyword">readonly</span>) <span class="keyword">id</span>&lt;HTRouterConfigurationProtocol&gt; _Nonnull (^transition)(HTRouteTransitionType transition);</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>, <span class="keyword">readonly</span>) <span class="keyword">id</span> &lt;HTRouterConfigurationProtocol&gt; _Nonnull (^addParameters)(<span class="built_in">NSDictionary</span> *parameters);</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>, <span class="keyword">readonly</span>) <span class="keyword">id</span> &lt;HTRouterConfigurationProtocol&gt; _Nonnull (^addInterceptor)(<span class="keyword">id</span>&lt;HTRouteInterceptorProtocol&gt; interceptor);<span class="comment">// 暂不支持</span></span><br><span class="line"><span class="comment">// from 来源配置</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>, <span class="keyword">readonly</span>) HTRoutePreferOption preferOption;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>, <span class="keyword">readonly</span>) HTRouteTransitionType transitionType;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>, <span class="keyword">readonly</span>) HTRouteMatchMode matchMode;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>, <span class="keyword">readonly</span>, <span class="keyword">nullable</span>) <span class="built_in">NSDictionary</span>&lt;<span class="built_in">NSString</span> *,<span class="keyword">id</span>&gt; *parameters;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>, <span class="keyword">readonly</span>, <span class="keyword">nullable</span>) <span class="built_in">NSArray</span> *interceptors;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<h3 id="还差什么？"><a href="#还差什么？" class="headerlink" title="还差什么？"></a>还差什么？</h3><p>首先，实现上可能还有bug，不过明显的bug肯定是容易发现、修复的。设计上的问题，可能要做一定调整。</p>
+<p>再者，没有类似Java的注解功能，一些语法糖还不支持（但折腾宏的话，其实可以实现一部分的）。</p>
+<p>另一方面，我们也要思考，需不需要，适不适合，值不值得。路由库尽量只做路由库的功能，业务嵌入的部分是要单独适配的。不是很喜欢侵入性太高的方案。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/iOS/"># iOS</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/03/18/ios-lib-storekit/">iOS开发：苹果内购组件</a>
+            
+            
+            <a class="next" rel="next" href="/2019/01/26/ci-docker-sonarqube/">持续集成：搭建SonarQube</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        Copyright <span>© Jason 2021. Powered by <a href="https://tech.kernelflow.com" target="_blank">Hexo</a>.</span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

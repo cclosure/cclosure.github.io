@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jason">
+
+
+
+    <meta name="description" content="技术博客">
+
+
+
+<title>iOS开发：UITableView自适应高度 | { }</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jason&#39;s blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jason&#39;s blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">iOS开发：UITableView自适应高度</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jason</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">August 20, 2017</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/iOS/">iOS</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>人都是想偷懒的，技术因为”偷懒”而进步。造出来的轮子，让键盘上的双手得以腾出空来，可以干点别的事情。比如画画比如写书，所以我们有黑客与画家。</p>
+<p>从iOS8开始，iOS提供了对UITableViewCell自适应高度的支持。而在此之前，假如你需要编写一个异构的列表，你可能会觉得很不想动手：你需要计算每一种结构的Cell的高度，-tableView:heightForRowAtIndexPath:会是你最不想看到的方法之一。</p>
+<a id="more"></a>
+<p>所幸的是，你现在只需要设置，_tableView.rowHeight = UITableViewAutomaticDimension，大体来说，这样就可以了。Cell内部使用AutoLayout，对于这样异构的列表，并不大影响它的用户端性能表现。</p>
+<h3 id="iOS8的魔法"><a href="#iOS8的魔法" class="headerlink" title="# iOS8的魔法"></a># iOS8的魔法</h3><p>iOS8之前，UITableView并无自适应高度一说。所谓的自动适配高度，即是手动计算并触发重新布局，具体细节就不赘述了。</p>
+<p>那么转念一想，iOS8难道就不一样了吗？如果你理解Auto Layout，自然是知道，Auto Layout是布局系统在计算布局前的一个约束系统。在更新界面布局前，通过约束计算可以得出实际的布局数据，然后按传统流程，触发界面重新布局及渲染了。核心确实是一样的。</p>
+<p>理解这个很重要，出现问题时可以按图索骥来解决。</p>
+<p>iOS8在UITableView这个UI组件层面加上自适应高度的支持，可谓聊胜于无，但对一些特定业务开发来讲亦是省心省力。</p>
+<p>关键代码示范：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">_tableView.estimatedRowHeight = 100;</span><br><span class="line">_tableView.rowHeight = UITableViewAutomaticDimension;</span><br></pre></td></tr></table></figure>
+<p>没有开玩笑，这几乎是UITableView自适应高度需要的所有代码了。</p>
+<p>但有几个问题是需要注意的：</p>
+<ol>
+<li>Cell内部的Auto Layout约束，在y方向必须确保与contentView的top/bottom的连接能确定contentView的尺寸；</li>
+<li>rowHeight = UITableViewAutomaticDimension或者实现相应的代理方法；</li>
+<li>estimatedRowHeight需要设置；</li>
+</ol>
+<h3 id="常见的问题"><a href="#常见的问题" class="headerlink" title="# 常见的问题"></a># 常见的问题</h3><ol>
+<li><p>iOS 10（及以下）并没有自适应？</p>
+<p>请检查_tableView.estimatedRowHeight = xxx;是否设置了。在iOS11+，即使不设置该方法也是没问题的，但旧版本就没那么幸运了。如果没意识到这个，在设备兼容上你可能得多花一点时间来排查问题了。</p>
+</li>
+<li><p>iOS11+也没自适应？</p>
+<p>请检查Cell内部的Auto Layout约束是否确保了Cell的contentView尺寸被subviews约束了。重点留意y方向top/bottom属性的约束。</p>
+</li>
+<li><p>部分Cell高度没自动更新高度</p>
+<p>请留意该Cell内部有没有子控件是UIScrollView的子类，这个问题请看下一节。</p>
+</li>
+</ol>
+<h3 id="UIScrollView-与-intrinsicContentSize"><a href="#UIScrollView-与-intrinsicContentSize" class="headerlink" title="# UIScrollView 与 intrinsicContentSize"></a># UIScrollView 与 intrinsicContentSize</h3><p>iOS6新增了一个UIView的属性方法，- (CGSize)intrinsicContentSize。学习Auto Layout最终必然要认识这一属性的。平时写布局时经常没设置UILabel、UIImage的大小，但出来效果毫不影响，正因为此属性的功劳。</p>
+<p>什么是intrinsicContentSize呢？字面理解，称作固有大小。简单来说，如果布局系统没有给UIView指定大小，那么就按intrinsicContentSize作为其大小——言下之意，如果指定了视图大小，那断然是按指示办的。UILabel、UIImage、UIButton等UI组件是有固有大小的，根据字体、文本、图片来确定其大小。但不是所有View都有intrinsicContentSize的，UIView默认实现是返回UIViewNoIntrinsicMetric。UIScrollView因为其可滚动特性的特殊性，其intrinsicContentSize同样被设定为UIViewNoIntrinsicMetric。</p>
+<p>这就是为什么当你遇到UITextView、UICollectionView等等作为Cell子视图时，魔法不奏效的原因了。</p>
+<p>解决方法就是，指定UIScrollView布局的”固有内容大小”了。譬如，将UIScrollView嵌入到一个container中，指定container的intrinsicContentSize，不失为一种方法。</p>
+<p>问题总是会遇到的，具体就请自行实践了。事不亲历，难说感同身受。</p>
+<p>顺便提一下，与intrinsicContentSize相关还有一关键问题：假如两个组件都没显式约束了大小，但是就intrinsicContentSize布局的话，可能会发生冲突！此时，Content Hugging与Content Compression这两个配置可以帮助解决冲突的。用俗话讲，Content Hugging是不想变大约束，Content Compression是不想变小约束，优先级越高越符合其初衷。</p>
+<h3 id="其他问题"><a href="#其他问题" class="headerlink" title="# 其他问题"></a># 其他问题</h3><ol>
+<li><p>设备尺寸兼容问题</p>
+<p>可能要回退到手动设定高度。举个业务场景，比如可滚动（变长）的列表，希望尽可能内容铺满页面。在小尺寸设备内容会超过页面大小，而大尺寸设备内容无法铺满一屏、但希望铺满一屏。</p>
+<p><img src="snapshot.png" alt="snapshot"></p>
+<p>仅提供参考：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath &#123;</span><br><span class="line">	  CGFloat const kContentTopBottomHeight = Scale((408+368));</span><br><span class="line">  	CGFloat const kContentHeight = Scale(558);</span><br><span class="line">    CGFloat height = MAX(kContentHeight, SCREEN_HEIGHT - kContentTopBottomHeight - TAB_BAR_SAFE_BOTTOM_MARGIN);</span><br><span class="line">    if (SCREEN_HEIGHT &gt;= height) &#123;// 1屏</span><br><span class="line">        return height;</span><br><span class="line">    &#125;</span><br><span class="line">    return UITableViewAutomaticDimension;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>UICollectionView自适应</p>
+<p>UICollectionView同样类似，需要使用layout.estimatedItemSize而不是layout.itemSize，具体要自行尝试。</p>
+</li>
+<li><p>性能问题</p>
+<p>使用Auto Layout后性能是会比手动布局稍低一些，具体视布局复杂度而定。</p>
+<p>性能敏感的请另行考虑方案。</p>
+</li>
+</ol>
+<h3 id="小结"><a href="#小结" class="headerlink" title="# 小结"></a># 小结</h3><p>UITableView的高度自适应为我们某些业务场景的界面编写带来了些便利，可以显式地减少很多繁琐的计算，在复杂的多尺寸设备环境下可以说是很贴心了。并且对于不可重用界面减少自定义Cell，对整体项目而言也是有利的。</p>
+<p>具体情况具体分析，也就各取所需了。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/iOS/"># iOS</a>
+                    
+                        <a href="/tags/UITableView/"># UITableView</a>
+                    
+                        <a href="/tags/AutoLayout/"># AutoLayout</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2018/02/01/git-repo-migrate/">技术碎片：Git代码仓库迁移</a>
+            
+            
+            <a class="next" rel="next" href="/2017/07/04/mutilthread-gcd-basic/">iOS开发：多线程之GCD基础知识</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        Copyright <span>© Jason 2021. Powered by <a href="https://tech.kernelflow.com" target="_blank">Hexo</a>.</span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

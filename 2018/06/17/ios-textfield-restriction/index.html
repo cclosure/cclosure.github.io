@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jason">
+
+
+
+    <meta name="description" content="技术博客">
+
+
+
+<title>iOS开发：输入字数限制 | { }</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jason&#39;s blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jason&#39;s blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/categories">Categories</a>
+                
+                    <a class="menu-item" href="/tags">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">iOS开发：输入字数限制</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jason</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 17, 2018</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/iOS/">iOS</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>字数限制是所有iOS开发都会遇到的一个问题。业务场景非常常见的，譬如，在微信中，用户昵称限制纯英文32个纯中文16个而emoji是8个，而微博发布动态则是有140字数的限制。但就实现出来的效果看，体验还是不够好的。这篇文章来聊聊文本输入字数限制的正确姿势。</p>
+<a id="more"></a>
+<h4 id="限制输入"><a href="#限制输入" class="headerlink" title="# 限制输入"></a># 限制输入</h4><p>先上图，这是微信修改昵称的页面：</p>
+<p><img src="textinput.jpg" alt="textinput"></p>
+<p>当你在中文输入法状态下，连续输按下12个h之后，原先文本框内的高亮不见了，并且仍可继续键入1个h，文本框内留下的是”h h h h h h h h h h hh”，一共12个h。不是说好的<u><strong>英文32个</strong></u>吗？是不是很刺激？</p>
+<p>不如先埋个坑，说回文本限制输入的基本思路：</p>
+<p>在文本输入框已达到限制长度之后，就不应再接受键盘的输入了。实现的方法也很简单。单行文本输入的控件<code>UITextField</code>提供了键盘输入事件代理，代理（遵循<code>UITextFieldDelegate</code>）只要实现了方法<code>- textField:shouldChangeCharactersInRange:replacementString:</code>， 在此方法中返回NO，键盘的输入将不再影响文本控件。然后做个文本截断，当真是顺其自然。微信的小伙伴，看表现必然也是在这里趟的坑了。</p>
+<p>对于多行文本控件<code>UITextView</code>同样如此。事实上，是因为两者作为文本输入控件都是遵循<code>UITextInput</code>协议的，通过实现该协议方法可以获得键盘的输入。自定义的文本输入控件，自然也是类似，不赘述。下文将继续以<code>UITextField</code>作为典型。</p>
+<p>先上代码再解释：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[<span class="keyword">self</span>.textField setBk_shouldChangeCharactersInRangeWithReplacementStringBlock:^<span class="built_in">BOOL</span>(<span class="built_in">UITextField</span> *textField, <span class="built_in">NSRange</span> range, <span class="built_in">NSString</span> *string) &#123;</span><br><span class="line">        <span class="keyword">if</span> (string.length == <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">YES</span>;</span><br><span class="line">        <span class="built_in">NSInteger</span> selectedLength = range.length;</span><br><span class="line">        <span class="built_in">NSInteger</span> replaceLength = string.length;</span><br><span class="line">			  <span class="comment">// 注1</span></span><br><span class="line">        <span class="built_in">NSInteger</span> existedLength = [textField.text composedCharLength];</span><br><span class="line">        </span><br><span class="line">				<span class="comment">// 注2</span></span><br><span class="line">        <span class="built_in">UITextInputMode</span> *current = [<span class="built_in">UITextInputMode</span> currentInputMode];</span><br><span class="line">        <span class="keyword">if</span> ([current.primaryLanguage isEqualToString:<span class="string">@"zh-Hans"</span>]) &#123;</span><br><span class="line">            <span class="built_in">UITextRange</span> *selectedRange = [textField markedTextRange];</span><br><span class="line">            <span class="built_in">UITextPosition</span> *position = [textField positionFromPosition:selectedRange.start offset:<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">if</span> (position) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">YES</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">  			<span class="comment">// 注3</span></span><br><span class="line">  			<span class="built_in">NSInteger</span> <span class="keyword">const</span> MAX_LENGTH = <span class="number">32</span>;</span><br><span class="line">        <span class="keyword">if</span> ((existedLength + replaceLength - selectedLength) &gt; MAX_LENGTH) &#123;</span><br><span class="line">            [<span class="built_in">UIWindow</span> ht_makeToastOnWindow:<span class="string">@"输入超过限制"</span>];</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">NO</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">YES</span>;</span><br><span class="line">    &#125;];</span><br></pre></td></tr></table></figure>
+<p>代码中3个注释，都是关键。</p>
+<p>注1，文本的<strong><u>字数</u></strong>计算。我们的产品同学经常有些特殊的爱好，比如中文按2个英文字数算，emoji按4个。参考文章开头提到的微信规则。字数的统计我们将在第三部分来介绍，这里暂时跳过。你大可以相信<code>-composedCharLength:</code>这个方法是正确的。</p>
+<p>注2，键盘输入模式，事实上主要用来查询键盘使用的语言。这里的处理是，如果当前是<strong><u>中文输入法</u></strong>，并且有高亮选中（即备选词尚未键入文本框），那么是允许用户继续输入的。即使还只能输入一个字，也是允许用户连续按下”hhhhhhh”的。体验是很直观的。假如昵称只允许3个中文字，按微信的做法，很可能你连张三（zhang san）都没办法输入。(当然如果只是纯英文的需求，请忽略！)</p>
+<p>注3，<u><strong>超长限制输入</strong></u>。这个是这个方法的核心也是最简单的。请注意，请勿在注3逻辑中进行超长截断，这将犯微信错误！只需处理超长不允许输入即可！</p>
+<h4 id="超长截断"><a href="#超长截断" class="headerlink" title="# 超长截断"></a># 超长截断</h4><p>源码胜过语言：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">- (void)limitLengthTo:(NSInteger)maxLength usingCharLength:(BOOL)usingCharLength &#123;</span><br><span class="line">    UITextField *textField = self;</span><br><span class="line">    NSString *text = textField.text;</span><br><span class="line">    NSInteger totalLength = usingCharLength ? [text composedCharLength] : text.length;</span><br><span class="line">    NSInteger trimmedLength = maxLength;</span><br><span class="line">    </span><br><span class="line">    UITextInputMode *current = [UITextInputMode currentInputMode];</span><br><span class="line">    if ([current.primaryLanguage isEqualToString:@&quot;zh-Hans&quot;]) &#123;</span><br><span class="line">        UITextRange *selectedRange = [textField markedTextRange];</span><br><span class="line">        UITextPosition *position = [textField positionFromPosition:selectedRange.start offset:0];</span><br><span class="line">        if (position) &#123;// 高亮时不截断</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    if (totalLength &gt; maxLength) &#123;</span><br><span class="line">        [self __trimedToLength:trimmedLength];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 注2</span><br><span class="line">- (NSString *)limitedToComposedCharLength:(NSInteger)maxLength &#123;</span><br><span class="line">    __block NSInteger count = 0;</span><br><span class="line">    __block BOOL finished = YES;</span><br><span class="line">    NSMutableString *text = [NSMutableString string];</span><br><span class="line">    NSRange range = NSMakeRange(0, self.length);</span><br><span class="line">    [self enumerateSubstringsInRange:range options:NSStringEnumerationByComposedCharacterSequences usingBlock:^(NSString * _Nullable substring, NSRange substringRange, NSRange enclosingRange, BOOL * _Nonnull stop) &#123;</span><br><span class="line">        const unichar hs = [substring characterAtIndex:0];</span><br><span class="line">        </span><br><span class="line">        NSInteger chatCount = 0;</span><br><span class="line">        if (&apos;!&apos; &lt;= hs &amp;&amp; hs &lt;= &apos;~&apos; ) &#123;// ASCII码中的英文或数字或英文字符</span><br><span class="line">            chatCount = 1;</span><br><span class="line">        &#125; else &#123;// 中文( 0x4e00 ~ 0x9fff)或其他</span><br><span class="line">            chatCount = 2;</span><br><span class="line">        &#125;</span><br><span class="line">        if (count + chatCount &gt; maxLength) &#123;</span><br><span class="line">            *stop = YES;</span><br><span class="line">            finished = NO;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        count += chatCount;</span><br><span class="line">        [text appendString:substring];</span><br><span class="line">    &#125;];</span><br><span class="line">    </span><br><span class="line">    return [text copy];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 注3</span><br><span class="line">- (void)__trimedToLength:(NSInteger)trimmedLength &#123;</span><br><span class="line">    UITextField *textField = self;</span><br><span class="line">    NSString *text = textField.text;</span><br><span class="line">    NSRange range = [text rangeOfComposedCharacterSequenceAtIndex:trimmedLength];</span><br><span class="line">    if (range.length == 1) &#123;</span><br><span class="line">        textField.text = [text substringToIndex:trimmedLength];// 中英文统计情况下会有问题的</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        NSRange rangeRange = [text rangeOfComposedCharacterSequencesForRange:NSMakeRange(0, trimmedLength)];</span><br><span class="line">        textField.text = [text substringWithRange:rangeRange];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="字数统计"><a href="#字数统计" class="headerlink" title="# 字数统计"></a># 字数统计</h4><p>1中文=2个字，1英文=1个字，1emoji=4个字</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">NSInteger</span>)composedCharLength &#123;</span><br><span class="line">    __block <span class="built_in">NSInteger</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">NSRange</span> range = <span class="built_in">NSMakeRange</span>(<span class="number">0</span>, <span class="keyword">self</span>.length);</span><br><span class="line">    [<span class="keyword">self</span> enumerateSubstringsInRange:range options:<span class="built_in">NSStringEnumerationByComposedCharacterSequences</span> usingBlock:^(<span class="built_in">NSString</span> * _Nullable substring, <span class="built_in">NSRange</span> substringRange, <span class="built_in">NSRange</span> enclosingRange, <span class="built_in">BOOL</span> * _Nonnull stop) &#123;</span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">unichar</span> hs = [substring characterAtIndex:<span class="number">0</span>];</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">NSInteger</span> chatCount = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">'!'</span> &lt;= hs &amp;&amp; hs &lt;= <span class="string">'~'</span> ) &#123;<span class="comment">// ASCII码中的英文或数字或英文字符</span></span><br><span class="line">            chatCount = <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ((<span class="number">0xd800</span> &lt;= hs &amp;&amp; hs &lt;= <span class="number">0xdbff</span>) || (<span class="number">0x2600</span> &lt;= hs &amp;&amp; hs &lt;= <span class="number">0x27FF</span>))&#123;</span><br><span class="line">            chatCount = <span class="number">4</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;<span class="comment">// 中文( 0x4e00 ~ 0x9fff)或其他</span></span><br><span class="line">            chatCount = <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        count += chatCount;</span><br><span class="line">    &#125;];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/iOS/"># iOS</a>
+                    
+                        <a href="/tags/TextInput/"># TextInput</a>
+                    
+                        <a href="/tags/文本/"># 文本</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2018/08/13/fsck-disk-rescue/">技术碎片：一条命令"拯救"移动硬盘</a>
+            
+            
+            <a class="next" rel="next" href="/2018/02/01/git-repo-migrate/">技术碎片：Git代码仓库迁移</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        Copyright <span>© Jason 2021. Powered by <a href="https://tech.kernelflow.com" target="_blank">Hexo</a>.</span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

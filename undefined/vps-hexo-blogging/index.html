@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>VPS搭建博客——不完全指南 | { }</title>
+
+
+    <meta name="keywords" content="VPS, hexo, 技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="一开始折腾Jekyll，后来使用hexo搭建博客托管在了Github Page上。再后来，买了VPS（主要是为了学习Sock5！），博客便迁移到自己的服务器了。本文主要记录使用CentOS结合hexo搭建个人博客的流程。 更新：因为IP间歇性被封，重新部署了一遍，配置HTTPS，Hexo发布流程也改了。有时间再整理出来！">
+<meta name="keywords" content="VPS,hexo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VPS搭建博客——不完全指南">
+<meta property="og:url" content="http://blog.knpc21.com/undefined/vps-hexo-blogging/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="一开始折腾Jekyll，后来使用hexo搭建博客托管在了Github Page上。再后来，买了VPS（主要是为了学习Sock5！），博客便迁移到自己的服务器了。本文主要记录使用CentOS结合hexo搭建个人博客的流程。 更新：因为IP间歇性被封，重新部署了一遍，配置HTTPS，Hexo发布流程也改了。有时间再整理出来！">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://blog.knpc21.com/undefined/vps-hexo-blogging/vultr-blogging-arch.png">
+<meta property="og:updated_time" content="2017-03-20T13:41:36.000Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="VPS搭建博客——不完全指南">
+<meta name="twitter:description" content="一开始折腾Jekyll，后来使用hexo搭建博客托管在了Github Page上。再后来，买了VPS（主要是为了学习Sock5！），博客便迁移到自己的服务器了。本文主要记录使用CentOS结合hexo搭建个人博客的流程。 更新：因为IP间歇性被封，重新部署了一遍，配置HTTPS，Hexo发布流程也改了。有时间再整理出来！">
+<meta name="twitter:image" content="http://blog.knpc21.com/undefined/vps-hexo-blogging/vultr-blogging-arch.png">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        VPS搭建博客——不完全指南
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2017/03/" class="post-meta__date button">2017-03-20</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>一开始折腾Jekyll，后来使用hexo搭建博客托管在了Github Page上。再后来，买了VPS（主要是为了学习Sock5！），博客便迁移到自己的服务器了。本文主要记录使用CentOS结合hexo搭建个人博客的流程。</p>
+<p>更新：因为IP间歇性被封，重新部署了一遍，配置HTTPS，Hexo发布流程也改了。有时间再整理出来！</p>
+<a id="more"></a>
+<p>本人使用的是Vultr的VPS，Vultr实际上官网有专门<a href="https://www.vultr.com/docs/install-hexo-on-centos-7" target="_blank" rel="noopener">撰文</a>介绍了在CentOS上搭建hexo。下面看实际踩坑后的总结：</p>
+<h3 id="基本原理"><a href="#基本原理" class="headerlink" title="# 基本原理"></a># 基本原理</h3><p>hexo的发布其实比较简单，就是将静态博客站点托管在VPS上而已。请看流程：</p>
+<p><img src="vultr-blogging-arch.png" alt></p>
+<p>hexo在本地机器生成发布文件后，通过git推送到VPS上，并且VPS上的git仓库配置了git-hooks，在接收到git仓库更新后，将内容拷贝到web服务站点即可。</p>
+<h3 id="环境配置"><a href="#环境配置" class="headerlink" title="# 环境配置"></a># 环境配置</h3><p>本地：</p>
+<ul>
+<li>Mac OS 10.13.6 (默认包含git、ssh等工具)</li>
+<li>Node.js (使用nvm管理)</li>
+<li>hexo: 3.8.0（请参照<a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">官网</a>搭建）</li>
+</ul>
+<p>VPS：(Vultr)</p>
+<ul>
+<li>CentOS 7</li>
+<li>git 2.17.1</li>
+<li>nginx</li>
+</ul>
+<p>环境搭建、ssh连接vps这些自不必多说了，参考官方介绍或Google一下即可。</p>
+<h3 id="整体流程"><a href="#整体流程" class="headerlink" title="# 整体流程"></a># 整体流程</h3><p>参照基本原理图，整体流程如下：</p>
+<p>1、服务器基本环境搭建，安装Git、Nginx等</p>
+<p>2、服务器配置Nginx</p>
+<p>3、服务器创建Git仓库，配置git-hooks</p>
+<p>4、本地发布并部署</p>
+<h4 id="VPS安装Git及Nginx"><a href="#VPS安装Git及Nginx" class="headerlink" title="VPS安装Git及Nginx"></a>VPS安装Git及Nginx</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install git</span><br><span class="line">yum install nginx</span><br></pre></td></tr></table></figure>
+<p>使用git —version及nginx -v检查是否安装成功。</p>
+<h4 id="VPS配置Nginx"><a href="#VPS配置Nginx" class="headerlink" title="VPS配置Nginx"></a>VPS配置Nginx</h4><p>nginx的目录一般是在/etc/nginx/，建议先备份一下nginx.conf文件。</p>
+<blockquote>
+<p>cd /etc/nginx/</p>
+<p>cp nginx.conf nginx.conf.backup</p>
+</blockquote>
+<p>需要修改配置文件中http配置，可自行了解nginx后再处理，我的配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">user  nginx;</span><br><span class="line">worker_processes  1;</span><br><span class="line"></span><br><span class="line">error_log  /var/log/nginx/error.log warn;</span><br><span class="line">pid        /var/run/nginx.pid;</span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include       /etc/nginx/mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line">    // ...</span><br><span class="line">    </span><br><span class="line">    include /etc/nginx/conf.d/*.conf;</span><br><span class="line">    include /etc/nginx/vhost/*.conf;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在http末尾添加include /etc/nginx/vhost/*.conf;。这是为了将多个不同服务隔离配置。对于有多个（子）域名的时候，就非常方便了，并且互不影响。</p>
+<p>在/etc/nginx/vhost目录（若没有请新建）下建立配置文件，比如我的技术博客是 tech.kernelsense.com.conf，配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    # 默认80端口</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  tech.kernelsense.com;</span><br><span class="line">    root         /var/www/tech;</span><br><span class="line"></span><br><span class="line">    include /etc/nginx/default.d/*.conf;</span><br><span class="line"></span><br><span class="line">    error_page 404 /404.html;</span><br><span class="line">        location = /40x.html &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    error_page 500 502 503 504 /50x.html;</span><br><span class="line">        location = /50x.html &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主要是配置server_name以及对应的服务根目录root。你姑且可以参考我的配置来。</p>
+<p>配置保存后，可以nginx -t检查配置文件语法是否有问题。systemctl status nginx检查nginx状态，running为运行中正常。</p>
+<h4 id="VPS创建git仓库"><a href="#VPS创建git仓库" class="headerlink" title="VPS创建git仓库"></a>VPS创建git仓库</h4><h5 id="创建git用户"><a href="#创建git用户" class="headerlink" title="创建git用户"></a>创建git用户</h5><p>首先需要创建git用户，专门用来管理git仓库，方便ssh访问。</p>
+<p>基本命令记录如下：(有问题请自行Google解决)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adduser git</span><br><span class="line">chmod 740 /etc/sudoers</span><br><span class="line">vi /etc/sudoers</span><br></pre></td></tr></table></figure>
+<p>在以下内容下方：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">## Allow root to run any commands anywhere</span><br><span class="line">root    ALL=(ALL)     ALL</span><br></pre></td></tr></table></figure>
+<p>添加一行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git ALL=(ALL) ALL</span><br></pre></td></tr></table></figure>
+<p>保存后恢复sudoers权限为400：chmod 400 /etc/sudoers。</p>
+<h5 id="配置ssh访问"><a href="#配置ssh访问" class="headerlink" title="配置ssh访问"></a>配置ssh访问</h5><p>su git切换用户后，将本地机器的相关服务的ssh的rsa公钥添加到vps上：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.ssh/authorized_keys</span><br><span class="line">chmod 600 ~/.ssh/authorzied_keys</span><br><span class="line">chmod 700 ~/.ssh</span><br></pre></td></tr></table></figure>
+<p>在本地机器进行测试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -v git@vps_ip</span><br></pre></td></tr></table></figure>
+<h5 id="创建博客的git仓库"><a href="#创建博客的git仓库" class="headerlink" title="创建博客的git仓库"></a>创建博客的git仓库</h5><p>在git用户目录下创建：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init --bare tech.git</span><br></pre></td></tr></table></figure>
+<p>是在su git情况下，否则需要修改权限：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo chown git:git -R /var/www/tech</span><br><span class="line">sudo chown git:git -R /home/git/tech.git</span><br></pre></td></tr></table></figure>
+<h5 id="创建git-hooks"><a href="#创建git-hooks" class="headerlink" title="创建git-hooks"></a>创建git-hooks</h5><p>在切换到git用户后，在相应的git仓库下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim ~/tech.git/hooks/post-receive</span><br></pre></td></tr></table></figure>
+<p>配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">GIT_REPO=/home/git/tech.git</span><br><span class="line">TMP_GIT_CLONE=/tmp/tech</span><br><span class="line">PUBLIC_WWW=/var/www/tech</span><br><span class="line">rm -rf $&#123;TMP_GIT_CLONE&#125;</span><br><span class="line">git clone $GIT_REPO $TMP_GIT_CLONE</span><br><span class="line">rm -rf $&#123;PUBLIC_WWW&#125;/*</span><br><span class="line">cp -rf $&#123;TMP_GIT_CLONE&#125;/* $&#123;PUBLIC_WWW&#125;</span><br></pre></td></tr></table></figure>
+<p>原理如上所述。</p>
+<p>根据个人需要修改目录。保存后执行chmod +x post-receive添加执行权限。</p>
+<h4 id="本地部署"><a href="#本地部署" class="headerlink" title="本地部署"></a>本地部署</h4><p>修改本地hexo的站点配置文件_config.yml，一般在末尾，配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy: </span><br><span class="line">  type: git</span><br><span class="line">  repo: git@serverIP:/home/git/tech.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+<p>若未安装deploy插件，请安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<p>部署步骤很简单：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>Jason
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://blog.knpc21.com/undefined/vps-hexo-blogging/">http://blog.knpc21.com/undefined/vps-hexo-blogging/</a>
+        </p>
+        
+            <strong>
+                <p>文章默认使用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 协议进行许可，使用时请注意遵守协议。</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2017-03-20</p></div> 
+    <div class="post-entry__tags"><a href="/tags/VPS/" class="post-tags__link button"># VPS</a><a href="/tags/hexo/" class="post-tags__link button"># hexo</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/ios/ios-nszombie-implementation/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            iOS开发：NSZombie的实现
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/ios/vps-vultr-tour/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            VPS搭建博客——购买及环境配置(2018)
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-K2Q2J84"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-K2Q2J84');
+    </script>
+ 
+
+ 
+
+ 
+
+
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "1d741b4fcb7f4062933be3f4b0eb6571"}'></script>
+    </script>
+    
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>社区电商小调研 | { }</title>
+
+
+    <meta name="keywords" content="调研, 技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="上面的图是很有意思的一个照片，「叮咚买菜」的广告。背景是林立的城市地标，前景线框就像是系统的逻辑，而距离镜头最近的是社区配送用的电动车。">
+<meta name="keywords" content="调研">
+<meta property="og:type" content="article">
+<meta property="og:title" content="社区电商小调研">
+<meta property="og:url" content="http://blog.knpc21.com/research/community-group-buying/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="上面的图是很有意思的一个照片，「叮咚买菜」的广告。背景是林立的城市地标，前景线框就像是系统的逻辑，而距离镜头最近的是社区配送用的电动车。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload.cc/i1/2021/11/15/QHvUiD.jpeg">
+<meta property="og:image" content="https://upload.cc/i1/2021/11/15/oLbZ5n.jpg">
+<meta property="og:image" content="https://z3.ax1x.com/2021/11/16/IRvzDA.jpg">
+<meta property="og:updated_time" content="2021-07-15T15:40:11.000Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="社区电商小调研">
+<meta name="twitter:description" content="上面的图是很有意思的一个照片，「叮咚买菜」的广告。背景是林立的城市地标，前景线框就像是系统的逻辑，而距离镜头最近的是社区配送用的电动车。">
+<meta name="twitter:image" content="https://upload.cc/i1/2021/11/15/QHvUiD.jpeg">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        社区电商小调研
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2021/07/" class="post-meta__date button">2021-07-15</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p><img src="https://upload.cc/i1/2021/11/15/QHvUiD.jpeg" alt="叮咚买菜"></p>
+<p>上面的图是很有意思的一个照片，「叮咚买菜」的广告。背景是林立的城市地标，前景线框就像是系统的逻辑，而距离镜头最近的是社区配送用的电动车。</p>
+<a id="more"></a>
+<p>叮咚买菜是一家很年轻的社区电商，2017年上线，今年6月29日已经纳斯达克上市。虽然一直是亏损状态，却一直被资本青睐，得到红杉资本、启明创投、软银等一众机构的投资。风险资本永远在追逐未来的高效收益，相信这些机构必然是忽视不了面前的机会。人日说「别只惦记着几捆白菜、几斤水果的流量」，我觉得互联网可能进入了2.0时代，增量不再是主要的驱动力了，存量才是未来争夺的焦点。</p>
+<p>根据艾媒咨询的数据，2020生鲜电商行业规模达4584.9亿元，比2019年增⻓了64.0%。预计未来一段时间生鲜电商仍旧保持高速增⻓，到2023年生鲜电商行业规模将超万亿。下图是社区电商的发展时间线:</p>
+<p><img src="https://upload.cc/i1/2021/11/15/oLbZ5n.jpg" alt="Timeline"></p>
+<h4 id="社区电商的基本模式"><a href="#社区电商的基本模式" class="headerlink" title="社区电商的基本模式"></a>社区电商的基本模式</h4><p>“社区电商”，是依托互联网的新零售。2014年首先出现前置仓模式，后续又出现了店仓一体化、O2O平台、社区团购等运营模式。不同模式可能契合不同消费层级的需求。2020年各大电商互联网企业争相入局，是以社区团购的模式为典型的，终端用户的争夺也继续走向下沉市场。</p>
+<p>使用场景上，用户可以在App下单，用户通过平台的同城配送服务或社区自提的方式取到商品。品类上目前主要从蔬果生鲜切入，当平台能规模进入市场时，平台运营的品类也不再局限于食品周边，可能拓展品类到日常生活快消品，所以冲击的目标首先可能是农贸市场商贩以及超市。</p>
+<p>社区电商主要涉及以下三部分工作：</p>
+<ol>
+<li>供给端管理</li>
+<li>仓储物流配送</li>
+<li>需求端管理</li>
+</ol>
+<p>为用户带来的便捷服务，说到底，其核心是依赖于供应链管理的优化，而不只是下单跟配送。</p>
+<p>供给端，货源主要直接是对接产地或者供货商，各个平台根据平台的优势跟侧重点，会有差异化的策略（下文会有些案例）。</p>
+<p>仓储物流配送，大多平台是面向大区域运营的，一般会建立 区域中心仓-城市仓-服务站-配送站/同城配送 的多级仓储物流体系。同时因为生鲜产品是高频采购商品，可能过半为生鲜产品，需要支持冷链物流跟仓储。</p>
+<p>需求端，推广期内，一般最开始是以社区团购优惠或者补贴的形式切入，通过分享可以获得折扣、低价等方式来推广，团购可以通过熟人关系的裂变来获客。社区团购中有个关键的角色称之为团长（比如芙蓉兴盛的店长），团长通过团购群来维护客群关系。</p>
+<h4 id="社区电商的案例"><a href="#社区电商的案例" class="headerlink" title="社区电商的案例"></a>社区电商的案例</h4><p>要了解社区电商，必须知道长沙，2018年在长沙有近百家团购平台混战。现在入场社区团购的就包括兴盛优选、叮咚买菜、每日优鲜、橙心优选（滴滴）、美团优选、多多买菜（拼多多）、十荟团等等。</p>
+<p>社区团购早期的雏形，可以参考兴盛优选。芙蓉兴盛便利店在全国有17000家连锁店，芙蓉兴盛的店主们通过运营微信群，收集用户的蔬菜购买需求，再通过兴盛优选统一采购，配送至门店，最后商品由用户自提。对于用户来说，线上购物的体验延伸到了买菜的事情上；对于便利店来说，店主在便利店主业的同时，可以获得额外的提成，增加了收入。</p>
+<h5 id="兴盛优选"><a href="#兴盛优选" class="headerlink" title="兴盛优选"></a>兴盛优选</h5><p>兴盛优选是经典的社区团购的开拓者，长沙也是兴盛优选的大本营。兴盛优选成立于2014年，在2016年开始了社区团购这一模式，目前业务已经覆盖全国17个省1400多个地县级市10万个乡镇乡村。</p>
+<p><img src="https://z3.ax1x.com/2021/11/16/IRvzDA.jpg" alt></p>
+<p>官方对自己的定位：</p>
+<blockquote>
+<p>“兴盛优选是一家关注民生的互联网“新零售”平台，主要定位于解决家庭消费者的日常需求，提供包括蔬菜水果，肉禽水产，米面粮油，日用百货等全品类精选商品。”</p>
+</blockquote>
+<p>兴盛优选从多方面控制运营成本，以下是兴盛优选的一些特点：</p>
+<ul>
+<li>供应链管理：打造了“阿必达”的B2B（商户到商户）的快消品订货平台，链接上游供应商/工厂/品牌，合作商户超过30万家，这是高效供应链管理的核心</li>
+<li>自建物流配送，搭建了“中心仓-网格仓-门店”的三级物流体系，既链接产地，也打通最后一公里。运输方面相当于区域（县城）拼单，整车运输成本会降低；另外网格仓的场地、车辆是网格站自行解决，成本核算到单量（靠单量拿绩效工资），其他的平台更多是通过快递的方式物流成本会比较高。另外冷链物流建设是必需的，不然在夏天生鲜产品无法保鲜，产品品质问题最终可能会导致溃败的结局</li>
+<li>营销裂变：基于社区的运营，团长/店面服务15分钟范围的生活圈，门店条件是需要建100人以上的团购群，叠加门店老板的人脉关系</li>
+<li>采用“预售+自提”的方式来运营，可以优化进货供应的管理，减少产品的损耗跟库存。</li>
+<li>使用高质低价、复购率高的产品做平台的基础商品做引流，从国家统计局的居民生鲜食品消费数据，蔬果就是高频刚需产品，也是目前多个平台营销补贴的重点</li>
+<li>打造当日23:00下单次日11点到达（211服务）</li>
+<li>供应商管理：售后率处罚，售后率高于规定时可能取消供货资格</li>
+<li>门店：水果店、菜店、便民服务店等都可以，而且它本身也有1万多家便利店门店</li>
+</ul>
+<p>兴盛优选从长沙开始，运营模式已经比较完善，尤其深耕“下沉市场”，物流系统去到农村。且从官方对自己的定位可以推测，当获取到流量之后，兴盛优选还可能拓展到普通电商领域，对标淘宝、京东、拼多多等。</p>
+<h5 id="美团优选等"><a href="#美团优选等" class="headerlink" title="美团优选等"></a>美团优选等</h5><p>基本复制兴盛优选的模式，不深究供应链方面，有也乏善可言。延续烧钱补贴模式，对新用户经常有0.01元买水果蔬菜的活动。营销手段始终是手段，联想到出行跟外卖玩家的作为，如果只为了抢人头、IPO，用户不过是PV的一个数字而已。</p>
+<h5 id="叮咚买菜-每日优鲜"><a href="#叮咚买菜-每日优鲜" class="headerlink" title="叮咚买菜/每日优鲜"></a>叮咚买菜/每日优鲜</h5><p>这两个是跟兴盛优选不太一样的一类模式。目前覆盖城市大概都是30个左右，大多以一线/准一线城市为主，主要在华北、华中、华东和华南地区。叮咚买菜创立于2017年5月，每日优鲜成立于2014年11月。</p>
+<ul>
+<li>生鲜电商为主，叮咚买菜自定位为“食品运营销售商”，这跟兴盛优选那些是有较大的出入的</li>
+<li>有门店经营生鲜蔬果等，也就是门店加上了配送功能，相当于临时代跑腿</li>
+<li>供应采购：分两部分，一部分是自采购，一部分则直接与供应商合作（主要是生鲜，供应商直供社区，避免生鲜的配送成本</li>
+<li>配送成本：客单价都在70元左右；每日有限39元起送、6元配送费、30分钟送达；叮咚买菜，则是0元起送，29分钟送达，更强调复购率。所以仓储上都采用了前置仓（也就是将仓库从远郊的物流中心前移到离消费者更近），仓储配送成本较高。</li>
+<li>商品品类：品类较齐全，大概是3000-4000个左右的品类，包括水果蔬菜、肉蛋、水产、零食、粮油、日百等，相对强调品质</li>
+<li>会员体系：会员价格，通过包年会员可以黏住部分用户；通过社区分享优惠进行营销推广</li>
+</ul>
+<h5 id="盒马鲜生"><a href="#盒马鲜生" class="headerlink" title="盒马鲜生"></a>盒马鲜生</h5><ul>
+<li>线下门店=超市（以吃为主）+仓储+分拣配送+在店现做现吃，线下体验，新零售模式</li>
+<li>冷链建设，提供全品类生鲜（包括进口），能快速分拣、配送</li>
+<li>采购：全球直采+本地化直采+自有品牌</li>
+<li>盈利：需要高客单价、客流量高才能维持运营</li>
+<li>目标消费客群：年轻消费者，25-45女性</li>
+<li>运营成本较高：大门店租金+到家配送</li>
+</ul>
+<h5 id="美菜网"><a href="#美菜网" class="headerlink" title="美菜网"></a>美菜网</h5><p>美菜网采取“两端一链一平台”的商业模式，将农产品电商、农产品物流基地进行整合，缩短农产品流通环节，减少供应链人力，实现生产端和餐厅的对接，产地直采、终端配送。本身是供应链服务商，更偏向于toB的服务。</p>
+<p>生鲜行业的上游很分散，下游需求基本掌握在渠道上，参与社区电商需要终端流量。对于供应链，品类、规模、利润被称为不可能三角——很难做到品类齐、规模大且利润高。</p>
+<p>美菜网尝试转向toC，参与社区团购，但手上没流量，资本并不看好。</p>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>过去的10年，是资本搭载移动互联网浪潮，用官方的话来说，进行“无序扩张”的10年。信息革命从ICT领域延伸到更广泛的生活应用领域，而后也将进入算法基建的时代。我们见证了独角兽的诞生，也参与了巨头的成长。虽然很多人只是拧螺丝钉的工程师，但我们始终要记住，技术只是社会目的的实现手段。资本是中性的，而人性是有善恶的。我们不能帮忙建造一艘驶向深渊的巨轮，因为我们可能就在船上。</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>Jason
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://blog.knpc21.com/research/community-group-buying/">http://blog.knpc21.com/research/community-group-buying/</a>
+        </p>
+        
+            <strong>
+                <p>文章默认使用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 协议进行许可，使用时请注意遵守协议。</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2021-07-15</p></div> 
+    <div class="post-entry__tags"><a href="/tags/调研/" class="post-tags__link button"># 调研</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/ios/ios-device-pixels/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            iOS开发：iPhone屏幕分辨率（更新）
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/undefined/dns-dnspod/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            DNSPod要实名了
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-K2Q2J84"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-K2Q2J84');
+    </script>
+ 
+
+ 
+
+ 
+
+
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "1d741b4fcb7f4062933be3f4b0eb6571"}'></script>
+    </script>
+    
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

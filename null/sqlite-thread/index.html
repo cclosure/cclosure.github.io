@@ -46,7 +46,7 @@
 <meta property="og:image" content="http://blog.knpc21.com/null/sqlite-thread/rollback-wal.png">
 <meta property="og:image" content="http://blog.knpc21.com/null/sqlite-thread/sqlite-busy.png">
 <meta property="og:image" content="http://blog.knpc21.com/null/sqlite-thread/checkpoint.png">
-<meta property="og:updated_time" content="2022-01-19T01:48:42.938Z">
+<meta property="og:updated_time" content="2019-08-15T13:49:00.000Z">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="SQLite的线程模型、事务与并发">
 <meta name="twitter:description" content="两个互斥锁：  fullmutex：连接锁，用于确保任何时候最多只能一个线程在同一个连接上执行事务 coremutex：文件锁，用于确保任何时候只有一个线程访问数据库  3种线程模型：（使用方式）  single-thread：两个互斥锁都禁用，使用方需要保证单线程访问 multi-thread：fullmutex禁用，coremutex开启，可以多个线程通过不同的数据库连接进行访问（单个连接只能">
@@ -181,7 +181,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sqlite3 *db = NULL; </span><br><span class="line">sqlite3_open(&quot;path/to/db&quot;, &amp;db); </span><br><span class="line">sqlite3_exec(db, &quot;pragma journal_mode=wal&quot;, nil, NULL, NULL); </span><br><span class="line">// `pragma journal_mode=wal` 语句会有一个返回值，返回当前 journal mode // 如果不为 wal，表示失败</span><br></pre></td></tr></table></figure>
     </div>
      
-    <div class="post-footer__meta"><p>更新于 2022-01-19</p></div> 
+    <div class="post-footer__meta"><p>updated at 2019-08-15</p></div> 
     <div class="post-entry__tags"></div> 
 </article>
 
@@ -227,7 +227,7 @@
 
     <div class="post__comments content-card" id="comment">
         
-    <h4>评论</h4>
+    <h4>Comments</h4>
     
     
     
@@ -251,7 +251,7 @@
 
             <footer class="footer">
      
-    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
             <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
         </svg>

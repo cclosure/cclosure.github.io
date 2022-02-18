@@ -35,19 +35,19 @@
 
     <!-- OpenGraph -->
  
-    <meta name="description" content="第三方平台授权登录，是现在互联网产品的标配支持。 但是OAuth2在移动端实践是不安全的。有不少的产品，比如国内有些数亿用户量的App，也会出现将client_secret保存在客户端的情况。钥匙丢了，锁却不能换的情况下，对于产品而言无疑是很被动的。 那我们在终端或者整体方案设计上，怎样可以规避这种问题？">
+    <meta name="description" content="OAuth2在移动端实践是不安全的，有不少的产品（包括某些上亿用户量的App），也会出现将client_secret保存在客户端的情况。钥匙丢了、锁却不能换，对于项目而言无疑是很被动的。 因此需要在终端或者整体方案设计上，考虑规避这类问题。">
 <meta name="keywords" content="JWT">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JSON Web Token">
 <meta property="og:url" content="http://blog.knpc21.com/ios/json-web-token/index.html">
 <meta property="og:site_name" content="{ }">
-<meta property="og:description" content="第三方平台授权登录，是现在互联网产品的标配支持。 但是OAuth2在移动端实践是不安全的。有不少的产品，比如国内有些数亿用户量的App，也会出现将client_secret保存在客户端的情况。钥匙丢了，锁却不能换的情况下，对于产品而言无疑是很被动的。 那我们在终端或者整体方案设计上，怎样可以规避这种问题？">
+<meta property="og:description" content="OAuth2在移动端实践是不安全的，有不少的产品（包括某些上亿用户量的App），也会出现将client_secret保存在客户端的情况。钥匙丢了、锁却不能换，对于项目而言无疑是很被动的。 因此需要在终端或者整体方案设计上，考虑规避这类问题。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://s3.bmp.ovh/imgs/2022/01/7471ed2a2c057ef9.jpg">
-<meta property="og:updated_time" content="2022-01-19T01:48:42.934Z">
+<meta property="og:updated_time" content="2020-01-10T13:41:36.000Z">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="JSON Web Token">
-<meta name="twitter:description" content="第三方平台授权登录，是现在互联网产品的标配支持。 但是OAuth2在移动端实践是不安全的。有不少的产品，比如国内有些数亿用户量的App，也会出现将client_secret保存在客户端的情况。钥匙丢了，锁却不能换的情况下，对于产品而言无疑是很被动的。 那我们在终端或者整体方案设计上，怎样可以规避这种问题？">
+<meta name="twitter:description" content="OAuth2在移动端实践是不安全的，有不少的产品（包括某些上亿用户量的App），也会出现将client_secret保存在客户端的情况。钥匙丢了、锁却不能换，对于项目而言无疑是很被动的。 因此需要在终端或者整体方案设计上，考虑规避这类问题。">
 <meta name="twitter:image" content="https://s3.bmp.ovh/imgs/2022/01/7471ed2a2c057ef9.jpg">
 
 
@@ -151,43 +151,64 @@
     
 </div>
     <div class="post__content">
-        <p>第三方平台授权登录，是现在互联网产品的标配支持。</p>
-<p>但是OAuth2在移动端实践是不安全的。有不少的产品，比如国内有些数亿用户量的App，也会出现将client_secret保存在客户端的情况。钥匙丢了，锁却不能换的情况下，对于产品而言无疑是很被动的。</p>
-<p>那我们在终端或者整体方案设计上，怎样可以规避这种问题？</p>
+        <p><code>OAuth2</code>在移动端实践是不安全的，有不少的产品（包括某些上亿用户量的App），也会出现将<code>client_secret</code>保存在客户端的情况。钥匙丢了、锁却不能换，对于项目而言无疑是很被动的。</p>
+<p>因此需要在终端或者整体方案设计上，考虑规避这类问题。</p>
 <a id="more"></a>
-<p>Sign In With Apple在WWDC2019推出后，今年几乎是强制性的接入（发觉并没有什么抵抗？），我觉得今年之后苹果的生态会更深入人心了。面对千万级别以上的开发者，苹果怎么从技术方案上保证数据安全呢？苹果使用的是JSON Web Token。</p>
-<h3 id="JSON-Web-Token概念"><a href="#JSON-Web-Token概念" class="headerlink" title="JSON Web Token概念"></a>JSON Web Token概念</h3><p>JSON Web Token（简称JWT）的规范性文件请看<a href="https://tools.ietf.org/html/rfc7519" target="_blank" rel="noopener">RFC-7519</a>。让我们看看IETF的对JWT的简介：</p>
+<p><code>Sign In With Apple</code>在WWDC2019推出后，今年几乎是强制性的接入（发觉大小公司并没有什么抵抗？）。尽管晚了一点，但作为苹果生态的重要一环，终究是出场了。要知道，微信、微博成长为大平台，早期支持授权登录是非常重要的。</p>
+<p>与「使用微信登录」、「使用微博登录」一样，<code>Sign In With Apple</code>其实也是基于<a href="https://oauth.net/2/" target="_blank" rel="noopener"><code>OAuth2</code></a>和<a href="https://openid.net/connect/" target="_blank" rel="noopener"><code>OpenID Connect</code></a>的规范来实现授权登录的。那么面对千万级别以上的开发者、全球的用户量，苹果怎么从技术方案上保证数据安全呢？其中的一个方式便是使用<code>JSON Web Token</code>。</p>
+<h3 id="JSON-Web-Token概念"><a href="#JSON-Web-Token概念" class="headerlink" title="JSON Web Token概念"></a>JSON Web Token概念</h3><p><code>JSON Web Token</code>（简称<code>JWT</code>）是一个规范，规范性文件请看<a href="https://tools.ietf.org/html/rfc7519" target="_blank" rel="noopener">RFC-7519</a>。</p>
+<p>看看IETF的对JWT的简介：</p>
 <blockquote>
 <p>JSON Web Token (JWT) is a compact, URL-safe means of representing<br>claims to be transferred between two parties.  The claims in a JWT<br>are encoded as a JSON object that is used as the payload of a JSON<br>Web Signature (JWS) structure or as the plaintext of a JSON Web<br>Encryption (JWE) structure, enabling the claims to be digitally<br>signed or integrity protected with a Message Authentication Code<br>(MAC) and/or encrypted.</p>
 </blockquote>
-<p>claim是一种对所有权的宣示。JWT主要是通过对claims做签名，来保证这种所有权的有效性。</p>
-<h3 id="JSON-Web-Token结构"><a href="#JSON-Web-Token结构" class="headerlink" title="JSON Web Token结构"></a>JSON Web Token结构</h3><p>那么JWT是什么样子呢？我们看一个例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1MjAyMDAxMDEiLCJuYW1lIjoiSmFzb24gQ2hhbiIsImlhdCI6MTU3Nzg4MjUxMH0.kB8ZprG8nGbNhR7AgcBoHOJaI1NucNMheN9IzoVdJK4</span><br></pre></td></tr></table></figure>
-<p>可以看到JWT令牌是一个字符串，并且由<code>.</code>点号分隔为3段。</p>
-<p>解码后可以看到：（先不管是什么解码的）<br>第一部分是：（Header）</p>
+<p>claim是一种对所有权的宣示。JWT主要是通过对claims做签名，来保证这种所有权的有效性。这从下面介绍的<code>JWT</code>的结构我们可以知道。</p>
+<h3 id="JSON-Web-Token结构"><a href="#JSON-Web-Token结构" class="headerlink" title="JSON Web Token结构"></a>JSON Web Token结构</h3><p>看一个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</span><br><span class="line">.eyJzdWIiOiJ1MjAyMDAxMDEiLCJuYW1lIjoiSmFzb24gQ2hhbiIsImlhdCI6MTU3Nzg4MjUxMH0</span><br><span class="line">.kB8ZprG8nGbNhR7AgcBoHOJaI1NucNMheN9IzoVdJK4</span><br></pre></td></tr></table></figure>
+<p>可以看到JWT令牌是一个由<code>.</code>点号分隔为3段的字符串（无分行），并且每段是Base64编码的。</p>
+<p>Base64解码后可以看到：<br>第一部分是：（Header）</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"alg"</span>: <span class="string">"HS256"</span>,</span><br><span class="line">  <span class="attr">"typ"</span>: <span class="string">"JWT"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>第二部分是：（Payload）</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"sub"</span>: <span class="string">"u20200101"</span>,</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"Jason Chan"</span>,</span><br><span class="line">  <span class="attr">"iat"</span>: <span class="number">1577882510</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>第三部分是：（Signature）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fͅhZ#Snp!xH΅]$</span><br></pre></td></tr></table></figure>
-<p>事实上，一个JWT就是由三部分组成：头部、有效载荷、签名。格式是<code>Header.Payload.Signature</code>，三部分通过点号连接。</p>
-<p>以上是做了Base64编码，详细可以看JWT的规范里的说明。</p>
-<p><strong>Header</strong>中指定了签名的散列算法，<code>alg</code>为算法的缩写，比如<code>RS256</code>、<code>HS256</code>。例子中是<code>HS256</code>，也就是HMAC SHA256）。<code>typ</code>为类型的缩写，可选的有[<a href="https://tools.ietf.org/html/rfc7519#ref-JWS" target="_blank" rel="noopener">JWS</a>] 与 [<a href="https://tools.ietf.org/html/rfc7519#ref-JWE" target="_blank" rel="noopener">JWE</a>]。对于非对称加密签名的算法，可能有<code>kid</code>字段。</p>
-<p><strong>Payload</strong>是包含声明的有效载荷。声明是关于实体（比如用户）与其他元数据。有特定的声明字段，规范里的声明字段有：</p>
+<p>事实上，一个JWT就是由三部分组成：头部、有效载荷、签名。格式是<code>Header.Payload.Signature</code>，三部分Base64编码后通过点号连接。</p>
+<p>其中<strong>Header</strong>中指定了签名的算法，<code>alg</code>为算法的缩写，通常的比如<code>RS256</code>、<code>HS256</code>。例子中是<code>HS256</code>，也就是HMAC SHA256）。<code>typ</code>为类型的缩写，可选的有[<a href="https://tools.ietf.org/html/rfc7519#ref-JWS" target="_blank" rel="noopener">JWS</a>] 与 [<a href="https://tools.ietf.org/html/rfc7519#ref-JWE" target="_blank" rel="noopener">JWE</a>]——这两个也是常用的JWT的两种应用。</p>
+<p><code>Header</code>也可以有额外的字段，比如对于非对称加密签名的算法，可能有<code>kid</code>字段（也就是秘钥id）等。</p>
+<p><strong>Payload</strong>是包含声明的有效载荷。声明是关于实体（比如用户）与其他元数据。</p>
+<p>声明可以分为三大类，Registered Claims、Public Claims和Private Claims。其中Registered Claims是标准规定的有特定的含义的声明字段，也是最常用到的，规范里的声明字段有：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&quot;iss&quot; (Issuer) Claim</span><br><span class="line">&quot;sub&quot; (Subject) Claim</span><br><span class="line">&quot;aud&quot; (Audience) Claim</span><br><span class="line">&quot;exp&quot; (Expiration Time) Claim</span><br><span class="line">&quot;nbf&quot; (Not Before) Claim</span><br><span class="line">&quot;iat&quot; (Issued At) Claim</span><br><span class="line">&quot;jti&quot; (JWT ID) Claim</span><br></pre></td></tr></table></figure>
-<p>主题<code>sub</code>是主要的声明。</p>
+<p>一般<code>sub</code>主题是主要的声明。</p>
+<p>Public Claims则可以理解为保留字段，比如<code>OpenID</code>的工作组就定义了一组字段，可以参考<a href="https://www.iana.org/assignments/jwt/jwt.xhtml" target="_blank" rel="noopener">IANA JWT</a>。对于实际应用上，如果不考虑外部交互，拓展一般用私有声明字段即可。</p>
 <p>也可以有自定义的声明字段。</p>
 <p><strong>Signature</strong>签名部分，根据header中指定的算法进行签名。比如例子中的<code>HS256</code>，是这样的：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">HMACSHA256(</span><br><span class="line">	base64Encode(header) + &quot;.&quot; + base64Encode(payload),</span><br><span class="line">  secret)</span><br></pre></td></tr></table></figure>
-<p>签名算法一般是<code>RS256</code>、<code>HS256</code>。前者是<code>RSA</code>非对称加密的私钥签名，后者则是<code>HMAC</code>的对称加密。其他签名算法此处不表。</p>
-<h3 id="JSON-Web-Token的潜在风险"><a href="#JSON-Web-Token的潜在风险" class="headerlink" title="JSON Web Token的潜在风险"></a>JSON Web Token的潜在风险</h3><p>我们需要理解JWT的设计初衷。JWT不是作为一个数据加密的用途的，它的头部及有效载荷实际是明文传输的。JWT主要是验证数据的有效性，避免被篡改。</p>
-<p>潜在的问题包括：</p>
+<p>签名算法一般是<code>HS256</code>、<code>RS256</code>或<code>ES256</code>。<code>HS256</code>是<code>HMAC SHA256</code>的摘要散列算法，<code>RS256</code>或<code>ES256</code>则是使用非对称密钥进行签名校验。</p>
+<h3 id="JWS与JWE"><a href="#JWS与JWE" class="headerlink" title="JWS与JWE"></a>JWS与JWE</h3><p><code>JWT</code>是规范，而<code>JWS</code>和<code>JWE</code>就是两个实现了。<code>JWS</code>主要明确签名的细节，关心的是数据防篡改，但数据是可能被窥探的；<code>JWE</code>则关心数据的私密安全性，主要明确数据加解密的细节。</p>
+<p><code>JWS</code>支持的签名算法前面提到的<code>HMAC SHA</code>、<code>RSA SHA</code>、<code>ECDSA SHA</code>系列，每个系列根据密钥长度有不同安全强度。<code>JWT</code>也是可以不签名的（header中alg为none），不签名的<code>JWT</code>被称为不安全的<code>JWT</code>，签名的其实就是<code>JWS</code>了。<code>JWS</code>签名需要用到公钥或者共享密钥来验签，这个密钥被称为<code>JSON Web Key</code>，也就是<code>JWK</code>。</p>
+<p>为了支持公钥验签，<code>JWS</code>会有额外的header声明。比如若使用私有部署的证书来签名，则可以声明<code>kid</code>来提供<code>jwk</code>的索引。苹果也是这么干的，苹果提供了服务地址来下载它用来验签的公钥。苹果下发到前端的identityToken就是一个使用苹果的私钥签名的<code>JWT</code>，后面有机会再介绍苹果的授权流程。除了<code>kid</code>，<code>JWS</code>还支持X509证书相关的字段，比如：</p>
 <ul>
+<li>x5u: 指向X509公共证书的URL</li>
+<li>x5c: X509证书链</li>
+<li>x5t：X509证书的SHA-1指纹</li>
+<li>x5t#S256: X509证书的SHA-256指纹</li>
+</ul>
+<p><code>JWE</code>的结构稍微有些差异，<code>JWE</code>令牌由五个关键组件构建，主要包括：JOSE头、JWE加密密钥、JWE初始化向量、JWE密文和JWE身份验证标签。</p>
+<ul>
+<li>The protected header，类似于JWS的头部；</li>
+<li>The encrypted key，用于加密密文和其他加密数据的对称密钥；</li>
+<li>The initialization vector，初始IV值，有些加密方式需要额外的或者随机的数据；</li>
+<li>The encrypted data，密文数据；</li>
+<li>The authentication tag，由算法产生的附加数据，来防止密文被篡改</li>
+</ul>
+<p>关注<code>JWE</code>的头部的一些参数字段：<br>alg：定义用于加密 Content Encryption Key（CEK）的算法，必须为RSA-OAEP<br>enc：定义用于加密载荷数据以及提供认证标签，必须为A128CBC-HS256<br>cty：定义载荷的Content Type，必须为“JWT”<br>kid：可选，密钥索引号<br>zip：可选，定义内容明文压缩算法</p>
+<p>具体的加解密流程可以参考文档说明。</p>
+<h3 id="JSON-Web-Token的潜在风险"><a href="#JSON-Web-Token的潜在风险" class="headerlink" title="JSON Web Token的潜在风险"></a>JSON Web Token的潜在风险</h3><p><code>JWT</code>的规范不是作为一个数据加密的用途的，比如<code>JWS</code>的头部及有效载荷实际是明文传输的，主要是验证数据的有效性，避免被篡改。因此会有些潜在的问题需要注意的：</p>
+<ol>
 <li>敏感信息泄露</li>
 <li>JWT的重放风险</li>
 <li>算法修改攻击</li>
 <li>对称加密签名密钥破解</li>
-</ul>
+</ol>
 <p>数据的传输阶段，有效载荷是明文的，所以不要传输敏感信息。而作为身份验证的一种手段，JWT存在伪造身份恶意攻击的风险。比如JWT的重放风险，虽然这个用其他的身份验证方式同样存在的。另一种问题是算法修改攻击，校验方应该限定<strong>Header</strong>中的<code>sig</code>，谨慎使用JWT库。如果JWT支持none算法，可能直接跳过签名的认证；或者攻击时将RS256修改为HS256，同样有签名验证的漏洞。可以参考这篇<a href="https://www.sjoerdlangkemper.nl/2016/09/28/attacking-jwt-authentication/" target="_blank" rel="noopener">文章</a>。</p>
 <p>本文参考：<a href="https://jwt.io/introduction/" target="_blank" rel="noopener">Introduction to JSON Web Tokens</a></p>
 
@@ -195,11 +216,11 @@
     
     <div class="post__license">
         <p>
-            <strong>本文作者：</strong>Jason
+            <strong>Author: </strong>Jason
         </p>
         <p>
             <strong>
-                本文链接：
+                Permalink: 
             </strong>
             <a href="http://blog.knpc21.com/ios/json-web-token/">http://blog.knpc21.com/ios/json-web-token/</a>
         </p>
@@ -211,7 +232,7 @@
         
     </div>
  
-    <div class="post-footer__meta"><p>更新于 2022-01-19</p></div> 
+    <div class="post-footer__meta"><p>updated at 2020-01-10</p></div> 
     <div class="post-entry__tags"><a href="/tags/JWT/" class="post-tags__link button"># JWT</a></div> 
 </article>
 
@@ -257,7 +278,7 @@
 
     <div class="post__comments content-card" id="comment">
         
-    <h4>评论</h4>
+    <h4>Comments</h4>
     
     
     
@@ -281,7 +302,7 @@
 
             <footer class="footer">
      
-    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
             <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
         </svg>

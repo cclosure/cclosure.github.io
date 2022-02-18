@@ -131,6 +131,68 @@
                     <div class="post-entry__header"></div>
 <div class="post-entry__content">
     <h2 class="post-entry__title">
+        iOS开发：苹果支付测试
+    </h2>
+    
+        <p>WWDC 2020苹果的Xcode12开始可以支持<code>StoreKit</code>支付的模拟测试，大概是试图减少开发者在测试调试上面的困扰。<code>StoreKit</code>一直遭人遭人诟病，毕竟将责任交由环境复杂的终端，是苹果支付问题的起点。</p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2020/06/" class="post-meta__date button">2020-06-30</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/iOS/" class="post-tags__link button"># iOS</a><a href="/tags/支付/" class="post-tags__link button"># 支付</a><a href="/tags/StoreKit/" class="post-tags__link button"># StoreKit</a></div> 
+<a href="/ios/storekit-testing/" class="post-entry__link">iOS开发：苹果支付测试</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        MessagePack简介
+    </h2>
+    
+        <p>It’s like JSON. but fast and small.</p>
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2020/04/" class="post-meta__date button">2020-04-19</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/JSON/" class="post-tags__link button"># JSON</a><a href="/tags/序列化/" class="post-tags__link button"># 序列化</a></div> 
+<a href="/tech/messagepack/" class="post-entry__link">MessagePack简介</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header">
+	
+        <div class="post-thumbnail" style="background-image: url('https://s3.bmp.ovh/imgs/2021/11/0a7a4851f78c57ef.png');"></div>
+    
+</div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
+        虚拟内存与Page Fault
+    </h2>
+    
+        <p>实际上<code>Page Fault</code>并不是如其名的一个“错误”，而只是访问内存分页的一种事件方式。</p>
+<p>缺页中断（英语：<code>Page Fault</code>）又名页缺失、页故障等，是当进程试图访问内存数据、但该内存地址对应的物理内存尚未加载时，由CPU的内存管理单元<code>MMU</code>所发出的中断。
+    
+</div>
+<div class="post-entry__meta">
+    <a href="/archives/2020/04/" class="post-meta__date button">2020-04-11</a>
+    
+ 
+</div>
+<div class="post-entry__tags"><a href="/tags/内存/" class="post-tags__link button"># 内存</a></div> 
+<a href="/tech/pagefault/" class="post-entry__link">虚拟内存与Page Fault</a>
+                </div>
+            
+                <div class='post-entry content-card'>
+                    <div class="post-entry__header"></div>
+<div class="post-entry__content">
+    <h2 class="post-entry__title">
         APNS远程推送模拟
     </h2>
     
@@ -157,9 +219,8 @@
         JSON Web Token
     </h2>
     
-        <p>第三方平台授权登录，是现在互联网产品的标配支持。</p>
-<p>但是OAuth2在移动端实践是不安全的。有不少的产品，比如国内有些数亿用户量的App，也会出现将client_secret保存在客户端的情况。钥匙丢了，锁却不能换的情况下，对于产品而言无疑是很被动的。</p>
-<p>那我们在终端或者整体方案设计上，怎样可以规避这种问题？</p>
+        <p><code>OAuth2</code>在移动端实践是不安全的，有不少的产品（包括某些上亿用户量的App），也会出现将<code>client_secret</code>保存在客户端的情况。钥匙丢了、锁却不能换，对于项目而言无疑是很被动的。</p>
+<p>因此需要在终端或者整体方案设计上，考虑规避这类问题。</p>
     
 </div>
 <div class="post-entry__meta">
@@ -232,6 +293,8 @@
         SQLite的基本用法介绍
     </h2>
     
+        <p>SQLite作为一个广泛使用的嵌入式数据库</p>
+    
 </div>
 <div class="post-entry__meta">
     <a href="/archives/2019/08/" class="post-meta__date button">2019-08-12</a>
@@ -239,7 +302,7 @@
  
 </div>
 <div class="post-entry__tags"></div> 
-<a href="/null/sqlite-basic/" class="post-entry__link">SQLite的基本用法介绍</a>
+<a href="/tech/sqlite-basic/" class="post-entry__link">SQLite的基本用法介绍</a>
                 </div>
             
                 <div class='post-entry content-card'>
@@ -262,62 +325,6 @@
 <a href="/ios/ios-lib-notification/" class="post-entry__link">iOS开发：自定义通知横幅</a>
                 </div>
             
-                <div class='post-entry content-card'>
-                    <div class="post-entry__header"></div>
-<div class="post-entry__content">
-    <h2 class="post-entry__title">
-        iOS开发：苹果内购组件
-    </h2>
-    
-        <p>苹果内购代码组件的重构。</p>
-    
-</div>
-<div class="post-entry__meta">
-    <a href="/archives/2019/03/" class="post-meta__date button">2019-03-18</a>
-    
- 
-</div>
-<div class="post-entry__tags"><a href="/tags/iOS/" class="post-tags__link button"># iOS</a><a href="/tags/IAP/" class="post-tags__link button"># IAP</a></div> 
-<a href="/ios/ios-lib-storekit/" class="post-entry__link">iOS开发：苹果内购组件</a>
-                </div>
-            
-                <div class='post-entry content-card'>
-                    <div class="post-entry__header"></div>
-<div class="post-entry__content">
-    <h2 class="post-entry__title">
-        iOS开发：路由组件
-    </h2>
-    
-</div>
-<div class="post-entry__meta">
-    <a href="/archives/2019/02/" class="post-meta__date button">2019-02-21</a>
-    
- 
-</div>
-<div class="post-entry__tags"><a href="/tags/架构/" class="post-tags__link button"># 架构</a><a href="/tags/iOS/" class="post-tags__link button"># iOS</a></div> 
-<a href="/ios/ios-lib-router/" class="post-entry__link">iOS开发：路由组件</a>
-                </div>
-            
-                <div class='post-entry content-card'>
-                    <div class="post-entry__header"></div>
-<div class="post-entry__content">
-    <h2 class="post-entry__title">
-        持续集成：搭建SonarQube
-    </h2>
-    
-        <p>SonarQube是一个开源的代码质量管理系统，可以将工程中代码问题，按预设的规则，输出代码质量报告。</p>
-<p>本文记录在Mac上使用Docker Compose搭建SonarQube的过程，方便后来人。</p>
-    
-</div>
-<div class="post-entry__meta">
-    <a href="/archives/2019/01/" class="post-meta__date button">2019-01-26</a>
-    
- 
-</div>
-<div class="post-entry__tags"><a href="/tags/docker/" class="post-tags__link button"># docker</a><a href="/tags/sonarqube/" class="post-tags__link button"># sonarqube</a></div> 
-<a href="/tech/ci-docker-sonarqube/" class="post-entry__link">持续集成：搭建SonarQube</a>
-                </div>
-            
         
     </div>
     
@@ -333,7 +340,7 @@
                                 Previous
                             </div>
                             <div class="nav__title">
-                                第 1 页
+                                Page 1
                             </div>
                         </div>
                     </a>
@@ -347,7 +354,7 @@
                                 Next
                             </div>
                             <div class="nav__title">
-                                第 3 页
+                                Page 3
                             </div>
                         </div>
                         <div>
@@ -364,7 +371,7 @@
 
             <footer class="footer">
      
-    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
             <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
         </svg>

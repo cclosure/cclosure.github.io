@@ -1,0 +1,3 @@
+protocol ProtocolX {
+    func foo()
+}

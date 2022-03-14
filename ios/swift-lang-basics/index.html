@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>Swift语法简要 | { }</title>
+
+
+    <meta name="keywords" content="Swift, ios, 技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="Swift 5.0 与ABI稳定历经了5年，Swift终于在2019年3月发布了5.0版本，带来了ABI稳定。从RedMonk公布的编程语言排名看，Swift自2017年开始跃到10名左右，而Objective-C则持续下降，目前Swift排名与Objective-C相近，并列排在了11位。  从现在的发展趋势看，Swift势必替代Objective-C成为iOS/MacOS的主要应用开发语言。">
+<meta name="keywords" content="Swift,ios">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift语法简要">
+<meta property="og:url" content="http://blog.knpc21.com/ios/swift-lang-basics/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="Swift 5.0 与ABI稳定历经了5年，Swift终于在2019年3月发布了5.0版本，带来了ABI稳定。从RedMonk公布的编程语言排名看，Swift自2017年开始跃到10名左右，而Objective-C则持续下降，目前Swift排名与Objective-C相近，并列排在了11位。  从现在的发展趋势看，Swift势必替代Objective-C成为iOS/MacOS的主要应用开发语言。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://s4.ax1x.com/2022/02/18/H74PQ1.png">
+<meta property="og:updated_time" content="2020-12-18T14:19:08.000Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Swift语法简要">
+<meta name="twitter:description" content="Swift 5.0 与ABI稳定历经了5年，Swift终于在2019年3月发布了5.0版本，带来了ABI稳定。从RedMonk公布的编程语言排名看，Swift自2017年开始跃到10名左右，而Objective-C则持续下降，目前Swift排名与Objective-C相近，并列排在了11位。  从现在的发展趋势看，Swift势必替代Objective-C成为iOS/MacOS的主要应用开发语言。">
+<meta name="twitter:image" content="https://s4.ax1x.com/2022/02/18/H74PQ1.png">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        Swift语法简要
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2020/12/" class="post-meta__date button">2020-12-18</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header">
+	
+        <div class="post-thumbnail" style="background-image: url('https://s4.ax1x.com/2022/02/18/H74PQ1.png');"></div>
+    
+</div>
+    <div class="post__content">
+        <a id="more"></a>
+<h3 id="Swift-5-0-与ABI稳定"><a href="#Swift-5-0-与ABI稳定" class="headerlink" title="Swift 5.0 与ABI稳定"></a>Swift 5.0 与ABI稳定</h3><p>历经了5年，Swift终于在2019年3月发布了5.0版本，带来了ABI稳定。从RedMonk公布的编程语言排名看，Swift自2017年开始跃到10名左右，而Objective-C则持续下降，目前Swift排名与Objective-C相近，并列排在了11位。</p>
+<p><img src="https://redmonk.com/sogrady/files/2020/07/lang-rank-q320-wm.png" alt></p>
+<p>从现在的发展趋势看，Swift势必替代Objective-C成为iOS/MacOS的主要应用开发语言。开发社区在项目演进尤其是新项目的开发上，更多地选择了Swift，苹果也确实在应用框架上越来越多的倾向了Swift。SwiftUI尽管还在发展中，但这也是苹果在思考融合声明式响应式UI框架的结果。</p>
+<p>站在这个时间节点，无论是企业还是个人，显然Swift不再是一个Option，而是新的基础建设的砖头和铲子。</p>
+<p>只从一方面去评价语言的优劣是不够的，语言的流行程度受到应用场景与需求的限定。很多人不一定喜欢JavaScript，但不妨碍JavaScript作为Web开发的主流语言。对于Swift，尽管吸纳了很多其他语言的特性，但为了兼容Objective-C以及其他考虑，显然也做了很多compromise。语言的发展都是平衡的产物。Chris Lattner在WWDC 2017上有过一些对Swift语言特点及后续发展的看法，有兴趣可以查阅<a href="https://oleb.net/blog/2017/06/chris-lattner-wwdc-swift-panel/" target="_blank" rel="noopener">这里</a>了解。</p>
+<p>本文将整理Swift的一些语法概要，方便一些小伙伴可以30分钟内对Swift语言特性有一个基本的认知。</p>
+<h3 id="语言文档"><a href="#语言文档" class="headerlink" title="语言文档"></a>语言文档</h3><p>官方文档：<a href="https://docs.swift.org/swift-book/LanguageGuide/TheBasics.html" target="_blank" rel="noopener">https://docs.swift.org/swift-book/LanguageGuide/TheBasics.html</a></p>
+<p>中译文档：<a href="https://www.cnswift.org/" target="_blank" rel="noopener">https://www.cnswift.org/</a></p>
+<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>Swift是一门<strong>编译型</strong>、<strong>静态类型</strong>、<strong>强类型</strong>的编程语言。</p>
+<p>编译型是指会源码直接编译为（特定平台架构下的）二进制可执行文件，解释型（通常说的脚本语言）则并不会。解释型语言（在不同平台下）有一个源码解释器，其在运行过程中才将需要执行的源码（或者中间字节码）转换为机器码。因此编译型语言性能更高，解释型语言则更容易实现跨平台。</p>
+<p>数据类型是语言定义的一部分（其定义了该类型数据可进行的操作），值是运行时的数据。静态/动态类型是以Type Check的时机进行区分的。通俗来说，动态类型选择相信编译期的数据类型声明，并在运行时才去确认数据的类型是否合法（合法是指不会因为出现与其类型定义不一致的操作而导致错误），而静态类型则在编译器是明确的。静态类型的代表有C++/Java/Go，动态类型的代表有Python、Ruby等。</p>
+<p><strong>强/弱类型</strong>则看编译器是否支持隐式类型转换。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var object: NSObject?</span><br><span class="line">func aha() &#123;</span><br><span class="line">  self.object = String(&quot;haha&quot;) // Cannot assign value of type &apos;String&apos; to type &apos;NSObject&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 不允许隐式类型转换</span><br><span class="line">var text: Int = 1234.00	// Cannot convert value of type &apos;Double&apos; to specified type &apos;Int&apos;</span><br></pre></td></tr></table></figure>
+<p>在编译阶段检查类型问题，可以避免运行时不可预测的错误。</p>
+<h3 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h3><p><strong>常量与变量</strong> Swift中通过let/var来限定值的可变性，通过<code>let</code>可以声明<strong>常量</strong>，<code>var</code>声明<strong>变量</strong>。举例，<code>let list = []</code>是不可变的，而<code>var list = []</code>则是可变的。这跟Objc常见的Mutable的集合类型是不同的，Objective-C是通过类型来支持可变性，Mutable类型是可变的，而非可变的是另一个类型，比如<code>NSMutableArray</code>与<code>NSArray</code>。Swift通过将Array这些集合使用值类型来实现以达到这个要求。</p>
+<p><strong>基本数据类型</strong> 有数值（Int、Int8、Int16、Int32、Int64，float，double）、Bool、字符(串)（String、Character）。</p>
+<p><strong>集合类型</strong>（数组Array、字典Dictionary、集合、元组）。</p>
+<p>String是字符串类型，比如<code>&quot;hello, world&quot;</code>，String的内容可以通过很多方式来访问。多行字符串使用<code>&quot;&quot;&quot;</code>来包括。为了能强化理解，你可以打开Xcode在Playground中来实践一下。</p>
+<p><strong>字面值</strong>，基础数据类型都可以直接使用字面值Literals，比如<code>let someString = “Some string literal value”</code>。</p>
+<p><strong>类型推断</strong>，比如上面的例子<code>let someString = “Some string literal value”</code>，Swift可以推断<code>someString</code>的类型，因为它使用了字符串字面量来初始化了。</p>
+<p><strong>类型别名</strong>，<code>typealias CountType = Int</code>，可以在代码中直接使用别名，<code>let count: CountType = 10</code>。</p>
+<p>Swift还引入了<strong>Optional</strong>（通常译为可空类型，其实是使用Enum实现的）——要么有值，要么为空（也就是值的缺失）。通常在变量声明时，可以在类型后加上<code>?</code>，来声明这是一个Optional类型，例如：<code>var name: String?</code>声明了一个名为<code>name</code>的变量，这个变量要么有值并且为String类型的值，要么为空。另外还有隐式解析可空类型，声明时在类型后加上<code>!</code>，比如<code>let xNotNil: String! = “aaa”</code>，指定该变量不应为空。普通可空类型可以为空，取值时必须<code>变量名!</code>（但通常我们会配合<code>if let</code>或<code>guard let</code>等方式来取值）；隐式解析可空类型可以直接取值。<strong>Optional Binding</strong>是在if等语句中，可用来对可空类型取值的，如果没有就是nil。可选链不赘述。</p>
+<p><strong>值类型与引用类型</strong> Swift中的数据，要么是值类型，要么是引用类型。引用类型实例内存是按引用计数的，这是不同之处。<code>struct</code>是值类型，<code>class</code>是引用类型。</p>
+<p>重复提醒：Swift是一门<strong>强类型</strong>语言，这意味着值不能进行隐式类型转换，不同类型之间转换必须通过显式的类型实例化过程。比如<code>Int</code>与<code>Int64</code>两个类型之间赋值，是需要显式的类型转换的，<code>let a: Int = Int(a64)</code>。</p>
+<p>另外<strong>注释</strong>与C系列的一样，单行注释<code>//</code>、多行注释<code>/**/</code>，但Swift的注释支持嵌套多行注释了。</p>
+<h3 id="基本运算符"><a href="#基本运算符" class="headerlink" title="基本运算符"></a>基本运算符</h3><p>Swift是类C的语言，基础运算符跟C或其他语言都类似。</p>
+<ul>
+<li><p>算术运算符：<code>+ - * / %</code></p>
+</li>
+<li><p>比较运算符：<code>== != &gt; &lt; &gt;= &lt;=</code></p>
+</li>
+<li><p>逻辑运算符：<code>! &amp;&amp; ||</code></p>
+</li>
+<li><p>三元运算符：<code>? :</code></p>
+</li>
+<li><p>区间运算符：<code>a..&lt;b</code>半开区间、<code>a...b</code>闭区间、[..i]或<code>[i..]</code>单侧区间</p>
+</li>
+</ul>
+<h3 id="集合类型（数组、字典、元组）"><a href="#集合类型（数组、字典、元组）" class="headerlink" title="集合类型（数组、字典、元组）"></a>集合类型（数组、字典、元组）</h3><p>几种集合类型：数组Array、字典Dictionary、集合Set、元组。</p>
+<p>集合是序列的一种，序列<code>Sequence</code>协议：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">protocol Sequence &#123;</span><br><span class="line">    associatedtype Iterator: IteratorProtocol</span><br><span class="line">    func makeIterator() -&gt; Iterator</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public protocol IteratorProtocol &#123;</span><br><span class="line">    associatedtype Element</span><br><span class="line">    public mutating func next() -&gt; Self.Element?</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>Sequence</code>协议要求集合类型支持迭代遍历，比如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">let alphabet = [&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;]</span><br><span class="line">for c in alphabet &#123;</span><br><span class="line">    print(c)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>会被编译器翻译为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var cIterator = alphabet.makeIterator()</span><br><span class="line">while let c = cIterator.next() &#123;</span><br><span class="line">    print(c)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>集合类型遵循<code>Collection</code>协议，<code>Collection</code>继承于<code>Sequence</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public protocol Collection : Sequence &#123;</span><br><span class="line">  associatedtype Index : Comparable</span><br><span class="line">  var startIndex: Index &#123; get &#125;</span><br><span class="line">  var endIndex: Index &#123; get &#125;</span><br><span class="line">  var isEmpty: Bool &#123; get &#125;</span><br><span class="line">  var count: Int &#123; get &#125;</span><br><span class="line">  </span><br><span class="line">  subscript(position: Index) -&gt; Element &#123; get &#125;</span><br><span class="line">  subscript(bounds: Range&lt;Index&gt;) -&gt; SubSequence &#123; get &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>集合类型在<code>Sequence</code>的基础上扩展了下标访问、元素个数能特性。我们常用的集合类型Array，Dictionary，Set都遵循该协议。</p>
+<h3 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h3><p>for-in、while、if、guard、switch、continue、break、fallthrough 含义都比较直观，只是switch多分支判断中，case内结束默认是break了，除非fallthroght。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">func startTalking(_ wage: Float) &#123;</span><br><span class="line">  guard let wage = wage where wage &gt; 0 else &#123;</span><br><span class="line">    print(&quot;nothing to say&quot;)</span><br><span class="line">    return</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  print(&quot;hahaha&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><p>function类型在swift语言中是first class citizen，其语法规范大概如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">func 函数名(参数标签 参数名: 类型=默认参数值) -&gt; 返回值 &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参数标签若与参数名一致，则可省略；参数标签也可以使用<code>_</code>，调用时可省略参数名（标签）。<br>函数支持return隐式返回、默认参数值、可变参数、inout参数（&amp;），并且支持嵌套函数。</p>
+<h3 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h3><p>“闭包就是一个匿名的函数体” 🆚 “函数是一个有名称的闭包”</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;(parameters) -&gt; returnType in  </span><br><span class="line"> 执行体</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是一个闭包表达式的语法。</p>
+<p>闭包利用上下文推断参数及返回值，支持尾随闭包、隐式返回单表达式闭包，使用$0引用参数，这些都是编译器的一些语法糖。</p>
+<p>比函数体晚执行的（通常是异步处理）称为逃逸闭包，需要使用@escaping进行修饰。</p>
+<h3 id="Class与Struct"><a href="#Class与Struct" class="headerlink" title="Class与Struct"></a>Class与Struct</h3><p>class与struct是Swift中使用最广泛的类型。</p>
+<p>0、类型声明、初始化、实例化</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> nickName: <span class="type">String</span> = <span class="string">""</span></span><br><span class="line">	<span class="keyword">var</span> age: <span class="type">Int</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">init</span>(age: <span class="type">Int</span>) &#123;</span><br><span class="line">		<span class="keyword">self</span>.age = age</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">func</span> <span class="title">work</span><span class="params">()</span></span> -&gt; <span class="type">Float</span> &#123;</span><br><span class="line">		  </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> p = <span class="type">Person</span>(age: <span class="number">20</span>)</span><br><span class="line">p.nickName = <span class="string">"Jason"</span></span><br><span class="line"><span class="built_in">print</span>(p)</span><br></pre></td></tr></table></figure>
+<p>1、存储属性与计算属性</p>
+<p>计算属性就是提供get/set方法的属性方法，依赖其他数据，一般作为便捷访问方法；</p>
+<p>存储属性拥有存储空间，相当于Objc类中拥有实例变量的属性。extension中只能声明计算属性，而没有存储属性。</p>
+<p>2、方法</p>
+<p>其实class、struct、enum中都可以声明方法，方法就是类型中定义的函数。类型、属性与方法都有权限修饰（见下文）。</p>
+<p>3、对象模型</p>
+<p>Swift中的类（class）可以继承，也可以不继承其他Swift类。不继承其他类的，实际上他们都是<code>SwiftObject</code>的派生类。也就是在Swift中有<code>SwiftObject</code>与<code>NSObject</code>两个根类）。Swift跟Objc一样其实是单一继承链。但不一样的是，Swift中的协议可以通过extension来提供默认的协议方法实现，使得Swift中的类能获得类似Mixin的能力。</p>
+<p>struct是值类型，不支持继承。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#if __has_attribute(objc_root_class)</span><br><span class="line">__attribute__((__objc_root_class__))</span><br><span class="line">#endif</span><br><span class="line">SWIFT_RUNTIME_EXPORT @interface SwiftObject&lt;NSObject&gt; &#123;</span><br><span class="line"> @private</span><br><span class="line">  Class isa;</span><br><span class="line">  SWIFT_HEAPOBJECT_NON_OBJC_MEMBERS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>4、内存模型</p>
+<p>struct与class的区别，首要在于值与引用的区别。引用意味着class的实例可以是共享的，而struct的”实例”都是copy的。值与引用各有其适用场景，值可以避免数据跨域的污染，而引用则有利于内存优化。</p>
+<p>内存管理上，Swift类依然使用引用计数。如上面提到的，Swift为了支持与Objective-C的互操作，设计了<code>SwiftObject</code>的根类。可以参考Swift的Github站点上对class的TypeMetadata的<a href="https://github.com/apple/swift/blob/main/docs/ABI/TypeMetadata.rst#class-metadata" target="_blank" rel="noopener">说明</a>。</p>
+<p>destructor(-2)/isa(0)/super(1)//reserved(2,3)/rodata(4,低位1是swift)/class(5,32bit)/instance addrp(32bit)/instance size(32bit)/…</p>
+<p>具体的内存布局我们会另外再说明。</p>
+<p>5、权限修饰：open/public/internal/fileprivate/private</p>
+<p>open：访问不受限，外部类可以继承、override方法，对于模块定义的类，如果允许外部进行继承是需要修饰为open的；<br>public：访问不受限，但仅本模块可以继承、修改方法/属性；<br>internal：访问限制在模块内部；<br>fileprivate：访问限制在同一文件内部；<br>private：访问限制在类内部；</p>
+<h3 id="一些常见协议"><a href="#一些常见协议" class="headerlink" title="一些常见协议"></a>一些常见协议</h3><p>自定义输出支持：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public protocol CustomStringConvertible &#123;</span><br><span class="line">    var description: String &#123; get &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>调试输出支持：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public protocol CustomDebugStringConvertible &#123;</span><br><span class="line">    var debugDescription: String &#123; get &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可散列化支持：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public protocol Hashable : Equatable &#123;</span><br><span class="line">    var hashValue: Int &#123; get &#125;</span><br><span class="line">    func hash(into hasher: inout Hasher)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public protocol Equatable &#123;</span><br><span class="line">    static func == (lhs: Self, rhs: Self) -&gt; Bool</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>作为集合的key需要是可哈希的（hashable），实现<code>Hashable</code>协议能使集合数据的查找复杂度降低到O(1)。</p>
+<p>自定义类型实现<code>Hashable</code>的方式，可以重写<code>hash(into:)</code>方法。如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">struct Color: Hashable &#123;</span><br><span class="line">    let red: UInt8</span><br><span class="line">    let green: UInt8</span><br><span class="line">    let blue: UInt8</span><br><span class="line"></span><br><span class="line">    // Synthesized by compiler</span><br><span class="line">    func hash(into hasher: inout Hasher) &#123;</span><br><span class="line">        hasher.combine(self.red)</span><br><span class="line">        hasher.combine(self.green)</span><br><span class="line">        hasher.combine(self.blue)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Default implementation from protocol extension</span><br><span class="line">    var hashValue: Int &#123;</span><br><span class="line">        var hasher = Hasher()</span><br><span class="line">        self.hash(into: &amp;hasher)</span><br><span class="line">        return hasher.finalize()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;// 案例来自nshipster</span><br></pre></td></tr></table></figure></p>
+<p>基本数据类型是可哈希的。</p>
+<p>比较运算支持：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public protocol Comparable : Equatable &#123;</span><br><span class="line">  </span><br><span class="line">    static func &lt; (lhs: Self, rhs: Self) -&gt; Bool</span><br><span class="line"></span><br><span class="line">    static func &lt;= (lhs: Self, rhs: Self) -&gt; Bool</span><br><span class="line"></span><br><span class="line">    static func &gt;= (lhs: Self, rhs: Self) -&gt; Bool</span><br><span class="line"></span><br><span class="line">    static func &gt; (lhs: Self, rhs: Self) -&gt; Bool</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>序列化编码支持：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public typealias Codable = Decodable &amp; Encodable</span><br><span class="line"></span><br><span class="line">public protocol Decodable &#123;</span><br><span class="line">    init(from decoder: Decoder) throws</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public protocol Encodable &#123;</span><br><span class="line">    func encode(to encoder: Encoder) throws</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Swift 4.0引入<code>Codable</code>使得可原生支持模型JSON转换。</p>
+<p>案例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">struct Person: Codable &#123;</span><br><span class="line">    let name: String</span><br><span class="line">    let age: Int</span><br><span class="line">    var additionInfo: String?</span><br><span class="line">    </span><br><span class="line">    enum CodingKeys: String, CodingKey &#123;</span><br><span class="line">        case name, age</span><br><span class="line">        case additionInfo = &quot;ext&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    init(from decoder: Decoder) throws &#123;</span><br><span class="line">        let values = try decoder.container(keyedBy: CodingKeys.self)</span><br><span class="line">        name = try values.decode(String.self, forKey: .name)</span><br><span class="line">        age = try values.decode(Int.self, forKey: .age)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    func encode(to encoder: Encoder) throws &#123;</span><br><span class="line">        var container = encoder.container(keyedBy: CodingKeys.self)</span><br><span class="line">        try container.encode(name, forKey: .name)</span><br><span class="line">        try container.encode(age, forKey: .age)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>// 编解码过程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">let person = try JSONDecoder().decode(Person.self, from: json.data(using: .utf8)!)</span><br><span class="line"></span><br><span class="line">let data = try? JSONEncoder().encode(pObj)</span><br><span class="line">let dataObject = try? JSONSerialization.jsonObject(with: data!, options: [])</span><br></pre></td></tr></table></figure></p>
+<p>对于需要自定义key的可以内置一个<code>CodingKeys</code>的enum定义来提供。如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">enum Video: Codable &#123;</span><br><span class="line">    case youTube(id: String)</span><br><span class="line">    case vimeo(id: String)</span><br><span class="line">    case hosted(url: URL)</span><br><span class="line">    case local(LocalVideo)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">extension Video &#123;</span><br><span class="line">    enum CodingKeys: String, CodingKey &#123;</span><br><span class="line">        case youTube</span><br><span class="line">        case vimeo</span><br><span class="line">        case hosted = &quot;custom&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 关联case的key自定义</span><br><span class="line">extension Video &#123;</span><br><span class="line">    enum YouTubeCodingKeys: String, CodingKey &#123;</span><br><span class="line">        case id = &quot;youTubeID&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="特性修饰词"><a href="#特性修饰词" class="headerlink" title="特性修饰词"></a>特性修饰词</h3><p>特性修饰词是进入Swift开发非常常见的。</p>
+<h4 id="main"><a href="#main" class="headerlink" title="@main"></a>@main</h4><p>声明为Swift程序入口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@main</span><br><span class="line">struct MyTopLevel &#123;</span><br><span class="line">    static func main() &#123;</span><br><span class="line">        // Top-level code goes here</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="available"><a href="#available" class="headerlink" title="@available"></a>@available</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@available(platform name version number, *)</span><br><span class="line">@available(swift version number)</span><br></pre></td></tr></table></figure>
+<h4 id="nonobjc"><a href="#nonobjc" class="headerlink" title="nonobjc"></a>nonobjc</h4><p>废除一个隐含的objc特性。</p>
+<h4 id="objc"><a href="#objc" class="headerlink" title="objc"></a>objc</h4><p>用 objc 特性标记的类必须继承自一个 Objective-C 中定义的类。如果你把 objc 用到类或协议中，它会隐式地应用于该类或协议中 Objective-C 兼容的成员上。</p>
+<h4 id="objcMembers"><a href="#objcMembers" class="headerlink" title="objcMembers"></a>objcMembers</h4><p>Swift中定义的方法默认是不能被OC调用的，除非我们手动添加@objc标识。但如果一个类的方法属性较多，这样会很麻烦，于是有了这样一个标识符@objcMembers，它可以让整个类的属性方法都隐式添加@objc。</p>
+<h4 id="dynamicCallable与dynamicMemberLookup"><a href="#dynamicCallable与dynamicMemberLookup" class="headerlink" title="dynamicCallable与dynamicMemberLookup"></a>dynamicCallable与dynamicMemberLookup</h4><p>前者实现<code>dynamicallyCall(withArguments:)</code>或<code>dynamicallyCall(withKeywordArguments:)</code>，实例可视为可调用函数，也就是instance(…)是可以的。</p>
+<p>后者类型必须实现一个 subscript(dynamicMemberLookup:) 下标脚本方法，动态的通过.属性的方法来访问查询。<br>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@dynamicMemberLookup</span><br><span class="line">struct DynamicStruct &#123;</span><br><span class="line">    let dictionary = [&quot;someDynamicMember&quot;: 325,</span><br><span class="line">                      &quot;someOtherMember&quot;: 787]</span><br><span class="line">    subscript(dynamicMember member: String) -&gt; Int &#123;</span><br><span class="line">        return dictionary[member] ?? 1054</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">let s = DynamicStruct()</span><br><span class="line"> </span><br><span class="line">// Using dynamic member lookup</span><br><span class="line">let dynamic = s.someDynamicMember</span><br><span class="line">print(dynamic)</span><br><span class="line">// Prints &quot;325&quot;</span><br></pre></td></tr></table></figure></p>
+<h4 id="escaping"><a href="#escaping" class="headerlink" title="escaping"></a>escaping</h4><p>逃逸闭包声明。</p>
+<h4 id="propertyWrapper"><a href="#propertyWrapper" class="headerlink" title="propertyWrapper"></a>propertyWrapper</h4><p>Swift 5.1开始支持@propertyWrapper，属性封装器。@propertyWrapper是Swift 5之后非常重要的特性，应用场景也很多。SwiftUI的推出，@State，@Binding，@EnvironmentObject 等这些都依赖于属性封装器的支持。</p>
+<p>包装器必须定义一个 wrappedValue 实例属性。包装属性的值就是这个属性暴露的 getter 和 setter。大多数情况下， wrappedValue 是一个计算值，但也可以是存储值。</p>
+<p>包装器定义和管理任何被包装值需要的存储。编译器会通过在包装的属性名称前添加下划线（ _ ）来合成对应实例所需要的存储——比如说， someProperty 的包装器会以 <code>_someProperty</code> 的形式存储。包装器合成存储的访问控制权限为 private 级。</p>
+<p>propertyWrapper大概有4个用例场景：</p>
+<ul>
+<li>值约束</li>
+<li>属性赋值时进行值转换</li>
+<li>改变合成的比较语义</li>
+<li>属性访问检查</li>
+</ul>
+<p>详细可查看<a href="https://nshipster.com/propertywrapper/" target="_blank" rel="noopener">nshipster</a>。</p>
+<p>包装属性的投射值就是属性包装器可以用于暴露额外功能的第二个值。属性包装器类型的作者负责决定投射值的意义并且定义暴露的投射值的接口。要从属性包装器中投射值，在包装器类型中定义 projectedValue 实例属性。编译器会通过在包装属性名称前添加一个美元符号（ $ ）来为投射的值合成标记</p>
+<h4 id="testable"><a href="#testable" class="headerlink" title="testable"></a>testable</h4><p>允许测试模块像public一样访问internal的的代码。</p>
+<h4 id="State、-Binding、-ObservedObject、-EnvironmentObject"><a href="#State、-Binding、-ObservedObject、-EnvironmentObject" class="headerlink" title="@State、@Binding、@ObservedObject、@EnvironmentObject"></a>@State、@Binding、@ObservedObject、@EnvironmentObject</h4><p>SwiftUI内容。</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>updated at 2020-12-18</p></div> 
+    <div class="post-entry__tags"><a href="/tags/Swift/" class="post-tags__link button"># Swift</a><a href="/tags/ios/" class="post-tags__link button"># ios</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/ios/swift-lang-memlayout/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            Swift的内存布局与方法调度
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/ios/ios-audio-aac/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            iOS音频：AAC文件结构
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-K2Q2J84"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-K2Q2J84');
+    </script>
+ 
+
+ 
+
+ 
+
+
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "1d741b4fcb7f4062933be3f4b0eb6571"}'></script>
+    </script>
+    
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

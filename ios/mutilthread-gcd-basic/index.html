@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>iOS开发：多线程之GCD基础知识 | { }</title>
+
+
+    <meta name="keywords" content="iOS, GCD, 多线程, 技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="写在前面llibdispatch是苹果开发的一套C接口的库（苹果官方称之为GCD，Grand Central Dispatch），多线程技术的封装是其核心之一。GCD内部管理线程池，对上层以队列的形式提供操作接口，任务则以block的形式提交到队列，最终由GCD决策如何将任务派发到线程执行。">
+<meta name="keywords" content="iOS,GCD,多线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS开发：多线程之GCD基础知识">
+<meta property="og:url" content="http://blog.knpc21.com/ios/mutilthread-gcd-basic/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="写在前面llibdispatch是苹果开发的一套C接口的库（苹果官方称之为GCD，Grand Central Dispatch），多线程技术的封装是其核心之一。GCD内部管理线程池，对上层以队列的形式提供操作接口，任务则以block的形式提交到队列，最终由GCD决策如何将任务派发到线程执行。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-07-04T05:12:41.000Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="iOS开发：多线程之GCD基础知识">
+<meta name="twitter:description" content="写在前面llibdispatch是苹果开发的一套C接口的库（苹果官方称之为GCD，Grand Central Dispatch），多线程技术的封装是其核心之一。GCD内部管理线程池，对上层以队列的形式提供操作接口，任务则以block的形式提交到队列，最终由GCD决策如何将任务派发到线程执行。">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        iOS开发：多线程之GCD基础知识
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2017/07/" class="post-meta__date button">2017-07-04</a>
+        
+    <span class="separate-dot"></span><a href="/categories/iOS/" class="button">iOS</a>
+
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h4 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h4><p>llibdispatch是苹果开发的一套C接口的库（苹果官方称之为GCD，Grand Central Dispatch），多线程技术的封装是其核心之一。GCD内部管理线程池，对上层以队列的形式提供操作接口，任务则以block的形式提交到队列，最终由GCD决策如何将任务派发到线程执行。</p>
+<a id="more"></a>
+<p>之前有翻译过raywenderlich中关于GCD的两篇文章，里面比较清楚的讲解了串行、并发的概念以及基本的API说明。今天来重新整理一遍libdispatch相关内容，其缘由是前不久项目中发现对队列与线程的一些误解。记录与分享之。</p>
+<h4 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h4><h5 id="并行与并发"><a href="#并行与并发" class="headerlink" title="并行与并发"></a>并行与并发</h5><p>parallelism与concurrency的区别，这个在raywenderlich也有说明。简而言之，并行（parallelism）在计算机领域则指的是机器指令的同时执行，也就是多个处理器执行；并发（concurrency）指的是逻辑层面的同时进行，其对立面是sequentially、任务间有先后顺序的处理方式。不太恰当的举个例子，项目开发上我们不同团队之间会是并行开发，比如后端、前端、美术团队是同时进行；而至于你，则一边听着音乐、一边码着代码。前者强调的是物理线路的分离，后者强调的是逻辑依赖的分离。并行的必要条件是并发，但并发不是并行的充分条件。放到所举栗子中，项目中不同团队的并行开发要求不同团队中的任务是没有依赖的，而就算任务不存在依赖，如果没有这样的团队划分（比如人员紧缺、职责混乱）也无法达成并行开发。</p>
+<h5 id="同步与异步"><a href="#同步与异步" class="headerlink" title="同步与异步"></a>同步与异步</h5><p>synchronous与asynchronous，同步/异步在计算机领域多线程的语境下，通常用来用来描述两个（及以上）操作之间的协作关系。程序执行中的状态通常称之为上下文（Context），切换进程、线程以及函数调用都需要切换上下文。我们知道，每个线程是一个无分叉的CPU命令执行序列。我们发起一个过程调用时，函数调用栈会将上一个函数的上下文信息（栈幁，活动记录，可参考<a href="https://en.wikipedia.org/wiki/Call_stack" target="_blank" rel="noopener">wiki</a>）push到栈中，直到函数处理结束后栈幁pop出，指令执行指针（如PC或IP）才会被重置到发起调用前代码的下一条指令。同步调用或异步调用（回调），描述的是消息的通知模式，也就是被调用的函数过程的执行结果，是通过返回值还是通过回调函数/闭包的形式来通知调用者，前者是同步调用后者是异步调用。这是两个函数过程的不同的协作模式。所以，像“异步函数”这种是很不恰当而奇怪的称呼。</p>
+<p>所以所谓“同步队列”、“异步队列”这些是误用。</p>
+<h5 id="多线程方案"><a href="#多线程方案" class="headerlink" title="多线程方案"></a>多线程方案</h5><p>按抽象层次从低到高列举简单介绍如下：</p>
+<ol>
+<li>pthread 符合POSIX标准的libc（或glibc）中的线程库实现</li>
+<li>NSThread 苹果的基于pthread实现的OC接口的线程管理类</li>
+<li>GCD 苹果实现的C接口的任务/队列管理，线程池管理</li>
+<li>NSOperation 基于GCD的OC接口的任务管理，添加了任务依赖等特性</li>
+</ol>
+<p>目前最常用莫过于GCD与NSOperation了。</p>
+<h4 id="GCD基础知识"><a href="#GCD基础知识" class="headerlink" title="GCD基础知识"></a>GCD基础知识</h4><h5 id="串行、并发队列"><a href="#串行、并发队列" class="headerlink" title="串行、并发队列"></a>串行、并发队列</h5><p>GCD中所有队列都是FIFO的方式对任务的出列进行管理，可以分为两大类：串行队列、并发队列。</p>
+<p>其中串行执行队列，必须等每个出列的任务执行完后才将下一个任务出列；而并发执行队列则是当前任务出列后，无需等待执行完毕，在并发数允许的情况下，可以将下一个任务出列。</p>
+<p>需要先提一下，GCD中的任务dispatch通常会有两组接口，一组是<code>dispatch[_xxx]_sync(queue, task)</code>，一组是<code></code>dispatch[_xxx]_async(queue, task)<code>，其功能都是将任务</code>task<code>提交到队列</code>queue<code>中执行。这里的</code>sync<code>与</code>async<code>的概念可能与&quot;过程阻塞调用&quot;更接近。前者是派发同步调用的任务，后者派发异步调用的任务。</code>dispatch[_xxx]_sync(queue, task)<code>的函数调用，会想办法实现，在</code>task<code>执行完之后才继续执行调用前的下一条指令；而</code>dispatch[_xxx]_async(queue, task)<code>则仅是将</code>task<code>添加到</code>queue<code>中，然后该函数执行完毕继续下一条指令，至于</code>task`什么时候执行它不关心。当并发数为1时，并发队列等同于串行队列。</p>
+<p>GCD的队列细分可按下表所示划分为4种（见下表示）。主线程队列是个特殊的串行队列，可通过<code>dispatch_get_main_queue()</code>来取得。对于并发队列，提供提供了几个不同优先级的全局的并发队列。用户可自定义队列，接口为<code>dispatch_create_queue(label, attributes)</code>。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">队列</th>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">创建/获取</th>
+<th style="text-align:center">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">主队列</td>
+<td style="text-align:center">串行</td>
+<td style="text-align:center">dispatch_get_main_queue()</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">全局并发队列</td>
+<td style="text-align:center">并发</td>
+<td style="text-align:center">dispatch_get_global_queue(priority, flag)</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">自定义串行队列</td>
+<td style="text-align:center">串行</td>
+<td style="text-align:center">dispatch_create_queue(“com.queue.name”, NULL)</td>
+<td style="text-align:center">需锚定</td>
+</tr>
+<tr>
+<td style="text-align:center">自定义并发队列</td>
+<td style="text-align:center">并发</td>
+<td style="text-align:center">dispatch_create_queue(“com.queue.name”, DISPATCH_QUEUE_CONCURRENT)</td>
+<td style="text-align:center">需锚定</td>
+</tr>
+</tbody>
+</table>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 创建串行队列</span><br><span class="line">dispatch_create_queue(&quot;com.queue.serial&quot;, NULL) </span><br><span class="line">// 创建并发队列</span><br><span class="line">dispatch_create_queue(&quot;com.queue.concurrent&quot;, DISPATCH_QUEUE_CONCURRENT)</span><br></pre></td></tr></table></figure>
+<h5 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h5><p>GCD对上层提供的概念是队列的概念，并自身维护了线程池，libdispatch会按需将队列中的任务派发到具体的线程中执行。</p>
+<p>但队列与线程并非一一对应的关系。这是个很容易被误解的地方。（当然我这次也踩了这个坑）</p>
+<p><u>提交到同一个队列的任务，并不一定在同一个线程中执行。即使是串行队列。</u></p>
+<p>举个实际的例子：</p>
+<p>为了解决数据访问的不一致问题（实际是Realm数据库读写），我们创建了一个串行队列<code>syncqueue</code>，会有<code>dispatch_sync()</code>以及<code>dispatch_async()</code>两种调用。我们的预期是，这不是串行队列吗？上面两种调用，是会在同一个线程中执行的。你觉得呢？<code>sync</code>与<code>async</code>的调用并不能保证是同一个线程中的操作，而Realm本身为速度而生、是一种mvcc结构，是允许多线程的同时读写，它的数据一致性是通过数据更新来实现的。结果可想而知，调用了<code>delete</code>异步写入之后，并不能反映到随后的同步<code>query</code>结果中。</p>
+<p>事实上，是我们混淆了队列与线程的概念、关系。在上面例子中，<code>sync</code>与<code>async</code>的操作依然是遵循队列FIFO串行出列的特性的，但<code>sync</code>操作往往被dispatch到调用线程中执行，而<code>async</code>操作往往被dispatch到一个新的线程中执行。（可通过下面的测试进行验证）</p>
+<p>所以务必记住线程池的概念，区分队列与线程。</p>
+<h5 id="主线程队列"><a href="#主线程队列" class="headerlink" title="主线程队列"></a>主线程队列</h5><p>主线程队列有什么特殊？简要的说，这是个跟应用主线程关联的队列。</p>
+<p>首先，只有主线程队列结合到主<code>runloop</code>中去了，主线程队列提交的任务一定在主线程执行。因为是串行队列，所有任务按提交的时间先后执行，在每次runloop循环中检查是否有任务并执行。非线程安全的UI操作，默认都需要在主线程（队列）中执行。</p>
+<p>再者，在主队列<u>异步</u>提交的任务，也只会在主线程执行，而不会开辟新的线程执行。这是个容易被忽略的常识。因为对于异步提交到非主线程队列的任务，通常会被提交到另一个具体线程（与当前线程不同）执行。</p>
+<h5 id="目标队列"><a href="#目标队列" class="headerlink" title="目标队列"></a>目标队列</h5><p>主线程队列任务会在主线程中执行，全局并发队列中任务会被派发到具体线程中执行。但自定义队列中的任务不会直接被提交到具体线程中，而是需要锚定以上两种队列，称之为目标队列。自定义队列中的任务会被提交到目标队列中。</p>
+<p>可使用<code>dispatch_set_target_queue(object, targetqueue)</code>来指定目标队列。</p>
+<h5 id="一些坑点"><a href="#一些坑点" class="headerlink" title="一些坑点"></a>一些坑点</h5><ol>
+<li><p><code>dispatch[_xxx]_sync</code>的不当使用导致死锁</p>
+<p>在串行队列中，派发同步调用的任务，必定导致死锁。例如在主线程中（或<code>dispatch_async()</code>到mainQueue的任务block中），调用<code>dispatch[_xxx]_sync</code>必定死锁；在其他串行队列同样如此（但并发队列不会，虽然官方不建议）。</p>
+</li>
+<li><p><code>dispatch_after(delta, queue, task)</code>，在指定时间追加任务到队列中。</p>
+</li>
+</ol>
+<h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>以下是一些基本测试，通过这些测试代码，你可能更好的体会串行/并发、同步/异步的概念。以下代码均在主线程调起。其中，syncq、syncq2为2个新建的串行执行队列，asyncq为新建的并发执行队列。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">NSLog(@&quot;[Thread][0]: %@&quot;,[NSThread currentThread]);</span><br><span class="line">// 全部输出为：[Thread][0]: &lt;NSThread: 0x60000007b440&gt;&#123;number = 1, name = main&#125;，后文简称main</span><br><span class="line">dispatch_sync(syncq, ^&#123;</span><br><span class="line">    NSLog(@&quot;[Thread][1]: %@&quot;,[NSThread currentThread]);</span><br><span class="line"></span><br><span class="line">    dispatch_sync(asyncq, ^&#123;</span><br><span class="line">        NSLog(@&quot;[Thread][2]: %@&quot;,[NSThread currentThread]);</span><br><span class="line"></span><br><span class="line">        dispatch_sync(syncq2, ^&#123;</span><br><span class="line">            NSLog(@&quot;[Thread][3]: %@&quot;,[NSThread currentThread]);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    dispatch_sync(syncq2, ^&#123;</span><br><span class="line">        NSLog(@&quot;[Thread][4]: %@&quot;,[NSThread currentThread]);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">NSLog(@&quot;[Thread][0]: %@&quot;,[NSThread currentThread]);//main</span><br><span class="line">dispatch_async(syncq, ^&#123;</span><br><span class="line">  // 以下输出全为：[Thread][1]: &lt;NSThread: 0x6000002653c0&gt;&#123;number = 3, name = (null)&#125;</span><br><span class="line">    NSLog(@&quot;[Thread][1]: %@&quot;,[NSThread currentThread]);</span><br><span class="line"></span><br><span class="line">    dispatch_sync(asyncq, ^&#123;</span><br><span class="line">        NSLog(@&quot;[Thread][2]: %@&quot;,[NSThread currentThread]);</span><br><span class="line"></span><br><span class="line">        dispatch_sync(syncq2, ^&#123;</span><br><span class="line">            NSLog(@&quot;[Thread][3]: %@&quot;,[NSThread currentThread]);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    dispatch_sync(syncq2, ^&#123;</span><br><span class="line">        NSLog(@&quot;[Thread][4]: %@&quot;,[NSThread currentThread]);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">NSLog(@&quot;[Thread][0]: %@&quot;,[NSThread currentThread]);</span><br><span class="line">// [Thread][0]: &lt;NSThread: 0x60000007b440&gt;&#123;number = 1, name = main&#125;</span><br><span class="line">dispatch_sync(syncq, ^&#123;</span><br><span class="line">    NSLog(@&quot;[Thread][1]: %@&quot;,[NSThread currentThread]);</span><br><span class="line"></span><br><span class="line">    dispatch_sync(dispatch_get_main_queue(), ^&#123;// 死锁</span><br><span class="line">        NSLog(@&quot;[Thread][2]: %@&quot;,[NSThread currentThread]);</span><br><span class="line"></span><br><span class="line">        dispatch_sync(syncq2, ^&#123;</span><br><span class="line">            NSLog(@&quot;[Thread][3]: %@&quot;,[NSThread currentThread]);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    dispatch_sync(syncq2, ^&#123;</span><br><span class="line">        NSLog(@&quot;[Thread][4]: %@&quot;,[NSThread currentThread]);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">NSLog(@&quot;[Thread][0]: %@&quot;,[NSThread currentThread]);//main</span><br><span class="line">dispatch_sync(syncq, ^&#123;</span><br><span class="line">    NSLog(@&quot;[Thread][1]: %@&quot;,[NSThread currentThread]);</span><br><span class="line"></span><br><span class="line">    dispatch_async(asyncq, ^&#123;</span><br><span class="line">        NSLog(@&quot;[Thread][2]: %@&quot;,[NSThread currentThread]);</span><br><span class="line"></span><br><span class="line">        dispatch_sync(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">            NSLog(@&quot;[Thread][3]: %@&quot;,[NSThread currentThread]);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    dispatch_sync(syncq2, ^&#123;</span><br><span class="line">        NSLog(@&quot;[Thread][4]: %@&quot;,[NSThread currentThread]);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">输出为：</span><br><span class="line">[Thread][0]: &lt;NSThread: 0x6000000701c0&gt;&#123;number = 1, name = main&#125;</span><br><span class="line">[Thread][1]: &lt;NSThread: 0x6000000701c0&gt;&#123;number = 1, name = main&#125;</span><br><span class="line">[Thread][4]: &lt;NSThread: 0x6000000701c0&gt;&#123;number = 1, name = main&#125;</span><br><span class="line">[Thread][2]: &lt;NSThread: 0x60000007d040&gt;&#123;number = 3, name = (null)&#125;</span><br><span class="line">[Thread][3]: &lt;NSThread: 0x6000000701c0&gt;&#123;number = 1, name = main&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">NSLog(@&quot;[Thread][0]: %@&quot;,[NSThread currentThread]);//main</span><br><span class="line">dispatch_sync(syncq, ^&#123;</span><br><span class="line">    NSLog(@&quot;[Thread][1]: %@&quot;,[NSThread currentThread]);</span><br><span class="line"></span><br><span class="line">    dispatch_async(asyncq, ^&#123;</span><br><span class="line">        NSLog(@&quot;[Thread][2]: %@&quot;,[NSThread currentThread]);</span><br><span class="line"></span><br><span class="line">        dispatch_sync(asyncq, ^&#123;</span><br><span class="line">            NSLog(@&quot;[Thread][3]: %@&quot;,[NSThread currentThread]);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    dispatch_sync(syncq2, ^&#123;</span><br><span class="line">        NSLog(@&quot;[Thread][4]: %@&quot;,[NSThread currentThread]);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">[Thread][0]: &lt;NSThread: 0x60800007ea80&gt;&#123;number = 1, name = main&#125;</span><br><span class="line">[Thread][1]: &lt;NSThread: 0x60800007ea80&gt;&#123;number = 1, name = main&#125;</span><br><span class="line">[Thread][4]: &lt;NSThread: 0x60800007ea80&gt;&#123;number = 1, name = main&#125;</span><br><span class="line">[Thread][2]: &lt;NSThread: 0x60000026c840&gt;&#123;number = 3, name = (null)&#125;</span><br><span class="line">[Thread][3]: &lt;NSThread: 0x60000026c840&gt;&#123;number = 3, name = (null)&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">NSLog(@&quot;[Thread][0]: %@&quot;,[NSThread currentThread]);//main</span><br><span class="line">dispatch_sync(asyncq, ^&#123;</span><br><span class="line">    NSLog(@&quot;[Thread][1]: %@&quot;,[NSThread currentThread]);</span><br><span class="line"></span><br><span class="line">    dispatch_async(syncq, ^&#123;</span><br><span class="line">        NSLog(@&quot;[Thread][2]: %@&quot;,[NSThread currentThread]);</span><br><span class="line"></span><br><span class="line">        dispatch_sync(syncq, ^&#123;// 死锁</span><br><span class="line">            NSLog(@&quot;[Thread][3]: %@&quot;,[NSThread currentThread]);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    dispatch_sync(syncq2, ^&#123;</span><br><span class="line">        NSLog(@&quot;[Thread][4]: %@&quot;,[NSThread currentThread]);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">[Thread][0]: &lt;NSThread: 0x600000077980&gt;&#123;number = 1, name = main&#125;</span><br><span class="line">[Thread][1]: &lt;NSThread: 0x600000077980&gt;&#123;number = 1, name = main&#125;</span><br><span class="line">[Thread][4]: &lt;NSThread: 0x600000077980&gt;&#123;number = 1, name = main&#125;</span><br><span class="line">[Thread][2]: &lt;NSThread: 0x608000262d80&gt;&#123;number = 3, name = (null)&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">NSLog(@&quot;[Thread][0]: %@&quot;,[NSThread currentThread]);//main</span><br><span class="line">dispatch_sync(asyncq, ^&#123;</span><br><span class="line">    NSLog(@&quot;[Thread][1]: %@&quot;,[NSThread currentThread]);</span><br><span class="line"></span><br><span class="line">    dispatch_async(syncq, ^&#123;</span><br><span class="line">        NSLog(@&quot;[Thread][2]: %@&quot;,[NSThread currentThread]);</span><br><span class="line"></span><br><span class="line">        dispatch_sync(syncq2, ^&#123;</span><br><span class="line">            NSLog(@&quot;[Thread][3]: %@&quot;,[NSThread currentThread]);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    dispatch_sync(syncq, ^&#123;//syncq等待？</span><br><span class="line">        NSLog(@&quot;[Thread][4]: %@&quot;,[NSThread currentThread]);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">[Thread][0]: &lt;NSThread: 0x60800007b740&gt;&#123;number = 1, name = main&#125;</span><br><span class="line">[Thread][1]: &lt;NSThread: 0x60800007b740&gt;&#123;number = 1, name = main&#125;</span><br><span class="line">[Thread][2]: &lt;NSThread: 0x600000266700&gt;&#123;number = 3, name = (null)&#125;</span><br><span class="line">[Thread][3]: &lt;NSThread: 0x600000266700&gt;&#123;number = 3, name = (null)&#125;</span><br><span class="line">[Thread][4]: &lt;NSThread: 0x60800007b740&gt;&#123;number = 1, name = main&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">NSLog(@&quot;[Thread][0]: %@&quot;,[NSThread currentThread]);//main</span><br><span class="line">dispatch_sync(asyncq, ^&#123;</span><br><span class="line">    NSLog(@&quot;[Thread][1]: %@&quot;,[NSThread currentThread]);</span><br><span class="line"></span><br><span class="line">    dispatch_async(syncq, ^&#123;</span><br><span class="line">        NSLog(@&quot;[Thread][2]: %@&quot;,[NSThread currentThread]);</span><br><span class="line"></span><br><span class="line">        dispatch_sync(syncq2, ^&#123;</span><br><span class="line">            NSLog(@&quot;[Thread][3]: %@&quot;,[NSThread currentThread]);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    dispatch_sync(asyncq, ^&#123;</span><br><span class="line">        NSLog(@&quot;[Thread][4]: %@&quot;,[NSThread currentThread]);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">[Thread][0]: &lt;NSThread: 0x600000067e80&gt;&#123;number = 1, name = main&#125;</span><br><span class="line">[Thread][1]: &lt;NSThread: 0x600000067e80&gt;&#123;number = 1, name = main&#125;</span><br><span class="line">[Thread][4]: &lt;NSThread: 0x600000067e80&gt;&#123;number = 1, name = main&#125;</span><br><span class="line">[Thread][2]: &lt;NSThread: 0x600000073580&gt;&#123;number = 3, name = (null)&#125;</span><br><span class="line">[Thread][3]: &lt;NSThread: 0x600000073580&gt;&#123;number = 3, name = (null)&#125;</span><br></pre></td></tr></table></figure>
+<p>本文主要介绍GCD的一些基本背景知识以及基础知识，更详细的介绍以及拓展知识，将在后续系列中介绍。</p>
+<p>本文完。</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>Jason
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://blog.knpc21.com/ios/mutilthread-gcd-basic/">http://blog.knpc21.com/ios/mutilthread-gcd-basic/</a>
+        </p>
+        
+            <strong>
+                <p>文章默认使用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 协议进行许可，使用时请注意遵守协议。</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2017-07-04</p></div> 
+    <div class="post-entry__tags"><a href="/tags/iOS/" class="post-tags__link button"># iOS</a><a href="/tags/GCD/" class="post-tags__link button"># GCD</a><a href="/tags/多线程/" class="post-tags__link button"># 多线程</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/ios/ios-tableview-autoheight/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            iOS开发：UITableView自适应高度
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/ios/ios-nszombie-implementation/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            iOS开发：NSZombie的实现
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-K2Q2J84"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-K2Q2J84');
+    </script>
+ 
+
+ 
+
+ 
+
+
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "1d741b4fcb7f4062933be3f4b0eb6571"}'></script>
+    </script>
+    
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

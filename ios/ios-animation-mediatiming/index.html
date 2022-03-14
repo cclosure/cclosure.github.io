@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>iOS开发：CAMediaTiming与动画 | { }</title>
+
+
+    <meta name="keywords" content="iOS, 动画, 技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="写在前面在体验至上的时代，一些自然酷炫流畅的动画无疑能提高用户对app好感度以及留存率。常见动画有如下拉加载、加载进度以及转场动画等，iOS开发中的动画大家都不陌生。Core Animation框架提供了一套CALayer层动画接口。因为CALayer作为UIView的backing layer的关系，UIKit基于CA框架也提供了一套视图动画接口，归根到底还是CA动画。 这篇文章，主要是来聊聊">
+<meta name="keywords" content="iOS,动画">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS开发：CAMediaTiming与动画">
+<meta property="og:url" content="http://blog.knpc21.com/ios/ios-animation-mediatiming/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="写在前面在体验至上的时代，一些自然酷炫流畅的动画无疑能提高用户对app好感度以及留存率。常见动画有如下拉加载、加载进度以及转场动画等，iOS开发中的动画大家都不陌生。Core Animation框架提供了一套CALayer层动画接口。因为CALayer作为UIView的backing layer的关系，UIKit基于CA框架也提供了一套视图动画接口，归根到底还是CA动画。 这篇文章，主要是来聊聊">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CoreAnimation_guide/Art/sublayer_hierarchies_2x.png">
+<meta property="og:image" content="https://www.objc.io/images/issue-3/pixels-software-stack@2x-1ae69f5a.png">
+<meta property="og:image" content="https://www.objc.io/images/issue-3/pixels,%20hardware@2x-861825d9.png">
+<meta property="og:updated_time" content="2016-10-23T03:35:58.000Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="iOS开发：CAMediaTiming与动画">
+<meta name="twitter:description" content="写在前面在体验至上的时代，一些自然酷炫流畅的动画无疑能提高用户对app好感度以及留存率。常见动画有如下拉加载、加载进度以及转场动画等，iOS开发中的动画大家都不陌生。Core Animation框架提供了一套CALayer层动画接口。因为CALayer作为UIView的backing layer的关系，UIKit基于CA框架也提供了一套视图动画接口，归根到底还是CA动画。 这篇文章，主要是来聊聊">
+<meta name="twitter:image" content="https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CoreAnimation_guide/Art/sublayer_hierarchies_2x.png">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        iOS开发：CAMediaTiming与动画
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2016/10/" class="post-meta__date button">2016-10-23</a>
+        
+    <span class="separate-dot"></span><a href="/categories/iOS/" class="button">iOS</a>
+
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h4 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h4><p>在体验至上的时代，一些自然酷炫流畅的动画无疑能提高用户对app好感度以及留存率。常见动画有如下拉加载、加载进度以及转场动画等，iOS开发中的动画大家都不陌生。Core Animation框架提供了一套CALayer层动画接口。因为CALayer作为UIView的backing layer的关系，UIKit基于CA框架也提供了一套视图动画接口，归根到底还是CA动画。</p>
+<p>这篇文章，主要是来聊聊动画的一些基本概念，不是来解析具体的动画效果实现。不妨先停下来想一想，动画是什么，它的基本实现原理是什么，我们能做什么。我们从框架提供的接口的角度来认识动画。</p>
+<a id="more"></a>
+<h4 id="动画是什么：CAAnimation"><a href="#动画是什么：CAAnimation" class="headerlink" title="动画是什么：CAAnimation"></a>动画是什么：CAAnimation</h4><p><code>CAAnimation</code>是Core Animation框架中的一个基类，但并不实际用于动画实现，只是定义了“动画”对象所遵循的基本接口，具体动画效果通过子类提供。其子类有如：<code>CAPropertyAnimation</code>属性动画及其两个子类<code>CABasicAnimation</code>、<code>CAKeyFrameAnimation</code>，iOS9推出的<code>CASpringAnimation</code>、<code>CATransition</code>（都是继承<code>CABasicAnimation</code>）以及动画组<code>CAAnimationGroup</code>（继承于<code>CAAnimation</code>）。我们主要基于基本动画进行分析，动画组及帧动画也是基本动画的组合。</p>
+<p><code>CAAnimation</code>遵循两个关键的协议：<code>CAAction</code>以及<code>CAMediaTiming</code>。</p>
+<p><code>CAAction</code>是一个事件处理的接口（动画行为），要求实现接口的对象实现<code>-(void)runActionForKey:(NSString *)event object:(id)anObject arguments:(nullable NSDictionary *)dict</code>进行事件处理（也就是执行动画）。通常而言，object是layer，event则是key，每个layer保存了一份从event到action的映射表（可参考接口<code>- (void)addAnimation:(CAAnimation *)anim forKey:(nullable NSString *)key</code>）。对于系统支持的隐式动画，每当layer的（可动画）属性被修改时，会触发相同名称（属性名）的事件，系统有相应的<code>CAAnimation</code>对象与该事件绑定。另外，系统提供了两个非直接关联到属性的事件：<code>onOrderIn</code>及 <code>onOrderOut</code>，当layer可见或非可见时触发。</p>
+<p><code>CAMediaTiming</code>是一个关键的协议，也是本文所关注的点。<code>CALayer</code>及<code>CAAnimation</code>都遵循实现了该协议。<code>CAMediaTiming</code>对分层时间系统进行了建模，每个对象描述了其父对象时间（parent time）到本身时间（local time）的映射，local time包含两个：active local time及basic local time。时间的转换包含了两个阶段：一是，从父对象时间（parent time）转换为本地活跃时间（active local time），包含了本对象出现在父对象时间线上的点以及其相对（父对象）时间速度；二是，从active local time到basic local time，允许对象本身时长的周期性重复以及逆向播放。</p>
+<p>除此之外，<code>CAAnimation</code>定义了另外一个关键属性：<code>timingFunction</code>，类型是<code>CAMediaTimingFunction</code>，这是一个动画时间控制函数。</p>
+<p>看完了基本接口，回想一下最初提出的问题，“动画是什么？”。举些大家日常都比较熟悉的例子：电影慢镜头及GIF。电影慢镜头可以将一些短时间内发生的变化场景捕获后，以更长的时间来展示；GIF简单来说，将很多张图片进行合并到同一个图片文件就可以制作出一个GIF，每张图片可以控制周期内播放时长。这些都跟“时间”紧密相关，我们对场景变化的感知是基于时间的。动画，是一定时间内场景（状态）的变化所创造的效果。</p>
+<p><code>CAMediaTiming</code>就如Core Animation框架的时间系统。我们接触的基本动画、交互动画以及物理模拟动画，其实都跟这个概念密切相关。</p>
+<h4 id="时间系统：CAMediaTiming"><a href="#时间系统：CAMediaTiming" class="headerlink" title="时间系统：CAMediaTiming"></a>时间系统：CAMediaTiming</h4><p><code>CAMediaTiming</code>提供了8个属性，分别是：</p>
+<ol>
+<li><code>duration</code>：“The basic duration of the object. Defaults to 0.”（API的解释，下同），这个不一定是真实的动画时长，真实的还跟速度<code>speed</code>以及上层对象时间体系有关。</li>
+<li><code>speed</code>：“The rate of the layer. Used to scale parent time to local time, e.g. if rate is 2, local time progresses twice as fast as parent time. Defaults to 1.”，当前层的速率，用于将父对象时间拉伸到本身时间。</li>
+<li><code>beginTime</code>：“The begin time of the object, in relation to its parent object, if applicable. Defaults to 0.”，本对象在父对象的时间线中开始的位置，比如本身一个anmation添加到一个animation group中时，beginTime设定了动画组开始后当前动画的开始时间（也即是延迟）。但对于将animation添加到layer中时，layer作为parent object它的开始时间是过去时间不能这样使用，需要明确确定其beginTime可以选择对当前绝对时间的偏移。当前绝对时间可通过<code>CACurrentMediaTime()</code>获取并<code>[layer convertTime:CACurrentMediaTime() fromLayer:nil]</code>转换到layer的时间坐标系中。</li>
+<li><code>timeoffset</code>：“Additional offset in active local time. i.e. to convert from parent time tp to active local time t: <code>t = (tp - begin) * speed + offset</code>. One use of this is to “pause” a layer by setting <code>speed</code> to zero and<code>offset</code> to a suitable value. Defaults to 0.”，这里给出了一条时间转换关系公式，对于父对象中的时间点tp，在本身时间坐标系统时间为<strong><code>t = (tp - begin) * speed + offset</code></strong>，也就是父时间进行伸缩并加上偏移就得到当前对象的时间点。不是很直观理解，举个例子：动画组anigroup（作为parent object）时长3秒分别对应状态p1、p2、p3，一个动画anim时长6秒分别对应状态a1~a6，其动画速度<code>speed</code>为2、偏移<code>offset</code>为1，被添加到动画组anigroup中；那么当动画组anigroup状态为p2时，动画anim的状态为a5。</li>
+<li><code>fillmode</code>、<code>repeatCount</code> ,<code>repeatDuration</code>及<code>autoreverses</code>动画重复及逆向播放的控制属性。</li>
+</ol>
+<p>如上面提到的，动画是一定的<u>时间规律</u>下的<u>状态切换</u>，这包含两层含义：一是<u>时间变化</u>规律，二是<u>状态切换</u>。动画效果需要分别对这二者进行控制（或者可以认为是动画状态变化的两面体现，动画既包括值的变化也包括时间的变化；动画的插值与时间相关，时间变化规律指的也是插值的变化，否则感知上时间就是线性变化的）。不过实际上，开发中通常是指定动画的状态切换效果，其时间规律通常是采用已有的动画时间控制函数。除此之外，时基动画需要对<u>时间进度</u>进行管理，上面所列的公式<strong><code>t = (tp - begin) * speed + offset</code></strong>不是用来直接确定动画状态切换的时间规律（效果）的，而是用于确定父对象时间到本对象时间映射（进度）的。其中三组控制变量：父时间进度（tp-begin）、速度（speed）、偏移（offset）。</p>
+<p>举几个例子说明时间的进度控制：</p>
+<ol>
+<li>Xcode模拟器的动画调试慢放，通过修改动画播放的<code>speed</code>；</li>
+<li>动画暂停，将<code>speed</code>置为0，并指定相应的<code>offset</code>；甚至还可以通过定时器控制offset的方式，来实现逆向播放等。</li>
+</ol>
+<h4 id="插值与时间控制函数：CAMediaTimingFunction"><a href="#插值与时间控制函数：CAMediaTimingFunction" class="headerlink" title="插值与时间控制函数：CAMediaTimingFunction"></a>插值与时间控制函数：CAMediaTimingFunction</h4><p>时基系统的动画，按时间的步进更新动画对象的状态，这涉及了动画状态的插值问题。</p>
+<p>比如说一个位置平移动画（比如说弹簧效果），仅知道动画时间<code>duration</code>、始末状态<code>valueBegin</code>、<code>valueEnd</code>是不够的，动画的过程需要知道动画时间<code>t</code>时的位置状态<code>valueT</code>。实现这个具体的动画也很简单，我们需要定义一个以时间t为控制变量的插值函数<code>value=mapfunc(t, duration, valueBegin, valueEnd)</code>，随着时间t的步进对<code>location</code>进行更新即可。</p>
+<p>但上述的插值函数<code>mapfunc</code>的问题在于，它是与具体特定动画的动画时间<code>duration</code>、始末状态值相关的。即使是同一效果，不同振幅或不同动画时间都需要提供一个相应的插值函数！不具备可重用性。那假如把动画定义为一种“效果”（比如，弹簧震荡效果），我们如何将这种效果抽象出来？</p>
+<p><code>CAMediaTimingFunction</code>登场。那<code>CAMediaTimingFunction</code>做了什么？<code>CAMediaTimingFunction</code>能将某种“效果”的插值过程抽象出来吗？最初的需求，动画状态的插值还是要实现的。</p>
+<p>回到问题的本质，动画的状态切换是基于时间的插值，其实是一个映射问题，<code>value=mapfunc(t, duration, valueBegin, valueEnd)</code>是从线性变化变量t到value的一个非线性变换。为了将动画效果与具体动画状态区分开来，我们需要将时间参数t与其他参数分离，分别构造两个映射函数：</p>
+<ol>
+<li>mapvalue(tProgress, duration, valueBegin, valueEnd)</li>
+<li>tProgress = maptime(tReal) </li>
+</ol>
+<p>将状态的切换转换为基于进度的插值，<code>tProgress</code>是一个进度值，<code>mapvalue</code>进行线性映射；另外增加一个时间映射函数<code>maptime</code>，将（单位）动画时间映射为状态切换进度tProgress，动画效果将时间控制部分分离了。这正是<code>CAMediaTimingFunction</code>的职责：时间控制（时间映射）。</p>
+<p><code>CAMediaTimingFunction</code>做了动画时间到动画进度（映射到始末状态的线性插值）的映射，其中系统预定义了五种时间控制方法，另外支持定义三次贝塞尔曲线的控制函数。</p>
+<p>然后我们回到UI及动画的渲染过程，结合上面所说的时间控制理解一下UI渲染的过程。</p>
+<p>####CALayer的渲染及动画</p>
+<h5 id="图层树"><a href="#图层树" class="headerlink" title="图层树"></a>图层树</h5><p>CALayer拥有与UIView一样的树状层次结构，实际上作为UIView的backing layer是用做内容显示的管理，而UIView则主要添加了事件机制。对应UIView树形结构，CALayer有它的图层树（模型树）、呈现树及渲染树，对应每个CALayer的<code>modelLayer</code>，<code>presentationLayer</code>及<code>renderLayer</code>。<code>modelLayer</code>是我们代码层面反应对layer的属性的修改，<code>presentationLayer</code>则是动画过程中与界面展示一致的图层数据，<code>renderLayer</code>则是框架私有的（见上图）。可参考Apple官网的图示：</p>
+<p><img src="https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CoreAnimation_guide/Art/sublayer_hierarchies_2x.png" alt></p>
+<p>作为UIView的layer也被称为Root Layer，其代理指定为关联的UIView，用于管理layer的绘制/渲染，代理事件主要包括：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@protocol CALayerDelegate &lt;NSObject&gt;</span><br><span class="line"></span><br><span class="line">- (void)displayLayer:(CALayer *)layer;</span><br><span class="line">- (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx;</span><br><span class="line">- (void)layerWillDraw:(CALayer *)layer CA_AVAILABLE_STARTING (10.12, 10.0, 10.0, 3.0);</span><br><span class="line">- (void)layoutSublayersOfLayer:(CALayer *)layer;</span><br><span class="line"></span><br><span class="line">/* If defined, called by the default implementation of the</span><br><span class="line"> * -actionForKey: method. Should return an object implementating the</span><br><span class="line"> * CAAction protocol. May return &apos;nil&apos; if the delegate doesn&apos;t specify</span><br><span class="line"> * a behavior for the current event. Returning the null object (i.e.</span><br><span class="line"> * &apos;[NSNull null]&apos;) explicitly forces no further search. (I.e. the</span><br><span class="line"> * +defaultActionForKey: method will not be called.) */</span><br><span class="line">- (nullable id&lt;CAAction&gt;)actionForLayer:(CALayer *)layer forKey:(NSString *)event;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>界面的渲染过程在objc.io有一期<a href="https://www.objc.io/issues/3-views/moving-pixels-onto-the-screen/" target="_blank" rel="noopener">介绍</a>。下面是渲染的基本过程图解：</p>
+<p><img src="https://www.objc.io/images/issue-3/pixels-software-stack@2x-1ae69f5a.png" alt="渲染"></p>
+<p>总的来说，每次运行循环CPU按需要创建好UIView的缓冲区，对view内容进行绘制（CPU工作），然后缓冲区交给GPU渲染，最后实际显示到屏幕上：</p>
+<ul>
+<li><p>每个UIView的backing layer有一个<code>content</code>字段，指向的是一块位图缓冲区，称为backing store（可以理解成CGImageRef）；</p>
+</li>
+<li><p>CPU对UIView的绘制，主要在动画事务（下文详细介绍）提交、完成布局工作后，<code>[CALayer display]</code>触发的各层事件回调（<code>[CALayer drawInContext:]</code>、<code>[UIView(CALayerDelegate) drawLayer:inContext:]</code>、<code>[UIView drawRect:]</code>）中在CPU层面对界面的绘制，数据通过CGContextRef</p>
+<p>写入backing store；</p>
+</li>
+<li><p>backing store写完后，通过渲染服务交给GPU进行渲染，将backing store中的位图数据进行显示。</p>
+</li>
+</ul>
+<p>每当修改视图或层的属性，将导致位图缓冲区的重新创建，重新绘制后，layer的<code>content</code>字段会重新指向新的位图缓冲区。CPU影响的是布局与CPU层面的渲染。</p>
+<p>GPU是基于OpenGL对Texture纹理数据进行处理的，Core Animation框架可以创建Texture并将其与位图数据绑定。整个过程如下图示：</p>
+<p><img src="https://www.objc.io/images/issue-3/pixels,%20hardware@2x-861825d9.png" alt></p>
+<p>GPU处理需要将位图数据从RAM搬到VRAM，主要是处理Texture的渲染工作，包括：</p>
+<ul>
+<li>纹理组合，相当于UIView的层次叠加处理，公式<code>R = S+D*(1-Sa)</code>，图层的透明度有重大影响；</li>
+<li>像素缩放采样，位图数据与最终渲染的数据大小不一致需调整</li>
+<li>离屏渲染</li>
+</ul>
+<h5 id="动画事务：CATransaction"><a href="#动画事务：CATransaction" class="headerlink" title="动画事务：CATransaction"></a>动画事务：CATransaction</h5><p>Core Animation假设屏幕上所有东西均可进行动画，对CALayer的可动画属性进行修改时，默认会导致动画的发生来保证平滑过渡，这便是隐式动画。之所以称之为隐式，是因为没有指定它的动画时间、类型等。实际上，动画的执行时间取决于当前事务的设置，动画类型取决于图层行为。</p>
+<p>动画事务<code>CATransaction</code>是Core Animation用来包含一系列属性动画集合的机制，用于将多个可动画属性的修改集中提交执行。任何用指定事务来改变图层的可动画属性时，不会立即发生变化而是等事务提交后才有动画过渡，所有动画属性的修改都应处于事务中。<code>CATransaction</code>分为显式及隐式事务，显式的事务使用如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[CATransaction begin];</span><br><span class="line">// 动画</span><br><span class="line">[CATransaction commit];</span><br></pre></td></tr></table></figure>
+<p>动画事务可嵌套，嵌套的动画事务，只有最外层事务提交时才执行整个动画。<code>CATransaction</code>没有实例属性，对duration及是否动画等配置的修改会影响当前事务。对于想无动画设置属性可以设置<code>kCATransactionDisableActions</code>的key或<code>+setDisableActions</code>（停止了动画action查询）。</p>
+<p>Core Animation在每个Runloop周期中自动开始一次新的事务，任何一次Runloop中的动画属性的修改都被集中起来，做一次0.25s（默认）的动画。这也是隐式动画的所使用事务。只有非Root Layer的可动画属性修改会触发隐式动画，因为Root Layer有关联的UIView作为其delegate，在查询对应属性key的action时返回了nil。</p>
+<p>UIView中的类方法<code>+beginAnimations:context:</code>及<code>+commitAnimations</code>以及基于block的动画接口中，都有添加了事务。</p>
+<h5 id="动画的创建与执行"><a href="#动画的创建与执行" class="headerlink" title="动画的创建与执行"></a>动画的创建与执行</h5><p>iOS显示系统是vSync信号驱动，硬件中断信号之后，会通知到runloop，在新的一轮runloop循环中CPU完成好界面布局及绘制。对于动画，首先是上面所提的<code>CATransaction</code>事务会将我们认为的“动画”行为提交到Core Animation，Core Animation在runloop中注册了事件状态监听，并在回调中，将中间状态提交到GPU处理。硬件时钟的回调基本是线性时间的，这也是为什么需要“时间控制函数”的原因。另外GPU或CPU层面的处理耗时过长会导致直接丢弃当前帧渲染，表现出来就是界面卡顿。</p>
+<p>篇幅过长，有部分简单带过，有时间再补上。</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>Author: </strong>Jason
+        </p>
+        <p>
+            <strong>
+                Permalink: 
+            </strong>
+            <a href="http://blog.knpc21.com/ios/ios-animation-mediatiming/">http://blog.knpc21.com/ios/ios-animation-mediatiming/</a>
+        </p>
+        
+            <strong>
+                <p>文章默认使用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 协议进行许可，使用时请注意遵守协议。</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>updated at 2016-10-23</p></div> 
+    <div class="post-entry__tags"><a href="/tags/iOS/" class="post-tags__link button"># iOS</a><a href="/tags/动画/" class="post-tags__link button"># 动画</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/ios/ios-view-transitioning-animation/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            iOS开发：自定义转场动画
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/ios/core-data-versioning/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            Core Data 数据版本/迁移
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>Comments</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-K2Q2J84"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-K2Q2J84');
+    </script>
+ 
+
+ 
+
+ 
+
+
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "1d741b4fcb7f4062933be3f4b0eb6571"}'></script>
+    </script>
+    
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

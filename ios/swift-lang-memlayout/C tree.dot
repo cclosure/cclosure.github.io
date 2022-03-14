@@ -1,0 +1,31 @@
+digraph memory_dump_graph {
+graph [bgcolor=black]
+_100584460 [style=filled] [fillcolor=white] [label="malloc 0x100584460 (16 bytes)
+a016590001000000
+a0285a0001000000"]
+_100584460 -> _1005916a0 [color=white] [fontcolor=white] [label="@0"]
+_100584460 -> _1005a28a0 [color=white] [fontcolor=white] [label="@8"]
+_1005a28a0 [style=filled] [fillcolor=white] [label="malloc 0x1005a28a0 (16 bytes)
+4039590001000000
+a0ef570001000000"]
+_1005a28a0 -> _100593940 [color=white] [fontcolor=white] [label="@0"]
+_1005a28a0 -> _10057efa0 [color=white] [fontcolor=white] [label="@8"]
+_100593940 [style=filled] [fillcolor=white] [label="malloc 0x100593940 (16 bytes)
+4c65616620686572
+6500051000000070
+Strings:
+Leaf here"]
+_10057efa0 [style=filled] [fillcolor=white] [label="malloc 0x10057efa0 (16 bytes)
+536f6d657468696e
+670048656c6c6f21
+Strings:
+Something
+Hello!"]
+_1005916a0 [style=filled] [fillcolor=white] [label="malloc 0x1005916a0 (16 bytes)
+4039590001000000
+8aa2051000000030"]
+_1005916a0 -> _100593940 [color=white] [fontcolor=white] [label="@0"]
+_7ffeefbff400 [style=filled] [fillcolor=white] [label="unknown 0x7ffeefbff400 (8 bytes)
+6044580001000000"]
+_7ffeefbff400 -> _100584460 [color=white] [fontcolor=white] [label="@0"]
+}

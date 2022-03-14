@@ -1,0 +1,7 @@
+digraph memory_dump_graph {
+graph [bgcolor=black]
+_7ffeefbff380 [style=filled] [fillcolor=white] [label="unknown 0x7ffeefbff380 (24 bytes)
+0100000000000000
+0200000000000000
+0300000000000000"]
+}

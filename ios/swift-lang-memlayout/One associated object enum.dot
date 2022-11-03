@@ -1,0 +1,13 @@
+digraph memory_dump_graph {
+graph [bgcolor=black]
+_7ffeefbff330 [style=filled] [fillcolor=white] [label="unknown 0x7ffeefbff330 (40 bytes)
+b0957a0001000000
+0000000000000000
+0200000000000000
+0400000000000000
+0600000000000000"]
+_7ffeefbff330 -> _1007a95b0 [color=white] [fontcolor=white] [label="@0"]
+_1007a95b0 [style=filled] [fillcolor=white] [label="malloc 0x1007a95b0 (16 bytes)
+1941858fffff1d01
+0000000000000000"]
+}

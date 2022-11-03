@@ -1,0 +1,2798 @@
+digraph memory_dump_graph {
+graph [bgcolor=black]
+_7fff7453af81 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7453af81 (128 bytes)
+5e3f323440303a38
+3a3136007b526566
+436f756e74733c73
+776966743a3a5265
+66436f756e744269
+7473543c73776966
+743a3a526566436f
+756e744973496e6c...
+Strings:
+^?24@0:8:16
+{RefCounts<swift::RefCountBitsT<swift::RefCountIsInline> >=\"refCounts\"{atomic<swift::RefCountBitsT<swift::RefCountIs"]
+_7fff68ce71c0 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject isMemberOfClass:]
+ 0x7fff68ce71c0 (32 bytes)
+554889e548b9f8ff
+ffffff7f00004823
+0f31c04839d10f94
+c05dc30f1f440000"]
+_100013260 [style=filled] [fillcolor=white] [label="ProtocolConformancesSection
+ 0x100013260 (444 bytes)
+5f54744331336d65
+6d6f727964756d70
+6572323944656570
+436c617373006400
+5f00616c6c007072
+6f6d707400000000
+456e746572207468
+652064756d702074...
+Strings:
+_TtC13memorydumper29DeepClass
+prompt
+Enter the dump to run:
+You must enter something. Available dumps:
+Available dumps are listed here. Pass the desired dumps as arguments, or pass \"all\" to dump all available:
+Division results in an overflow
+Division by zero
+__TEXT
+swift_getObjCClassMetadata
+_TtCs12_SwiftObject
+swift_getTypeContextDescriptor
+swift_getExistentialTypeMetadata
+objc_addLoadImageFunc
+__swift5_proto"]
+_1000157b0 [style=filled] [fillcolor=white] [label="ObjC class memorydumper2.DeepClass
+ 0x1000157b0 (216 bytes)
+7857010001000000
+c056010001000000
+40511e68ff7f0000
+0000000038000000
+62b5590001000000
+0200000000000000
+3000000007000000
+e800000010000000..."]
+_1000157b0 -> _100015778 [color=white] [fontcolor=white] [label="@0"]
+_1000157b0 -> _1000156c0 [color=white] [fontcolor=white] [label="@8"]
+_1000157b0 -> _7fff681e5140 [color=white] [fontcolor=white] [label="@16"]
+_1000157b0 -> _10059b562 [color=white] [fontcolor=white] [label="@32"]
+_1000157b0 -> _100012b0c [color=white] [fontcolor=white] [label="@64"]
+_1000157b0 -> _10000c400 [color=white] [fontcolor=white] [label="@88"]
+_1000157b0 -> _10000c460 [color=white] [fontcolor=white] [label="@96"]
+_1000157b0 -> _10000c4c0 [color=white] [fontcolor=white] [label="@104"]
+_1000157b0 -> _10000ce90 [color=white] [fontcolor=white] [label="@112"]
+_1000157b0 -> _10000c6e0 [color=white] [fontcolor=white] [label="@128"]
+_1000157b0 -> _10000c740 [color=white] [fontcolor=white] [label="@136"]
+_1000157b0 -> _10000c7a0 [color=white] [fontcolor=white] [label="@144"]
+_1000157b0 -> _10000ca00 [color=white] [fontcolor=white] [label="@160"]
+_1000157b0 -> _10000ca60 [color=white] [fontcolor=white] [label="@168"]
+_1000157b0 -> _10000cac0 [color=white] [fontcolor=white] [label="@176"]
+_1000157b0 -> _10000cd20 [color=white] [fontcolor=white] [label="@192"]
+_1000157b0 -> _10000cd80 [color=white] [fontcolor=white] [label="@200"]
+_1000157b0 -> _10000cde0 [color=white] [fontcolor=white] [label="@208"]
+_7fff737056c4 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff737056c4 (128 bytes)
+696e7374616e6365
+73526573706f6e64
+546f53656c656374
+6f723a0073657442
+6f756e64734f7269
+67696e3a00736574
+4672616d654f7269
+67696e3a00736574...
+Strings:
+instancesRespondToSelector:
+setBoundsOrigin:
+setFrameOrigin:
+setContentFilters:
+setAutoresizesSubviews:
+setMaskView:
+isSupported"]
+_1000155f0 [style=filled] [fillcolor=white] [label="ObjC class memorydumper2.DeepClassSuper2
+ 0x1000155f0 (152 bytes)
+b855010001000000
+4055010001000000
+40511e68ff7f0000
+0000000028000000
+02b9590001000000
+0200000000000000
+2000000007000000
+a800000010000000..."]
+_1000155f0 -> _1000155b8 [color=white] [fontcolor=white] [label="@0"]
+_1000155f0 -> _100015540 [color=white] [fontcolor=white] [label="@8"]
+_1000155f0 -> _7fff681e5140 [color=white] [fontcolor=white] [label="@16"]
+_1000155f0 -> _10059b902 [color=white] [fontcolor=white] [label="@32"]
+_1000155f0 -> _100012a20 [color=white] [fontcolor=white] [label="@64"]
+_1000155f0 -> _10000c400 [color=white] [fontcolor=white] [label="@88"]
+_1000155f0 -> _10000c460 [color=white] [fontcolor=white] [label="@96"]
+_1000155f0 -> _10000c4c0 [color=white] [fontcolor=white] [label="@104"]
+_1000155f0 -> _10000c850 [color=white] [fontcolor=white] [label="@112"]
+_1000155f0 -> _10000c6e0 [color=white] [fontcolor=white] [label="@128"]
+_1000155f0 -> _10000c740 [color=white] [fontcolor=white] [label="@136"]
+_1000155f0 -> _10000c7a0 [color=white] [fontcolor=white] [label="@144"]
+_10059b4c0 [style=filled] [fillcolor=white] [label="malloc 0x10059b4c0 (32 bytes)
+010008a000000000
+3850010001000000
+7857010001000000
+0000000000000000"]
+_10059b4c0 -> _100015038 [color=white] [fontcolor=white] [label="@8"]
+_10059b4c0 -> _100015778 [color=white] [fontcolor=white] [label="@16"]
+_7fff7377eea7 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377eea7 (128 bytes)
+69734e5344696374
+696f6e6172795f5f
+0069734e534f626a
+6563745f5f006973
+4e534f7264657265
+645365745f5f0069
+734e534e756d6265
+725f5f0069734e53...
+Strings:
+isNSDictionary__
+isNSObject__
+isNSOrderedSet__
+isNSNumber__
+isNSSet__
+isNSString__
+isNSTimeZone__
+isNSValue__
+refCounts
+_swi"]
+_7fff736fdda4 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fdda4 (128 bytes)
+636f6e666f726d73
+546f50726f746f63
+6f6c3a0072657370
+6f6e6473546f5365
+6c6563746f723a00
+72657461696e0072
+656c656173650061
+75746f72656c6561...
+Strings:
+conformsToProtocol:
+respondsToSelector:
+retain
+release
+autorelease
+retainCount
+zone
+description
+debugDescription
+account:didChan"]
+_100012a98 [style=filled] [fillcolor=white] [label="nominal type descriptor for memorydumper2.DeepClassSuper3
+ 0x100012a98 (52 bytes)
+500000c028fdffff
+e8ffffff0cc9ffff
+c40e0000e80a0000
+0200000017000000
+0400000001000000
+1300000014000000
+03000000"]
+_100012a98 -> _100000004 [color=white] [fontcolor=white] [label="@32"]
+_7fff86b79538 [style=filled] [fillcolor=white] [label="ObjC class __NSAtom
+ 0x7fff86b79538 (40 bytes)
+6095b786ff7f0000
+0000000000000000
+40511e68ff7f0000
+0000000010000000
+9070500001000000"]
+_7fff86b79538 -> _7fff86b79560 [color=white] [fontcolor=white] [label="@0"]
+_7fff86b79538 -> _7fff681e5140 [color=white] [fontcolor=white] [label="@16"]
+_7fff86b79538 -> _100507090 [color=white] [fontcolor=white] [label="@32"]
+_7fff7450fdd1 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7450fdd1 (128 bytes)
+40343040303a383a
+3136403234403332
+0063323440303a38
+2331360063323440
+303a383a31360056
+76313640303a3800
+5e7b5f4e535a6f6e
+653d7d313640303a...
+Strings:
+@40@0:8:16@24@32
+c24@0:8#16
+c24@0:8:16
+Vv16@0:8
+^{_NSZone=}16@0:8
+c24@0:8@\"Protocol\"16
+@\"NSString\"16@0:8
+v32@0:8@16@24
+v32@0:8@\""]
+_7fff68ce75f0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject performSelector:withObject:]
+ 0x7fff68ce75f0 (16 bytes)
+554889e54889d648
+89ca5de92ebd0200"]
+_10000c6e0 [style=filled] [fillcolor=white] [label="memorydumper2.DeepClassSuper2.b.getter : Swift.Int
+ 0x10000c6e0 (96 bytes)
+554889e54883ec40
+4c89e84883c01831
+c9488d55e8be2000
+00004889c7488975
+e04889d6488b45e0
+488955d84889c24c
+896dd0e8ee580000
+488b45d0488b4018..."]
+_7fff68ce76e0 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject description]
+ 0x7fff68ce76e0 (48 bytes)
+554889e55350e87b
+ba02004889c34889
+c7e89abd02004889
+df89c6e880fbe1ff
+4889c74883c4085b
+5de9ccbb02006690"]
+_7fff7377ee7a [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377ee7a (128 bytes)
+69734e534346436f
+6e7374616e745374
+72696e675f5f0069
+734e53446174615f
+5f0069734e534461
+74655f5f0069734e
+5344696374696f6e
+6172795f5f006973...
+Strings:
+isNSCFConstantString__
+isNSData__
+isNSDate__
+isNSDictionary__
+isNSObject__
+isNSOrderedSet__
+isNSNumber__
+isNSSet__
+isNSString__"]
+_7fff736fdddb [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fdddb (128 bytes)
+6175746f72656c65
+6173650072657461
+696e436f756e7400
+7a6f6e6500646573
+6372697074696f6e
+0064656275674465
+736372697074696f
+6e006163636f756e...
+Strings:
+autorelease
+retainCount
+zone
+description
+debugDescription
+account:didChangeWithType:inStore:oldAccount:
+changeFromAccount:toAcco"]
+_7fff7450fdc3 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7450fdc3 (128 bytes)
+40333240303a383a
+3136403234004034
+3040303a383a3136
+4032344033320063
+323440303a382331
+360063323440303a
+383a313600567631
+3640303a38005e7b...
+Strings:
+@32@0:8:16@24
+@40@0:8:16@24@32
+c24@0:8#16
+c24@0:8:16
+Vv16@0:8
+^{_NSZone=}16@0:8
+c24@0:8@\"Protocol\"16
+@\"NSString\"16@0:8
+v32@0:8@1"]
+_7fff68ce7220 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject zone]
+ 0x7fff68ce7220 (32 bytes)
+554889e5e875c002
+004885c074025dc3
+5de95cc00200662e
+0f1f840000000000"]
+_100507090 [style=filled] [fillcolor=white] [label="malloc 0x100507090 (32 bytes)
+0000088000000000
+e87eb686ff7f0000
+6095b786ff7f0000
+1841858fff7f0000"]
+_100507090 -> _7fff86b67ee8 [color=white] [fontcolor=white] [label="@8"]
+_100507090 -> _7fff86b79560 [color=white] [fontcolor=white] [label="@16"]
+_100507090 -> _7fff8f854118 [color=white] [fontcolor=white] [label="@24"]
+_100013230 [style=filled] [fillcolor=white] [label="ProtocolConformancesSection
+ 0x100013230 (492 bytes)
+5f54744331336d65
+6d6f727964756d70
+6572323135446565
+70436c6173735375
+7065723300630000
+0000000000000000
+5f54744331336d65
+6d6f727964756d70...
+Strings:
+_TtC13memorydumper215DeepClassSuper3
+_TtC13memorydumper29DeepClass
+prompt
+Enter the dump to run:
+You must enter something. Available dumps:
+Available dumps are listed here. Pass the desired dumps as arguments, or pass \"all\" to dump all available:
+Division results in an overflow
+Division by zero
+__TEXT
+swift_getObjCClassMetadata
+_TtCs12_SwiftObject
+swift_getTypeContextDescriptor
+swift_getExistentialTypeMetadata
+objc_addLoadImageFunc
+__swift5_proto"]
+_10059b540 [style=filled] [fillcolor=white] [label="malloc 0x10059b540 (32 bytes)
+0000088000000000
+20a13e82ff7f0000
+2880908fff7f0000
+3895b786ff7f0000"]
+_10059b540 -> _7fff823ea120 [color=white] [fontcolor=white] [label="@8"]
+_10059b540 -> _7fff8f908028 [color=white] [fontcolor=white] [label="@16"]
+_10059b540 -> _7fff86b79538 [color=white] [fontcolor=white] [label="@24"]
+_7fff68d33815 [style=filled] [fillcolor=white] [label="swift::Demangle::Demangler::demangleOperatorIdentifier()::op_char_table
+ 0x7fff68d33815 (128 bytes)
+54232c5200646573
+6372697074696f6e
+005440224e535374
+72696e67222c522c
+4300646562756744
+6573637269707469
+6f6e00636c6f7375
+726520617267756d...
+Strings:
+T#,R
+description
+T@\"NSString\",R,C
+debugDescription
+closure argument was escaped in withoutActuallyEscaping block
+closure argumen"]
+_10059b922 [style=filled] [fillcolor=white] [label="unknown 0x10059b922 (128 bytes)
+088000000000384f
+010001000000f055
+01000100000048a0
+8f8fff7f000023dd
+6f73ff7f00007825
+cf68fe7f00000000
+0000000000000000
+0000000000000000..."]
+_7fff68ce77c0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject isNSObject__]
+ 0x7fff68ce77c0 (16 bytes)
+554889e531c05dc3
+0f1f840000000000"]
+_7fff68ce7370 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject autorelease]
+ 0x7fff68ce7370 (16 bytes)
+554889e54889f85d
+c30f1f8000000000"]
+_7fff68ce7300 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject _tryRetain]
+ 0x7fff68ce7300 (32 bytes)
+554889e5e8c70afb
+ff31c94885c00f95
+c189c85dc3662e0f
+1f84000000000090"]
+_7fff8f907ff0 [style=filled] [fillcolor=white] [label="metaclass for Swift._StringBreadcrumbs
+ 0x7fff8f907ff0 (40 bytes)
+48a08f8fff7f0000
+48a08f8fff7f0000
+2087620001000000
+0300000031200100
+e086620001000000"]
+_7fff8f907ff0 -> _7fff8f8fa048 [color=white] [fontcolor=white] [label="@0"]
+_7fff8f907ff0 -> _7fff8f8fa048 [color=white] [fontcolor=white] [label="@8"]
+_7fff8f907ff0 -> _100628720 [color=white] [fontcolor=white] [label="@16"]
+_7fff8f907ff0 -> _1006286e0 [color=white] [fontcolor=white] [label="@32"]
+_7fff7450fde2 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7450fde2 (128 bytes)
+63323440303a3823
+3136006332344030
+3a383a3136005676
+313640303a38005e
+7b5f4e535a6f6e65
+3d7d313640303a38
+0063323440303a38
+402250726f746f63...
+Strings:
+c24@0:8#16
+c24@0:8:16
+Vv16@0:8
+^{_NSZone=}16@0:8
+c24@0:8@\"Protocol\"16
+@\"NSString\"16@0:8
+v32@0:8@16@24
+v32@0:8@\"CKAccountStore\"16"]
+_7fff68ce75d0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject isEqual:]
+ 0x7fff68ce75d0 (16 bytes)
+554889e531c04839
+fa0f94c05dc36690"]
+_7fff9005ddc0 [style=filled] [fillcolor=white] [label="Instance of Protocol
+ 0x7fff9005ddc0 (128 bytes)
+c840858fff7f0000
+4e2b1f68ff7f0000
+0000000000000000
+6036858fff7f0000
+0000000000000000
+3038858fff7f0000
+0000000000000000
+5038858fff7f0000..."]
+_7fff7377ef19 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377ef19 (128 bytes)
+726566436f756e74
+73005f7377696674
+547970654d657461
+64617461005f7377
+696674547970654e
+616d65005f737769
+667456616c756500
+6465627567517569...
+Strings:
+refCounts
+_swiftTypeMetadata
+_swiftTypeName
+_swiftValue
+debugQuickLookObject
+decomposedStringWithCanonicalMapping
+automaticallyN"]
+_7fff8f8fa048 [style=filled] [fillcolor=white] [label="OBJC_METACLASS_$_Swift._SwiftObject
+ 0x7fff8f8fa048 (40 bytes)
+48a08f8fff7f0000
+20a08f8fff7f0000
+60ba590001000000
+0300000031200100
+20b5590001000000"]
+_7fff8f8fa048 -> _7fff8f8fa048 [color=white] [fontcolor=white] [label="@0"]
+_7fff8f8fa048 -> _7fff8f8fa020 [color=white] [fontcolor=white] [label="@8"]
+_7fff8f8fa048 -> _10059ba60 [color=white] [fontcolor=white] [label="@16"]
+_7fff8f8fa048 -> _10059b520 [color=white] [fontcolor=white] [label="@32"]
+_7fff7450fdae [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7450fdae (128 bytes)
+63323440303a3840
+3136004000233136
+40303a3800403332
+40303a383a313640
+3234004034304030
+3a383a3136403234
+4033320063323440
+303a382331360063...
+Strings:
+c24@0:8@16
+#16@0:8
+@32@0:8:16@24
+@40@0:8:16@24@32
+c24@0:8#16
+c24@0:8:16
+Vv16@0:8
+^{_NSZone=}16@0:8
+c24@0:8@\"Protocol\"16
+@\"NSSt"]
+_7fff68d3381a [style=filled] [fillcolor=white] [label="swift::Demangle::Demangler::demangleOperatorIdentifier()::op_char_table
+ 0x7fff68d3381a (128 bytes)
+6465736372697074
+696f6e005440224e
+53537472696e6722
+2c522c4300646562
+7567446573637269
+7074696f6e00636c
+6f73757265206172
+67756d656e742077...
+Strings:
+description
+T@\"NSString\",R,C
+debugDescription
+closure argument was escaped in withoutActuallyEscaping block
+closure argument pas"]
+_100014f80 [style=filled] [fillcolor=white] [label="_METACLASS_DATA_memorydumper2.DeepClassSuper2
+ 0x100014f80 (72 bytes)
+8100000028000000
+2800000000000000
+0000000000000000
+0032010001000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000..."]
+_100014f80 -> _100013200 [color=white] [fontcolor=white] [label="@24"]
+_7fff736fdd39 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fdd39 (128 bytes)
+706572666f726d53
+656c6563746f723a
+776974684f626a65
+63743a0070657266
+6f726d53656c6563
+746f723a77697468
+4f626a6563743a77
+6974684f626a6563...
+Strings:
+performSelector:withObject:
+performSelector:withObject:withObject:
+isProxy
+isKindOfClass:
+isMemberOfClass:
+conformsToProtocol:"]
+_7fff736fde04 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fde04 (128 bytes)
+6465627567446573
+6372697074696f6e
+006163636f756e74
+3a6469644368616e
+6765576974685479
+70653a696e53746f
+72653a6f6c644163
+636f756e743a0063...
+Strings:
+debugDescription
+account:didChangeWithType:inStore:oldAccount:
+changeFromAccount:toAccount:
+addFailureBlock:
+defaultProvider"]
+_7fff68ce7820 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject isNSValue__]
+ 0x7fff68ce7820 (16 bytes)
+554889e531c05dc3
+0f1f840000000000"]
+_7fff7367ffbc [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7367ffbc (128 bytes)
+5f5474437331325f
+53776966744f626a
+656374005f5f5377
+69667456616c7565
+005f5f5377696674
+4e756c6c005f5f53
+776966744e617469
+76654e5341727261...
+Strings:
+_TtCs12_SwiftObject
+__SwiftValue
+__SwiftNull
+__SwiftNativeNSArrayBase
+__SwiftNativeNSMutableArrayBase
+__SwiftNativeNSDictionaryB"]
+_7fff68ce7520 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject conformsToProtocol:]
+ 0x7fff68ce7520 (80 bytes)
+554889e541565348
+85d2743348bbf8ff
+ffffff7f00004823
+1f74244989d66690
+4889df4c89f6e8fd
+bb020084c0751a48
+89dfe815bc020048
+89c34885c075e131...
+Strings:
+AVSH
+[A^]"]
+_7fff68ce7420 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject isSubclassOfClass:]
+ 0x7fff68ce7420 (48 bytes)
+554889e54885ff74
+150f1f8000000000
+4839d7740d488b7f
+084885ff75f231c0
+eb02b0010fb6c05d
+c30f1f8000000000"]
+_100015688 [style=filled] [fillcolor=white] [label="metaclass for memorydumper2.DeepClassSuper3
+ 0x100015688 (40 bytes)
+48a08f8fff7f0000
+b855010001000000
+40511e68ff7f0000
+0000000031200000
+c0b4590001000000"]
+_100015688 -> _7fff8f8fa048 [color=white] [fontcolor=white] [label="@0"]
+_100015688 -> _1000155b8 [color=white] [fontcolor=white] [label="@8"]
+_100015688 -> _7fff681e5140 [color=white] [fontcolor=white] [label="@16"]
+_100015688 -> _10059b4c0 [color=white] [fontcolor=white] [label="@32"]
+_10059b902 [style=filled] [fillcolor=white] [label="unknown 0x10059b902 (128 bytes)
+088000000000f04f
+010001000000c056
+0100010000000000
+0000000000000000
+088000000000384f
+010001000000f055
+01000100000048a0
+8f8fff7f000023dd..."]
+_7fff68ce7200 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject self]
+ 0x7fff68ce7200 (16 bytes)
+554889e54889f85d
+c30f1f8000000000"]
+_7fff68d2f383 [style=filled] [fillcolor=white] [label="swift_instantiateObjCClass::ImageInfo
+ 0x7fff68d2f383 (128 bytes)
+686173680054512c
+4e2c520066617374
+657374456e636f64
+696e6700005f5474
+437334315f5f5377
+6966744e61746976
+654e534172726179
+57697468436f6e74...
+Strings:
+hash
+TQ,N,R
+fastestEncoding
+_TtCs41__SwiftNativeNSArrayWithContiguousStorage
+_TtCs20_SwiftNSMutableArray
+v32@0:8"]
+_10059b562 [style=filled] [fillcolor=white] [label="unknown 0x10059b562 (128 bytes)
+0880000000006051
+0100010000000000
+0000000000000000
+0000000000000000
+088000000000a850
+010001000000b057
+0100010000000000
+000000000000eba5..."]
+_7fff736fdd28 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fdd28 (128 bytes)
+706572666f726d53
+656c6563746f723a
+00706572666f726d
+53656c6563746f72
+3a776974684f626a
+6563743a00706572
+666f726d53656c65
+63746f723a776974...
+Strings:
+performSelector:
+performSelector:withObject:
+performSelector:withObject:withObject:
+isProxy
+isKindOfClass:
+isMemberOfClass:
+conf"]
+_7fff68ce71e0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject isMemberOfClass:]
+ 0x7fff68ce71e0 (32 bytes)
+554889e548b9f8ff
+ffffff7f00004823
+0f31c04839d10f94
+c05dc30f1f440000"]
+_7fff823e9c68 [style=filled] [fillcolor=white] [label="_OBJC_METACLASS_RO_$_Swift._SwiftObject
+ 0x7fff823e9c68 (72 bytes)
+0300000028000000
+2800000000000000
+0000000000000000
+bcff6773ff7f0000
+60973e82ff7f0000
+509c3e82ff7f0000
+0000000000000000
+0000000000000000..."]
+_7fff823e9c68 -> _7fff7367ffbc [color=white] [fontcolor=white] [label="@24"]
+_7fff823e9c68 -> _7fff823e9760 [color=white] [fontcolor=white] [label="@32"]
+_7fff823e9c68 -> _7fff823e9c50 [color=white] [fontcolor=white] [label="@40"]
+_7fff68ce7800 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject isNSString__]
+ 0x7fff68ce7800 (16 bytes)
+554889e531c05dc3
+0f1f840000000000"]
+_7fff8f8f9510 [style=filled] [fillcolor=white] [label="OBJC_IVAR_$_Swift._SwiftObject with unmangled suffix \".isa\"
+ 0x7fff8f8f9510 (8 bytes)
+0000000000000000"]
+_7fff68ce7350 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject retain]
+ 0x7fff68ce7350 (16 bytes)
+554889e54889f85d
+c30f1f8000000000"]
+_100628720 [style=filled] [fillcolor=white] [label="malloc 0x100628720 (64 bytes)
+23dd6f73ff7f0000
+f00d5ee700000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0100000000000000
+2087620001000000"]
+_7fff7377ef09 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377ef09 (128 bytes)
+69734e5356616c75
+655f5f0069736100
+726566436f756e74
+73005f7377696674
+547970654d657461
+64617461005f7377
+696674547970654e
+616d65005f737769...
+Strings:
+isNSValue__
+refCounts
+_swiftTypeMetadata
+_swiftTypeName
+_swiftValue
+debugQuickLookObject
+decomposedStringWithCanonicalMappin"]
+_7fff7377ee10 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377ee10 (128 bytes)
+5f69734465616c6c
+6f636174696e6700
+5f74727952657461
+696e00616c6c6f77
+735765616b526566
+6572656e63650072
+657461696e576561
+6b5265666572656e...
+Strings:
+_isDeallocating
+_tryRetain
+allowsWeakReference
+retainWeakReference
+_copyDescription
+_cfTypeID
+isNSArray__
+isNSCFConstantString__"]
+_7fff68ce7380 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject retainCount]
+ 0x7fff68ce7380 (16 bytes)
+554889e548c7c0ff
+ffffff5dc30f1f00"]
+_7fff8f8fa020 [style=filled] [fillcolor=white] [label="ObjC class Swift._SwiftObject
+ 0x7fff8f8fa020 (40 bytes)
+49a08f8fffff1d00
+0000000000000000
+40511e68ff7f0000
+0000000018000000
+40b5590001000000"]
+_7fff8f8fa020 -> _7fff681e5140 [color=white] [fontcolor=white] [label="@16"]
+_7fff8f8fa020 -> _10059b540 [color=white] [fontcolor=white] [label="@32"]
+_7fff7377eeed [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377eeed (128 bytes)
+69734e5353747269
+6e675f5f0069734e
+5354696d655a6f6e
+655f5f0069734e53
+56616c75655f5f00
+6973610072656643
+6f756e7473005f73
+7769667454797065...
+Strings:
+isNSString__
+isNSTimeZone__
+isNSValue__
+refCounts
+_swiftTypeMetadata
+_swiftTypeName
+_swiftValue
+debugQuickLookObject
+decompo"]
+_7fff7374b8dc [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7374b8dc (128 bytes)
+696e7374616e6365
+4d6574686f64466f
+7253656c6563746f
+723a00696e646578
+65734f6641646465
+644f626a65637473
+006964656e746966
+696572466f724f62...
+Strings:
+instanceMethodForSelector:
+indexesOfAddedObjects
+identifierForObjectAtopAddedImmutableObject:
+_identifiersAtopByIdentifier
+_adde"]
+_7fff7377eed6 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377eed6 (128 bytes)
+69734e534e756d62
+65725f5f0069734e
+535365745f5f0069
+734e53537472696e
+675f5f0069734e53
+54696d655a6f6e65
+5f5f0069734e5356
+616c75655f5f0069...
+Strings:
+isNSNumber__
+isNSSet__
+isNSString__
+isNSTimeZone__
+isNSValue__
+refCounts
+_swiftTypeMetadata
+_swiftTypeName
+_swiftValue
+debug"]
+_7fff737084cd [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff737084cd (128 bytes)
+646f65734e6f7452
+65636f676e697a65
+53656c6563746f72
+3a0075726c526571
+7565737400646174
+61436f6e73756d65
+720055524c007363
+68656d6500697352...
+Strings:
+doesNotRecognizeSelector:
+urlRequest
+dataConsumer
+scheme
+isResourceRequest
+isSystemImageRequest
+host
+initWithURLRequest:data"]
+_7fff68d3380a [style=filled] [fillcolor=white] [label="swift::Demangle::Demangler::demangleOperatorIdentifier()::op_char_table
+ 0x7fff68d3380a (128 bytes)
+7375706572636c61
+73730054232c5200
+6465736372697074
+696f6e005440224e
+53537472696e6722
+2c522c4300646562
+7567446573637269
+7074696f6e00636c...
+Strings:
+superclass
+T#,R
+description
+T@\"NSString\",R,C
+debugDescription
+closure argument was escaped in withoutActuallyEscaping block
+clos"]
+_7fff68ce75c0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject hash]
+ 0x7fff68ce75c0 (16 bytes)
+554889e54889f85d
+c30f1f8000000000"]
+_7fff823ea090 [style=filled] [fillcolor=white] [label="_OBJC_$_INSTANCE_VARIABLES_Swift._SwiftObject
+ 0x7fff823ea090 (72 bytes)
+2000000002000000
+10958f8fff7f0000
+15ef7773ff7f0000
+981d5174ff7f0000
+0300000008000000
+18958f8fff7f0000
+19ef7773ff7f0000
+8daf5374ff7f0000..."]
+_7fff823ea090 -> _7fff8f8f9510 [color=white] [fontcolor=white] [label="@8"]
+_7fff823ea090 -> _7fff7377ef15 [color=white] [fontcolor=white] [label="@16"]
+_7fff823ea090 -> _7fff74511d98 [color=white] [fontcolor=white] [label="@24"]
+_7fff823ea090 -> _7fff8f8f9518 [color=white] [fontcolor=white] [label="@40"]
+_7fff823ea090 -> _7fff7377ef19 [color=white] [fontcolor=white] [label="@48"]
+_7fff823ea090 -> _7fff7453af8d [color=white] [fontcolor=white] [label="@56"]
+_100015540 [style=filled] [fillcolor=white] [label="ObjC class memorydumper2.DeepClassSuper1
+ 0x100015540 (120 bytes)
+0855010001000000
+20a08f8fff7f0000
+40511e68ff7f0000
+0000000020000000
+22b9590001000000
+0200000000000000
+1800000007000000
+8800000010000000..."]
+_100015540 -> _100015508 [color=white] [fontcolor=white] [label="@0"]
+_100015540 -> _7fff8f8fa020 [color=white] [fontcolor=white] [label="@8"]
+_100015540 -> _7fff681e5140 [color=white] [fontcolor=white] [label="@16"]
+_100015540 -> _10059b922 [color=white] [fontcolor=white] [label="@32"]
+_100015540 -> _1000129b0 [color=white] [fontcolor=white] [label="@64"]
+_100015540 -> _10000c400 [color=white] [fontcolor=white] [label="@88"]
+_100015540 -> _10000c460 [color=white] [fontcolor=white] [label="@96"]
+_100015540 -> _10000c4c0 [color=white] [fontcolor=white] [label="@104"]
+_100015540 -> _10000c570 [color=white] [fontcolor=white] [label="@112"]
+_1005070b0 [style=filled] [fillcolor=white] [label="malloc 0x1005070b0 (32 bytes)
+0100088006000000
+787eb686ff7f0000
+0000000000000000
+0000000000000000"]
+_7fff7450fdbb [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7450fdbb (128 bytes)
+23313640303a3800
+40333240303a383a
+3136403234004034
+3040303a383a3136
+4032344033320063
+323440303a382331
+360063323440303a
+383a313600567631...
+Strings:
+#16@0:8
+@32@0:8:16@24
+@40@0:8:16@24@32
+c24@0:8#16
+c24@0:8:16
+Vv16@0:8
+^{_NSZone=}16@0:8
+c24@0:8@\"Protocol\"16
+@\"NSString\"16@0:8"]
+_100014ec8 [style=filled] [fillcolor=white] [label="_METACLASS_DATA_memorydumper2.DeepClassSuper1
+ 0x100014ec8 (72 bytes)
+8100000028000000
+2800000000000000
+0000000000000000
+d031010001000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000..."]
+_100014ec8 -> _1000131d0 [color=white] [fontcolor=white] [label="@24"]
+_1000129b0 [style=filled] [fillcolor=white] [label="nominal type descriptor for memorydumper2.DeepClassSuper1
+ 0x1000129b0 (52 bytes)
+5000008010feffff
+e8ffffffb4c9ffff
+740f000000000000
+020000000f000000
+0500000001000000
+0a0000000b000000
+04000000"]
+_1000129b0 -> _100000005 [color=white] [fontcolor=white] [label="@32"]
+_7fff736fdd1d [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fdd1d (128 bytes)
+636c617373007365
+6c6600706572666f
+726d53656c656374
+6f723a0070657266
+6f726d53656c6563
+746f723a77697468
+4f626a6563743a00
+706572666f726d53...
+Strings:
+class
+self
+performSelector:
+performSelector:withObject:
+performSelector:withObject:withObject:
+isProxy
+isKindOfClass:
+isMemberOf"]
+_7fff823ea120 [style=filled] [fillcolor=white] [label="_OBJC_CLASS_RO_$_Swift._SwiftObject
+ 0x7fff823ea120 (72 bytes)
+0200000000000000
+1000000000000000
+0000000000000000
+bcff6773ff7f0000
+b09c3e82ff7f0000
+509c3e82ff7f0000
+90a03e82ff7f0000
+0000000000000000..."]
+_7fff823ea120 -> _7fff7367ffbc [color=white] [fontcolor=white] [label="@24"]
+_7fff823ea120 -> _7fff823e9cb0 [color=white] [fontcolor=white] [label="@32"]
+_7fff823ea120 -> _7fff823e9c50 [color=white] [fontcolor=white] [label="@40"]
+_7fff823ea120 -> _7fff823ea090 [color=white] [fontcolor=white] [label="@48"]
+_7fff823ea120 -> _7fff823ea0d8 [color=white] [fontcolor=white] [label="@64"]
+_7fff7374b8c9 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7374b8c9 (128 bytes)
+6d6574686f64466f
+7253656c6563746f
+723a00696e737461
+6e63654d6574686f
+64466f7253656c65
+63746f723a00696e
+64657865734f6641
+646465644f626a65...
+Strings:
+methodForSelector:
+instanceMethodForSelector:
+indexesOfAddedObjects
+identifierForObjectAtopAddedImmutableObject:
+_identifiersAto"]
+_7fff68ce7320 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject allowsWeakReference]
+ 0x7fff68ce7320 (16 bytes)
+554889e5e8670bfb
+ff34010fb6c05dc3"]
+_7fff681e5140 [style=filled] [fillcolor=white] [label="_objc_empty_cache
+ 0x7fff681e5140 (128 bytes)
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000..."]
+_10000c400 [style=filled] [fillcolor=white] [label="memorydumper2.DeepClassSuper1.a.getter : Swift.Int
+ 0x10000c400 (96 bytes)
+554889e54883ec40
+4c89e84883c01031
+c9488d55e8be2000
+00004889c7488975
+e04889d6488b45e0
+488955d84889c24c
+896dd0e8ce5b0000
+488b45d0488b4010..."]
+_7fff7450fe01 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7450fe01 (128 bytes)
+5e7b5f4e535a6f6e
+653d7d313640303a
+380063323440303a
+38402250726f746f
+636f6c2231360040
+224e53537472696e
+6722313640303a38
+0076333240303a38...
+Strings:
+^{_NSZone=}16@0:8
+c24@0:8@\"Protocol\"16
+@\"NSString\"16@0:8
+v32@0:8@16@24
+v32@0:8@\"CKAccountStore\"16@\"CKStoreAccount\"24
+@\"NSObject<"]
+_1000131d0 [style=filled] [fillcolor=white] [label="ProtocolConformancesSection
+ 0x1000131d0 (588 bytes)
+5f54744331336d65
+6d6f727964756d70
+6572323135446565
+70436c6173735375
+7065723100610000
+0000000000000000
+5f54744331336d65
+6d6f727964756d70...
+Strings:
+_TtC13memorydumper215DeepClassSuper1
+_TtC13memorydumper215DeepClassSuper2
+_TtC13memorydumper215DeepClassSuper3
+_TtC13memorydumper29DeepClass
+prompt
+Enter the dump to run:
+You must enter something. Available dumps:
+Available dumps are listed here. Pass the desired dumps as arguments, or pass \"all\" to dump all available:
+Division results in an overflow
+Division by zero
+__TEXT
+swift_getObjCClassMetadata
+_TtCs12_SwiftObject
+swift_getTypeContextDescriptor
+swift_getExistentialTypeMetadata
+objc_addLoadImageFunc
+__swift5_proto"]
+_7fff7377ee20 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377ee20 (128 bytes)
+5f74727952657461
+696e00616c6c6f77
+735765616b526566
+6572656e63650072
+657461696e576561
+6b5265666572656e
+6365005f636f7079
+4465736372697074...
+Strings:
+_tryRetain
+allowsWeakReference
+retainWeakReference
+_copyDescription
+_cfTypeID
+isNSArray__
+isNSCFConstantString__
+isNSData__
+isNS"]
+_7fff68ce7170 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject class]
+ 0x7fff68ce7170 (32 bytes)
+554889e548b8f8ff
+ffffff7f00004823
+075dc3662e0f1f84
+00000000000f1f00"]
+_10000c7a0 [style=filled] [fillcolor=white] [label="memorydumper2.DeepClassSuper2.b.modify : Swift.Int
+ 0x10000c7a0 (64 bytes)
+554889e541554883
+ec184983c51831c0
+89c1ba2100000048
+897df04c89ef488b
+75f04c896de8e83b
+580000488d050e00
+0000488b55e84883
+c418415d5dc36690"]
+_7fff7370e08c [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7370e08c (128 bytes)
+6973537562636c61
+73734f66436c6173
+733a006c69627261
+72794d616e616765
+723a70726f766964
+654c6f63616c5265
+736f757263653a72
+65636f7264436c61...
+Strings:
+isSubclassOfClass:
+libraryManager:provideLocalResource:recordClass:completionHandler:
+invoke
+taskIdentifier
+addBarrierBlock:"]
+_10000cd80 [style=filled] [fillcolor=white] [label="memorydumper2.DeepClass.d.setter : Swift.Int
+ 0x10000cd80 (96 bytes)
+554889e54883ec40
+4c89e84883c02831
+c9488d55e8be2100
+000048897de04889
+c7488975d84889d6
+488b45d8488955d0
+4889c24c896dc8e8
+4a520000488b45c8..."]
+_7fff7377eee3 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377eee3 (128 bytes)
+69734e535365745f
+5f0069734e535374
+72696e675f5f0069
+734e5354696d655a
+6f6e655f5f006973
+4e5356616c75655f
+5f00697361007265
+66436f756e747300...
+Strings:
+isNSSet__
+isNSString__
+isNSTimeZone__
+isNSValue__
+refCounts
+_swiftTypeMetadata
+_swiftTypeName
+_swiftValue
+debugQuickLookObje"]
+_7fff8f8f9518 [style=filled] [fillcolor=white] [label="OBJC_IVAR_$_Swift._SwiftObject with unmangled suffix \".refCounts\"
+ 0x7fff8f8f9518 (8 bytes)
+0800000000000000"]
+_7fff7450fd4d [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7450fd4d (128 bytes)
+76313640303a3800
+40323440303a3840
+3f31360040323440
+303a383a31360076
+323440303a384031
+3600403f00403136
+40303a380040224e
+5342756e646c6522...
+Strings:
+v16@0:8
+@24@0:8@?16
+@24@0:8:16
+v24@0:8@16
+@16@0:8
+@\"NSBundle\"
+@\"NSString\"
+v24@0:8@?16
+Q16@0:8
+c24@0:8@16
+#16@0:8
+@32@0:8:16"]
+_7fff68d33837 [style=filled] [fillcolor=white] [label="swift::Demangle::Demangler::demangleOperatorIdentifier()::op_char_table
+ 0x7fff68d33837 (128 bytes)
+6465627567446573
+6372697074696f6e
+00636c6f73757265
+20617267756d656e
+7420776173206573
+636170656420696e
+20776974686f7574
+41637475616c6c79...
+Strings:
+debugDescription
+closure argument was escaped in withoutActuallyEscaping block
+closure argument passed as @noescape to Objective"]
+_100013200 [style=filled] [fillcolor=white] [label="ProtocolConformancesSection
+ 0x100013200 (540 bytes)
+5f54744331336d65
+6d6f727964756d70
+6572323135446565
+70436c6173735375
+7065723200620000
+0000000000000000
+5f54744331336d65
+6d6f727964756d70...
+Strings:
+_TtC13memorydumper215DeepClassSuper2
+_TtC13memorydumper215DeepClassSuper3
+_TtC13memorydumper29DeepClass
+prompt
+Enter the dump to run:
+You must enter something. Available dumps:
+Available dumps are listed here. Pass the desired dumps as arguments, or pass \"all\" to dump all available:
+Division results in an overflow
+Division by zero
+__TEXT
+swift_getObjCClassMetadata
+_TtCs12_SwiftObject
+swift_getTypeContextDescriptor
+swift_getExistentialTypeMetadata
+objc_addLoadImageFunc
+__swift5_proto"]
+_7fff736fdd0d [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fdd0d (128 bytes)
+6861736800737570
+6572636c61737300
+636c617373007365
+6c6600706572666f
+726d53656c656374
+6f723a0070657266
+6f726d53656c6563
+746f723a77697468...
+Strings:
+hash
+superclass
+class
+self
+performSelector:
+performSelector:withObject:
+performSelector:withObject:withObject:
+isProxy
+isKindOfC"]
+_7fff68ce77f0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject isNSSet__]
+ 0x7fff68ce77f0 (16 bytes)
+554889e531c05dc3
+0f1f840000000000"]
+_7fff736fddf8 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fddf8 (128 bytes)
+6465736372697074
+696f6e0064656275
+6744657363726970
+74696f6e00616363
+6f756e743a646964
+4368616e67655769
+7468547970653a69
+6e53746f72653a6f...
+Strings:
+description
+debugDescription
+account:didChangeWithType:inStore:oldAccount:
+changeFromAccount:toAccount:
+addFailureBlock:
+default"]
+_7fff68ce7510 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject instanceMethodForSelector:]
+ 0x7fff68ce7510 (16 bytes)
+554889e54889d65d
+e943bc02000f1f00"]
+_7fff68ce71a0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject superclass]
+ 0x7fff68ce71a0 (32 bytes)
+554889e548b8f8ff
+ffffff7f00004823
+07488b40085dc366
+0f1f840000000000"]
+_10000c850 [style=filled] [fillcolor=white] [label="memorydumper2.DeepClassSuper2.__allocating_init() -> memorydumper2.DeepClassSuper2
+ 0x10000c850 (48 bytes)
+554889e5415550be
+20000000ba070000
+004c89efe8975700
+004989c5e80f0000
+004883c408415d5d
+c30f1f8000000000"]
+_7fff68ce7450 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject respondsToSelector:]
+ 0x7fff68ce7450 (48 bytes)
+4885d2741d554889
+e548b8f8ffffffff
+7f00004823074889
+c74889d65de906bd
+020031c0c3662e0f
+1f84000000000090"]
+_7fff68ce74f0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject methodForSelector:]
+ 0x7fff68ce74f0 (32 bytes)
+554889e553504889
+d3e884be02004889
+c74889de4883c408
+5b5de951bc020090"]
+_7fff736fdc58 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fdc58 (128 bytes)
+6465616c6c6f6300
+706c7567696e4c6f
+6164656400706c75
+67696e556e6c6f61
+646564006163636f
+756e744164646564
+3a006163636f756e
+744368616e676564...
+Strings:
+dealloc
+pluginLoaded
+pluginUnloaded
+accountAdded:
+accountChanged:
+accountRemoved:
+accountsDidNotChange
+donating:
+removing:
+donat"]
+_7fff68ce72e0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject retainCount]
+ 0x7fff68ce72e0 (16 bytes)
+554889e55de9e603
+fbff660f1f440000"]
+_7fff7377ee53 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377ee53 (128 bytes)
+5f636f7079446573
+6372697074696f6e
+005f636654797065
+49440069734e5341
+727261795f5f0069
+734e534346436f6e
+7374616e74537472
+696e675f5f006973...
+Strings:
+_copyDescription
+_cfTypeID
+isNSArray__
+isNSCFConstantString__
+isNSData__
+isNSDate__
+isNSDictionary__
+isNSObject__
+isNSOrderedSet"]
+_100015778 [style=filled] [fillcolor=white] [label="metaclass for memorydumper2.DeepClass
+ 0x100015778 (40 bytes)
+48a08f8fff7f0000
+8856010001000000
+40b9590001000000
+0300000031200100
+a0b4590001000000"]
+_100015778 -> _7fff8f8fa048 [color=white] [fontcolor=white] [label="@0"]
+_100015778 -> _100015688 [color=white] [fontcolor=white] [label="@8"]
+_100015778 -> _10059b940 [color=white] [fontcolor=white] [label="@16"]
+_100015778 -> _10059b4a0 [color=white] [fontcolor=white] [label="@32"]
+_10059b4a0 [style=filled] [fillcolor=white] [label="malloc 0x10059b4a0 (32 bytes)
+010008a000000000
+f050010001000000
+0000000000000000
+0000000000000000"]
+_10059b4a0 -> _1000150f0 [color=white] [fontcolor=white] [label="@8"]
+_7fff7371a5fa [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7371a5fa (128 bytes)
+616c6c6f63005f77
+65616b4c69627261
+72794d616e616765
+7200696e69745769
+74684c6962726172
+794d616e61676572
+3a007765616b4c69
+62726172794d616e...
+Strings:
+alloc
+_weakLibraryManager
+initWithLibraryManager:
+weakLibraryManager
+setWeakLibraryManager:
+_sessionLock
+_sizeOfResourcesToUploa"]
+_100012b0c [style=filled] [fillcolor=white] [label="nominal type descriptor for memorydumper2.DeepClass
+ 0x100012b0c (52 bytes)
+500000c0b4fcffff
+ecfffffff8fefeff
+6c0e00007a0a0000
+020000001b000000
+0400000001000000
+1700000018000000
+03000000"]
+_100012b0c -> _100000004 [color=white] [fontcolor=white] [label="@32"]
+_7fff68c96640 [style=filled] [fillcolor=white] [label="swift_deletedMethodError
+ 0x7fff68c96640 (32 bytes)
+554889e5488d35b3
+aa090031ff31c0e8
+1cfeffff662e0f1f
+8400000000006690"]
+_7fff68ce74d0 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject methodForSelector:]
+ 0x7fff68ce74d0 (32 bytes)
+554889e553504889
+d3e8a4be02004889
+c74889de4883c408
+5b5de971bc020090"]
+_10000ca00 [style=filled] [fillcolor=white] [label="memorydumper2.DeepClassSuper3.c.getter : Swift.Int
+ 0x10000ca00 (96 bytes)
+554889e54883ec40
+4c89e84883c02031
+c9488d55e8be2000
+00004889c7488975
+e04889d6488b45e0
+488955d84889c24c
+896dd0e8ce550000
+488b45d0488b4020..."]
+_7fff68ce7600 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject performSelector:withObject:withObject:]
+ 0x7fff68ce7600 (32 bytes)
+554889e54889d648
+89ca4c89c15de91b
+bd0200662e0f1f84
+00000000000f1f00"]
+_7fff68ce72c0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject release]
+ 0x7fff68ce72c0 (16 bytes)
+554889e55de9a6fd
+faff660f1f440000"]
+_7fff736fdd12 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fdd12 (128 bytes)
+7375706572636c61
+737300636c617373
+0073656c66007065
+72666f726d53656c
+6563746f723a0070
+6572666f726d5365
+6c6563746f723a77
+6974684f626a6563...
+Strings:
+superclass
+class
+self
+performSelector:
+performSelector:withObject:
+performSelector:withObject:withObject:
+isProxy
+isKindOfClass:"]
+_7fff68ce7790 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject isNSData__]
+ 0x7fff68ce7790 (16 bytes)
+554889e531c05dc3
+0f1f840000000000"]
+_7fff68ce70f0 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject initialize]
+ 0x7fff68ce70f0 (16 bytes)
+554889e55dc3662e
+0f1f840000000000"]
+_7fff736fddd3 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fddd3 (128 bytes)
+72656c6561736500
+6175746f72656c65
+6173650072657461
+696e436f756e7400
+7a6f6e6500646573
+6372697074696f6e
+0064656275674465
+736372697074696f...
+Strings:
+release
+autorelease
+retainCount
+zone
+description
+debugDescription
+account:didChangeWithType:inStore:oldAccount:
+changeFromAccoun"]
+_7fff68ce7100 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject allocWithZone:]
+ 0x7fff68ce7100 (48 bytes)
+554889e553504889
+fbe84cc00200ba1f
+0000004889df4889
+c64883c4085b5de9
+dcfbfaff662e0f1f
+8400000000006690"]
+_7fff7377ee64 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377ee64 (128 bytes)
+5f63665479706549
+440069734e534172
+7261795f5f006973
+4e534346436f6e73
+74616e7453747269
+6e675f5f0069734e
+53446174615f5f00
+69734e5344617465...
+Strings:
+_cfTypeID
+isNSArray__
+isNSCFConstantString__
+isNSData__
+isNSDate__
+isNSDictionary__
+isNSObject__
+isNSOrderedSet__
+isNSNumber__"]
+_7fff68ce7130 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject alloc]
+ 0x7fff68ce7130 (48 bytes)
+554889e553504889
+fbe81cc00200ba1f
+0000004889df4889
+c64883c4085b5de9
+acfbfaff662e0f1f
+8400000000006690"]
+_7fff823e9c50 [style=filled] [fillcolor=white] [label="_OBJC_CLASS_PROTOCOLS_$_Swift._SwiftObject
+ 0x7fff823e9c50 (24 bytes)
+0100000000000000
+c0dd0590ff7f0000
+0000000000000000"]
+_7fff823e9c50 -> _7fff9005ddc0 [color=white] [fontcolor=white] [label="@8"]
+_7fff736fdd7c [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fdd7c (128 bytes)
+697350726f787900
+69734b696e644f66
+436c6173733a0069
+734d656d6265724f
+66436c6173733a00
+636f6e666f726d73
+546f50726f746f63
+6f6c3a0072657370...
+Strings:
+isProxy
+isKindOfClass:
+isMemberOfClass:
+conformsToProtocol:
+respondsToSelector:
+retain
+release
+autorelease
+retainCount
+zone
+desc"]
+_7fff68ce77d0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject isNSOrderedSet__]
+ 0x7fff68ce77d0 (16 bytes)
+554889e531c05dc3
+0f1f840000000000"]
+_10059b980 [style=filled] [fillcolor=white] [label="Instance of memorydumper2.DeepClass
+ 0x10059b980 (48 bytes)
+b057010001000000
+0200000000000000
+0100000000000000
+0200000000000000
+0300000000000000
+0400000000000000"]
+_10059b980 -> _1000157b0 [color=white] [fontcolor=white] [label="@0"]
+_10000c460 [style=filled] [fillcolor=white] [label="memorydumper2.DeepClassSuper1.a.setter : Swift.Int
+ 0x10000c460 (96 bytes)
+554889e54883ec40
+4c89e84883c01031
+c9488d55e8be2100
+000048897de04889
+c7488975d84889d6
+488b45d8488955d0
+4889c24c896dc8e8
+6a5b0000488b45c8..."]
+_100628702 [style=filled] [fillcolor=white] [label="unknown 0x100628702 (128 bytes)
+088000000000507a
+3e82ff7f00000000
+000000000000d8da
+938fff7f000023dd
+6f73ff7f0000f00d
+5ee7000000000000
+0000000000000000
+0000000000000000..."]
+_7fff68ce7330 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject retainWeakReference]
+ 0x7fff68ce7330 (32 bytes)
+554889e5e8970afb
+ff31c94885c00f95
+c189c85dc3662e0f
+1f84000000000090"]
+_7fff68ce74b0 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject instancesRespondToSelector:]
+ 0x7fff68ce74b0 (32 bytes)
+554889e54885d274
+094889d65de9b6bc
+020031c05dc3662e
+0f1f840000000000"]
+_7fff68ce7760 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject _cfTypeID]
+ 0x7fff68ce7760 (16 bytes)
+554889e5b8010000
+005dc30f1f440000"]
+_7fff68ce72d0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject autorelease]
+ 0x7fff68ce72d0 (16 bytes)
+554889e55de944be
+0200660f1f440000"]
+_7fff68ce7210 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject isProxy]
+ 0x7fff68ce7210 (16 bytes)
+554889e531c05dc3
+0f1f840000000000"]
+_7fff68ce7620 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject description]
+ 0x7fff68ce7620 (96 bytes)
+554889e541574156
+53504989fe48897d
+e0e82afdfaff48bb
+f8ffffffff7f0000
+49231e4c8d75e04c
+89f74889dee88efb
+e1ff4989c7488b43
+f84c89f74889deff...
+Strings:
+AWAVSPI
+[A^A_]"]
+_7fff736fdd23 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fdd23 (128 bytes)
+73656c6600706572
+666f726d53656c65
+63746f723a007065
+72666f726d53656c
+6563746f723a7769
+74684f626a656374
+3a00706572666f72
+6d53656c6563746f...
+Strings:
+self
+performSelector:
+performSelector:withObject:
+performSelector:withObject:withObject:
+isProxy
+isKindOfClass:
+isMemberOfClass:"]
+_7fff7377ee3f [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377ee3f (128 bytes)
+72657461696e5765
+616b526566657265
+6e6365005f636f70
+7944657363726970
+74696f6e005f6366
+5479706549440069
+734e534172726179
+5f5f0069734e5343...
+Strings:
+retainWeakReference
+_copyDescription
+_cfTypeID
+isNSArray__
+isNSCFConstantString__
+isNSData__
+isNSDate__
+isNSDictionary__
+isNSObj"]
+_7fff68ce73b0 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject allowsWeakReference]
+ 0x7fff68ce73b0 (16 bytes)
+554889e5b8010000
+005dc30f1f440000"]
+_7fff745115ac [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff745115ac (128 bytes)
+40323440303a385e
+7b5f4e535a6f6e65
+3d7d31360040223c
+43504c456e67696e
+655472616e73706f
+727444656c657465
+5472616e73706f72
+7453636f70655461...
+Strings:
+@24@0:8^{_NSZone=}16
+@\"<CPLEngineTransportDeleteTransportScopeTask>\"
+@\"<CPLEngineTransportUpdateTransportScopeTask>\"
+@\"CPLResetT"]
+_7fff68ce7810 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject isNSTimeZone__]
+ 0x7fff68ce7810 (16 bytes)
+554889e531c05dc3
+0f1f840000000000"]
+_1006286e0 [style=filled] [fillcolor=white] [label="malloc 0x1006286e0 (32 bytes)
+010008a006000000
+c0793e82ff7f0000
+0000000000000000
+a0da938fff7f0000"]
+_7fff736fddf3 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fddf3 (128 bytes)
+7a6f6e6500646573
+6372697074696f6e
+0064656275674465
+736372697074696f
+6e006163636f756e
+743a646964436861
+6e67655769746854
+7970653a696e5374...
+Strings:
+zone
+description
+debugDescription
+account:didChangeWithType:inStore:oldAccount:
+changeFromAccount:toAccount:
+addFailureBlock:"]
+_7fff7371a5eb [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7371a5eb (128 bytes)
+616c6c6f63576974
+685a6f6e653a0061
+6c6c6f63005f7765
+616b4c6962726172
+794d616e61676572
+00696e6974576974
+684c696272617279
+4d616e616765723a...
+Strings:
+allocWithZone:
+alloc
+_weakLibraryManager
+initWithLibraryManager:
+weakLibraryManager
+setWeakLibraryManager:
+_sessionLock
+_sizeOfR"]
+_7fff7450fda6 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7450fda6 (128 bytes)
+51313640303a3800
+63323440303a3840
+3136004000233136
+40303a3800403332
+40303a383a313640
+3234004034304030
+3a383a3136403234
+4033320063323440...
+Strings:
+Q16@0:8
+c24@0:8@16
+#16@0:8
+@32@0:8:16@24
+@40@0:8:16@24@32
+c24@0:8#16
+c24@0:8:16
+Vv16@0:8
+^{_NSZone=}16@0:8
+c24@0:8@\"Protocol\"1"]
+_7fff68ce72f0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject _isDeallocating]
+ 0x7fff68ce72f0 (16 bytes)
+554889e5e8970bfb
+ff0fb6c05dc36690"]
+_10000cac0 [style=filled] [fillcolor=white] [label="memorydumper2.DeepClassSuper3.c.modify : Swift.Int
+ 0x10000cac0 (64 bytes)
+554889e541554883
+ec184983c52031c0
+89c1ba2100000048
+897df04c89ef488b
+75f04c896de8e81b
+550000488d050e00
+0000488b55e84883
+c418415d5dc36690"]
+_7fff7450fd7a [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7450fd7a (128 bytes)
+40313640303a3800
+40224e5342756e64
+6c65220040224e53
+537472696e672200
+76323440303a3840
+3f31360051313640
+303a380063323440
+303a384031360040...
+Strings:
+@16@0:8
+@\"NSBundle\"
+@\"NSString\"
+v24@0:8@?16
+Q16@0:8
+c24@0:8@16
+#16@0:8
+@32@0:8:16@24
+@40@0:8:16@24@32
+c24@0:8#16
+c24@0:8:16"]
+_7fff736fdde7 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fdde7 (128 bytes)
+72657461696e436f
+756e74007a6f6e65
+0064657363726970
+74696f6e00646562
+7567446573637269
+7074696f6e006163
+636f756e743a6469
+644368616e676557...
+Strings:
+retainCount
+zone
+description
+debugDescription
+account:didChangeWithType:inStore:oldAccount:
+changeFromAccount:toAccount:
+addFail"]
+_7fff74511d98 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff74511d98 (128 bytes)
+2300402243504c45
+6e67696e6553746f
+7265220040223c43
+504c456e67696e65
+5472616e73706f72
+7446657463685363
+6f70654c69737443
+68616e6765735461...
+Strings:
+@\"CPLEngineStore\"
+@\"<CPLEngineTransportFetchScopeListChangesTask>\"
+@\"NSDictionary\"16@0:8
+q24@0:8@\"<CPLReference>\"16
+q24@0:8@16"]
+_7fff68ce73a0 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject _tryRetain]
+ 0x7fff68ce73a0 (16 bytes)
+554889e5b8010000
+005dc30f1f440000"]
+_7fff736fdd55 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fdd55 (128 bytes)
+706572666f726d53
+656c6563746f723a
+776974684f626a65
+63743a776974684f
+626a6563743a0069
+7350726f78790069
+734b696e644f6643
+6c6173733a006973...
+Strings:
+performSelector:withObject:withObject:
+isProxy
+isKindOfClass:
+isMemberOfClass:
+conformsToProtocol:
+respondsToSelector:
+retain"]
+_7fff68ce75e0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject performSelector:]
+ 0x7fff68ce75e0 (16 bytes)
+554889e54889d65d
+e941bd02000f1f00"]
+_10000ca60 [style=filled] [fillcolor=white] [label="memorydumper2.DeepClassSuper3.c.setter : Swift.Int
+ 0x10000ca60 (96 bytes)
+554889e54883ec40
+4c89e84883c02031
+c9488d55e8be2100
+000048897de04889
+c7488975d84889d6
+488b45d8488955d0
+4889c24c896dc8e8
+6a550000488b45c8..."]
+_1000156c0 [style=filled] [fillcolor=white] [label="ObjC class memorydumper2.DeepClassSuper3
+ 0x1000156c0 (184 bytes)
+8856010001000000
+f055010001000000
+40511e68ff7f0000
+0000000030000000
+82b5590001000000
+0200000000000000
+2800000007000000
+c800000010000000..."]
+_1000156c0 -> _100015688 [color=white] [fontcolor=white] [label="@0"]
+_1000156c0 -> _1000155f0 [color=white] [fontcolor=white] [label="@8"]
+_1000156c0 -> _7fff681e5140 [color=white] [fontcolor=white] [label="@16"]
+_1000156c0 -> _10059b582 [color=white] [fontcolor=white] [label="@32"]
+_1000156c0 -> _100012a98 [color=white] [fontcolor=white] [label="@64"]
+_1000156c0 -> _10000c400 [color=white] [fontcolor=white] [label="@88"]
+_1000156c0 -> _10000c460 [color=white] [fontcolor=white] [label="@96"]
+_1000156c0 -> _10000c4c0 [color=white] [fontcolor=white] [label="@104"]
+_1000156c0 -> _10000cb70 [color=white] [fontcolor=white] [label="@112"]
+_1000156c0 -> _10000c6e0 [color=white] [fontcolor=white] [label="@128"]
+_1000156c0 -> _10000c740 [color=white] [fontcolor=white] [label="@136"]
+_1000156c0 -> _10000c7a0 [color=white] [fontcolor=white] [label="@144"]
+_1000156c0 -> _10000ca00 [color=white] [fontcolor=white] [label="@160"]
+_1000156c0 -> _10000ca60 [color=white] [fontcolor=white] [label="@168"]
+_1000156c0 -> _10000cac0 [color=white] [fontcolor=white] [label="@176"]
+_10000c740 [style=filled] [fillcolor=white] [label="memorydumper2.DeepClassSuper2.b.setter : Swift.Int
+ 0x10000c740 (96 bytes)
+554889e54883ec40
+4c89e84883c01831
+c9488d55e8be2100
+000048897de04889
+c7488975d84889d6
+488b45d8488955d0
+4889c24c896dc8e8
+8a580000488b45c8..."]
+_7fff68d33826 [style=filled] [fillcolor=white] [label="swift::Demangle::Demangler::demangleOperatorIdentifier()::op_char_table
+ 0x7fff68d33826 (128 bytes)
+5440224e53537472
+696e67222c522c43
+0064656275674465
+736372697074696f
+6e00636c6f737572
+6520617267756d65
+6e74207761732065
+7363617065642069...
+Strings:
+T@\"NSString\",R,C
+debugDescription
+closure argument was escaped in withoutActuallyEscaping block
+closure argument passed as @noes"]
+_7fff7377ee6e [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377ee6e (128 bytes)
+69734e5341727261
+795f5f0069734e53
+4346436f6e737461
+6e74537472696e67
+5f5f0069734e5344
+6174615f5f006973
+4e53446174655f5f
+0069734e53446963...
+Strings:
+isNSArray__
+isNSCFConstantString__
+isNSData__
+isNSDate__
+isNSDictionary__
+isNSObject__
+isNSOrderedSet__
+isNSNumber__
+isNSSet__"]
+_7fff68ce7780 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject isNSCFConstantString__]
+ 0x7fff68ce7780 (16 bytes)
+554889e531c05dc3
+0f1f840000000000"]
+_7fff68ce7740 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject _copyDescription]
+ 0x7fff68ce7740 (32 bytes)
+554889e5488b3595
+1cc126e8debb0200
+4889c75dff2526c7
+6e19660f1f440000"]
+_7fff68ce7360 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject release]
+ 0x7fff68ce7360 (16 bytes)
+554889e55dc3662e
+0f1f840000000000"]
+_7fff68ce7240 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject doesNotRecognizeSelector:]
+ 0x7fff68ce7240 (96 bytes)
+554889e541574156
+53504989d648bbf8
+ffffffff7f000048
+231f4889dfe810bf
+020031c984c00f94
+c1448d7c092b4889
+dfe8f0be02004889
+c34c89f7e8c7c102...
+Strings:
+AWAVSPI"]
+_7fff74512abd [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff74512abd (128 bytes)
+76323440303a383a
+3136005e3f313640
+303a380076323440
+303a385e3f313600
+5e7b6f626a635f69
+7661723d7d313640
+303a380076323440
+303a385e7b6f626a...
+Strings:
+v24@0:8:16
+^?16@0:8
+v24@0:8^?16
+^{objc_ivar=}16@0:8
+v24@0:8^{objc_ivar=}16
+c32@0:8@16@?24
+c48@0:8@16@24^@32@?40
+c40@0:8@16@24@?3"]
+_7fff73708f62 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff73708f62 (128 bytes)
+696e697469616c69
+7a65007061727365
+723a706172736545
+72726f724f636375
+727265643a00696e
+6974576974685554
+4638537472696e67
+3a007265706f7274...
+Strings:
+initialize
+parser:parseErrorOccurred:
+initWithUTF8String:
+reportErrorWithCode:userInfo:
+lengthOfBytesUsingEncoding:
+set_parserCo"]
+_7fff7377ef15 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377ef15 (128 bytes)
+6973610072656643
+6f756e7473005f73
+7769667454797065
+4d65746164617461
+005f737769667454
+7970654e616d6500
+5f73776966745661
+6c75650064656275...
+Strings:
+refCounts
+_swiftTypeMetadata
+_swiftTypeName
+_swiftValue
+debugQuickLookObject
+decomposedStringWithCanonicalMapping
+automatica"]
+_7fff736fdd93 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fdd93 (128 bytes)
+69734d656d626572
+4f66436c6173733a
+00636f6e666f726d
+73546f50726f746f
+636f6c3a00726573
+706f6e6473546f53
+656c6563746f723a
+0072657461696e00...
+Strings:
+isMemberOfClass:
+conformsToProtocol:
+respondsToSelector:
+retain
+release
+autorelease
+retainCount
+zone
+description
+debugDescriptio"]
+_1000155b8 [style=filled] [fillcolor=white] [label="metaclass for memorydumper2.DeepClassSuper2
+ 0x1000155b8 (40 bytes)
+48a08f8fff7f0000
+0855010001000000
+40511e68ff7f0000
+0000000031200000
+e0b4590001000000"]
+_1000155b8 -> _7fff8f8fa048 [color=white] [fontcolor=white] [label="@0"]
+_1000155b8 -> _100015508 [color=white] [fontcolor=white] [label="@8"]
+_1000155b8 -> _7fff681e5140 [color=white] [fontcolor=white] [label="@16"]
+_1000155b8 -> _10059b4e0 [color=white] [fontcolor=white] [label="@32"]
+_7fff68ce73c0 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject retainWeakReference]
+ 0x7fff68ce73c0 (16 bytes)
+554889e5b8010000
+005dc30f1f440000"]
+_7fff823ea0d8 [style=filled] [fillcolor=white] [label="_OBJC_$_PROP_LIST_Swift._SwiftObject
+ 0x7fff823ea0d8 (72 bytes)
+1000000004000000
+83f3d268ff7f0000
+0538d368ff7f0000
+0a38d368ff7f0000
+1538d368ff7f0000
+1a38d368ff7f0000
+2638d368ff7f0000
+3738d368ff7f0000..."]
+_7fff823ea0d8 -> _7fff68d2f383 [color=white] [fontcolor=white] [label="@8"]
+_7fff823ea0d8 -> _7fff68d33805 [color=white] [fontcolor=white] [label="@16"]
+_7fff823ea0d8 -> _7fff68d3380a [color=white] [fontcolor=white] [label="@24"]
+_7fff823ea0d8 -> _7fff68d33815 [color=white] [fontcolor=white] [label="@32"]
+_7fff823ea0d8 -> _7fff68d3381a [color=white] [fontcolor=white] [label="@40"]
+_7fff823ea0d8 -> _7fff68d33826 [color=white] [fontcolor=white] [label="@48"]
+_7fff823ea0d8 -> _7fff68d33837 [color=white] [fontcolor=white] [label="@56"]
+_7fff823ea0d8 -> _7fff68d33826 [color=white] [fontcolor=white] [label="@64"]
+_7fff68ce7160 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject class]
+ 0x7fff68ce7160 (16 bytes)
+554889e54889f85d
+c30f1f8000000000"]
+_7fff8f854118 [style=filled] [fillcolor=white] [label="ObjC class NSObject
+ 0x7fff8f854118 (40 bytes)
+f040858fff7f0000
+0000000000000000
+40b7590001000000
+0300000010800100
+0441600001000000"]
+_10059b520 [style=filled] [fillcolor=white] [label="malloc 0x10059b520 (32 bytes)
+010008a006000000
+689c3e82ff7f0000
+f07f908fff7f0000
+0000000000000000"]
+_10059b520 -> _7fff823e9c68 [color=white] [fontcolor=white] [label="@8"]
+_10059b520 -> _7fff8f907ff0 [color=white] [fontcolor=white] [label="@16"]
+_7fff68ce7680 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject debugDescription]
+ 0x7fff68ce7680 (96 bytes)
+554889e541574156
+53504989fe48897d
+e0e8cafcfaff48bb
+f8ffffffff7f0000
+49231e4c8d75e04c
+89f74889dee82efb
+e1ff4989c7488b43
+f84c89f74889deff...
+Strings:
+AWAVSPI
+[A^A_]"]
+_7fff7453af8d [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7453af8d (128 bytes)
+7b526566436f756e
+74733c7377696674
+3a3a526566436f75
+6e7442697473543c
+73776966743a3a52
+6566436f756e7449
+73496e6c696e653e
+203e3d2272656643...
+Strings:
+{RefCounts<swift::RefCountBitsT<swift::RefCountIsInline> >=\"refCounts\"{atomic<swift::RefCountBitsT<swift::RefCountIsInline> >=\"_"]
+_7fff7377ee91 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377ee91 (128 bytes)
+69734e5344617461
+5f5f0069734e5344
+6174655f5f006973
+4e5344696374696f
+6e6172795f5f0069
+734e534f626a6563
+745f5f0069734e53
+4f72646572656453...
+Strings:
+isNSData__
+isNSDate__
+isNSDictionary__
+isNSObject__
+isNSOrderedSet__
+isNSNumber__
+isNSSet__
+isNSString__
+isNSTimeZone__
+isNSValu"]
+_1000150f0 [style=filled] [fillcolor=white] [label="_METACLASS_DATA_memorydumper2.DeepClass
+ 0x1000150f0 (72 bytes)
+8100000028000000
+2800000000000000
+0000000000000000
+6032010001000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000..."]
+_1000150f0 -> _100013260 [color=white] [fontcolor=white] [label="@24"]
+_100012a20 [style=filled] [fillcolor=white] [label="nominal type descriptor for memorydumper2.DeepClassSuper2
+ 0x100012a20 (52 bytes)
+500000c0a0fdffff
+e8ffffff64c9ffff
+200f00005a0b0000
+0200000013000000
+0400000001000000
+0f00000010000000
+03000000"]
+_100012a20 -> _100000004 [color=white] [fontcolor=white] [label="@32"]
+_7fff68ce7190 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject superclass]
+ 0x7fff68ce7190 (16 bytes)
+554889e5488b4708
+5dc3660f1f440000"]
+_10000ce90 [style=filled] [fillcolor=white] [label="memorydumper2.DeepClass.__allocating_init() -> memorydumper2.DeepClass
+ 0x10000ce90 (48 bytes)
+554889e5415550be
+30000000ba070000
+004c89efe8575100
+004989c5e88f1300
+004883c408415d5d
+c30f1f8000000000"]
+_7fff7377eefa [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377eefa (128 bytes)
+69734e5354696d65
+5a6f6e655f5f0069
+734e5356616c7565
+5f5f006973610072
+6566436f756e7473
+005f737769667454
+7970654d65746164
+617461005f737769...
+Strings:
+isNSTimeZone__
+isNSValue__
+refCounts
+_swiftTypeMetadata
+_swiftTypeName
+_swiftValue
+debugQuickLookObject
+decomposedStringWith"]
+_10059ba60 [style=filled] [fillcolor=white] [label="malloc 0x10059ba60 (64 bytes)
+0000000000000000
+0000000000000000
+1ddd6f73ff7f0000
+28d141e700000000
+0000000000000000
+0000000000000000
+0100000000000000
+60ba590001000000"]
+_10059ba60 -> _7fff736fdd1d [color=white] [fontcolor=white] [label="@16"]
+_10059ba60 -> _10059ba60 [color=white] [fontcolor=white] [label="@56"]
+_7fff68ce77b0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject isNSDictionary__]
+ 0x7fff68ce77b0 (16 bytes)
+554889e531c05dc3
+0f1f840000000000"]
+_7fff823e9cb0 [style=filled] [fillcolor=white] [label="_OBJC_$_INSTANCE_METHODS_Swift._SwiftObject
+ 0x7fff823e9cb0 (992 bytes)
+1b00000029000000
+58dc6f73ff7f0000
+4dfd5074ff7f0000
+d073ce68ff7f0000
+04dd6f73ff7f0000
+aefd5074ff7f0000
+d075ce68ff7f0000
+0ddd6f73ff7f0000..."]
+_7fff823e9cb0 -> _7fff736fdc58 [color=white] [fontcolor=white] [label="@8"]
+_7fff823e9cb0 -> _7fff7450fd4d [color=white] [fontcolor=white] [label="@16"]
+_7fff823e9cb0 -> _7fff68ce73d0 [color=white] [fontcolor=white] [label="@24"]
+_7fff823e9cb0 -> _7fff736fdd04 [color=white] [fontcolor=white] [label="@32"]
+_7fff823e9cb0 -> _7fff7450fdae [color=white] [fontcolor=white] [label="@40"]
+_7fff823e9cb0 -> _7fff68ce75d0 [color=white] [fontcolor=white] [label="@48"]
+_7fff823e9cb0 -> _7fff736fdd0d [color=white] [fontcolor=white] [label="@56"]
+_7fff823e9cb0 -> _7fff7450fda6 [color=white] [fontcolor=white] [label="@64"]
+_7fff823e9cb0 -> _7fff68ce75c0 [color=white] [fontcolor=white] [label="@72"]
+_7fff823e9cb0 -> _7fff736fdd12 [color=white] [fontcolor=white] [label="@80"]
+_7fff823e9cb0 -> _7fff7450fdbb [color=white] [fontcolor=white] [label="@88"]
+_7fff823e9cb0 -> _7fff68ce71a0 [color=white] [fontcolor=white] [label="@96"]
+_7fff823e9cb0 -> _7fff736fdd1d [color=white] [fontcolor=white] [label="@104"]
+_7fff823e9cb0 -> _7fff7450fdbb [color=white] [fontcolor=white] [label="@112"]
+_7fff823e9cb0 -> _7fff68ce7170 [color=white] [fontcolor=white] [label="@120"]
+_7fff823e9cb0 -> _7fff736fdd23 [color=white] [fontcolor=white] [label="@128"]
+_7fff823e9cb0 -> _7fff7450fd7a [color=white] [fontcolor=white] [label="@136"]
+_7fff823e9cb0 -> _7fff68ce7200 [color=white] [fontcolor=white] [label="@144"]
+_7fff823e9cb0 -> _7fff736fdd28 [color=white] [fontcolor=white] [label="@152"]
+_7fff823e9cb0 -> _7fff7450fd61 [color=white] [fontcolor=white] [label="@160"]
+_7fff823e9cb0 -> _7fff68ce75e0 [color=white] [fontcolor=white] [label="@168"]
+_7fff823e9cb0 -> _7fff736fdd39 [color=white] [fontcolor=white] [label="@176"]
+_7fff823e9cb0 -> _7fff7450fdc3 [color=white] [fontcolor=white] [label="@184"]
+_7fff823e9cb0 -> _7fff68ce75f0 [color=white] [fontcolor=white] [label="@192"]
+_7fff823e9cb0 -> _7fff736fdd55 [color=white] [fontcolor=white] [label="@200"]
+_7fff823e9cb0 -> _7fff7450fdd1 [color=white] [fontcolor=white] [label="@208"]
+_7fff823e9cb0 -> _7fff68ce7600 [color=white] [fontcolor=white] [label="@216"]
+_7fff823e9cb0 -> _7fff736fdd7c [color=white] [fontcolor=white] [label="@224"]
+_7fff823e9cb0 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@232"]
+_7fff823e9cb0 -> _7fff68ce7210 [color=white] [fontcolor=white] [label="@240"]
+_7fff823e9cb0 -> _7fff736fdd84 [color=white] [fontcolor=white] [label="@248"]
+_7fff823e9cb0 -> _7fff7450fde2 [color=white] [fontcolor=white] [label="@256"]
+_7fff823e9cb0 -> _7fff68ce73e0 [color=white] [fontcolor=white] [label="@264"]
+_7fff823e9cb0 -> _7fff736fdd93 [color=white] [fontcolor=white] [label="@272"]
+_7fff823e9cb0 -> _7fff7450fde2 [color=white] [fontcolor=white] [label="@280"]
+_7fff823e9cb0 -> _7fff68ce71e0 [color=white] [fontcolor=white] [label="@288"]
+_7fff823e9cb0 -> _7fff736fdda4 [color=white] [fontcolor=white] [label="@296"]
+_7fff823e9cb0 -> _7fff7450fdae [color=white] [fontcolor=white] [label="@304"]
+_7fff823e9cb0 -> _7fff68ce7520 [color=white] [fontcolor=white] [label="@312"]
+_7fff823e9cb0 -> _7fff736fddb8 [color=white] [fontcolor=white] [label="@320"]
+_7fff823e9cb0 -> _7fff7450fded [color=white] [fontcolor=white] [label="@328"]
+_7fff823e9cb0 -> _7fff68ce7480 [color=white] [fontcolor=white] [label="@336"]
+_7fff823e9cb0 -> _7fff736fddcc [color=white] [fontcolor=white] [label="@344"]
+_7fff823e9cb0 -> _7fff7450fd7a [color=white] [fontcolor=white] [label="@352"]
+_7fff823e9cb0 -> _7fff68ce72a0 [color=white] [fontcolor=white] [label="@360"]
+_7fff823e9cb0 -> _7fff736fddd3 [color=white] [fontcolor=white] [label="@368"]
+_7fff823e9cb0 -> _7fff7450fd4d [color=white] [fontcolor=white] [label="@376"]
+_7fff823e9cb0 -> _7fff68ce72c0 [color=white] [fontcolor=white] [label="@384"]
+_7fff823e9cb0 -> _7fff736fdddb [color=white] [fontcolor=white] [label="@392"]
+_7fff823e9cb0 -> _7fff7450fd7a [color=white] [fontcolor=white] [label="@400"]
+_7fff823e9cb0 -> _7fff68ce72d0 [color=white] [fontcolor=white] [label="@408"]
+_7fff823e9cb0 -> _7fff736fdde7 [color=white] [fontcolor=white] [label="@416"]
+_7fff823e9cb0 -> _7fff7450fda6 [color=white] [fontcolor=white] [label="@424"]
+_7fff823e9cb0 -> _7fff68ce72e0 [color=white] [fontcolor=white] [label="@432"]
+_7fff823e9cb0 -> _7fff736fddf3 [color=white] [fontcolor=white] [label="@440"]
+_7fff823e9cb0 -> _7fff7450fe01 [color=white] [fontcolor=white] [label="@448"]
+_7fff823e9cb0 -> _7fff68ce7220 [color=white] [fontcolor=white] [label="@456"]
+_7fff823e9cb0 -> _7fff736fddf8 [color=white] [fontcolor=white] [label="@464"]
+_7fff823e9cb0 -> _7fff7450fd7a [color=white] [fontcolor=white] [label="@472"]
+_7fff823e9cb0 -> _7fff68ce7620 [color=white] [fontcolor=white] [label="@480"]
+_7fff823e9cb0 -> _7fff736fde04 [color=white] [fontcolor=white] [label="@488"]
+_7fff823e9cb0 -> _7fff7450fd7a [color=white] [fontcolor=white] [label="@496"]
+_7fff823e9cb0 -> _7fff68ce7680 [color=white] [fontcolor=white] [label="@504"]
+_7fff823e9cb0 -> _7fff737084cd [color=white] [fontcolor=white] [label="@512"]
+_7fff823e9cb0 -> _7fff74512abd [color=white] [fontcolor=white] [label="@520"]
+_7fff823e9cb0 -> _7fff68ce7240 [color=white] [fontcolor=white] [label="@528"]
+_7fff823e9cb0 -> _7fff7374b8c9 [color=white] [fontcolor=white] [label="@536"]
+_7fff823e9cb0 -> _7fff7453af81 [color=white] [fontcolor=white] [label="@544"]
+_7fff823e9cb0 -> _7fff68ce74f0 [color=white] [fontcolor=white] [label="@552"]
+_7fff823e9cb0 -> _7fff7377ee10 [color=white] [fontcolor=white] [label="@560"]
+_7fff823e9cb0 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@568"]
+_7fff823e9cb0 -> _7fff68ce72f0 [color=white] [fontcolor=white] [label="@576"]
+_7fff823e9cb0 -> _7fff7377ee20 [color=white] [fontcolor=white] [label="@584"]
+_7fff823e9cb0 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@592"]
+_7fff823e9cb0 -> _7fff68ce7300 [color=white] [fontcolor=white] [label="@600"]
+_7fff823e9cb0 -> _7fff7377ee2b [color=white] [fontcolor=white] [label="@608"]
+_7fff823e9cb0 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@616"]
+_7fff823e9cb0 -> _7fff68ce7320 [color=white] [fontcolor=white] [label="@624"]
+_7fff823e9cb0 -> _7fff7377ee3f [color=white] [fontcolor=white] [label="@632"]
+_7fff823e9cb0 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@640"]
+_7fff823e9cb0 -> _7fff68ce7330 [color=white] [fontcolor=white] [label="@648"]
+_7fff823e9cb0 -> _7fff7377ee53 [color=white] [fontcolor=white] [label="@656"]
+_7fff823e9cb0 -> _7fff7450fd7a [color=white] [fontcolor=white] [label="@664"]
+_7fff823e9cb0 -> _7fff68ce7740 [color=white] [fontcolor=white] [label="@672"]
+_7fff823e9cb0 -> _7fff7377ee64 [color=white] [fontcolor=white] [label="@680"]
+_7fff823e9cb0 -> _7fff7450fda6 [color=white] [fontcolor=white] [label="@688"]
+_7fff823e9cb0 -> _7fff68ce7760 [color=white] [fontcolor=white] [label="@696"]
+_7fff823e9cb0 -> _7fff7377ee6e [color=white] [fontcolor=white] [label="@704"]
+_7fff823e9cb0 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@712"]
+_7fff823e9cb0 -> _7fff68ce7770 [color=white] [fontcolor=white] [label="@720"]
+_7fff823e9cb0 -> _7fff7377ee7a [color=white] [fontcolor=white] [label="@728"]
+_7fff823e9cb0 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@736"]
+_7fff823e9cb0 -> _7fff68ce7780 [color=white] [fontcolor=white] [label="@744"]
+_7fff823e9cb0 -> _7fff7377ee91 [color=white] [fontcolor=white] [label="@752"]
+_7fff823e9cb0 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@760"]
+_7fff823e9cb0 -> _7fff68ce7790 [color=white] [fontcolor=white] [label="@768"]
+_7fff823e9cb0 -> _7fff7377ee9c [color=white] [fontcolor=white] [label="@776"]
+_7fff823e9cb0 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@784"]
+_7fff823e9cb0 -> _7fff68ce77a0 [color=white] [fontcolor=white] [label="@792"]
+_7fff823e9cb0 -> _7fff7377eea7 [color=white] [fontcolor=white] [label="@800"]
+_7fff823e9cb0 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@808"]
+_7fff823e9cb0 -> _7fff68ce77b0 [color=white] [fontcolor=white] [label="@816"]
+_7fff823e9cb0 -> _7fff7377eeb8 [color=white] [fontcolor=white] [label="@824"]
+_7fff823e9cb0 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@832"]
+_7fff823e9cb0 -> _7fff68ce77c0 [color=white] [fontcolor=white] [label="@840"]
+_7fff823e9cb0 -> _7fff7377eec5 [color=white] [fontcolor=white] [label="@848"]
+_7fff823e9cb0 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@856"]
+_7fff823e9cb0 -> _7fff68ce77d0 [color=white] [fontcolor=white] [label="@864"]
+_7fff823e9cb0 -> _7fff7377eed6 [color=white] [fontcolor=white] [label="@872"]
+_7fff823e9cb0 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@880"]
+_7fff823e9cb0 -> _7fff68ce77e0 [color=white] [fontcolor=white] [label="@888"]
+_7fff823e9cb0 -> _7fff7377eee3 [color=white] [fontcolor=white] [label="@896"]
+_7fff823e9cb0 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@904"]
+_7fff823e9cb0 -> _7fff68ce77f0 [color=white] [fontcolor=white] [label="@912"]
+_7fff823e9cb0 -> _7fff7377eeed [color=white] [fontcolor=white] [label="@920"]
+_7fff823e9cb0 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@928"]
+_7fff823e9cb0 -> _7fff68ce7800 [color=white] [fontcolor=white] [label="@936"]
+_7fff823e9cb0 -> _7fff7377eefa [color=white] [fontcolor=white] [label="@944"]
+_7fff823e9cb0 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@952"]
+_7fff823e9cb0 -> _7fff68ce7810 [color=white] [fontcolor=white] [label="@960"]
+_7fff823e9cb0 -> _7fff7377ef09 [color=white] [fontcolor=white] [label="@968"]
+_7fff823e9cb0 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@976"]
+_7fff823e9cb0 -> _7fff68ce7820 [color=white] [fontcolor=white] [label="@984"]
+_7fff68ce7390 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject _isDeallocating]
+ 0x7fff68ce7390 (16 bytes)
+554889e531c05dc3
+0f1f840000000000"]
+_7fff68ce73d0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject dealloc]
+ 0x7fff68ce73d0 (16 bytes)
+554889e55de9260e
+fbff660f1f440000"]
+_10000c4c0 [style=filled] [fillcolor=white] [label="memorydumper2.DeepClassSuper1.a.modify : Swift.Int
+ 0x10000c4c0 (64 bytes)
+554889e541554883
+ec184983c51031c0
+89c1ba2100000048
+897df04c89ef488b
+75f04c896de8e81b
+5b0000488d050e00
+0000488b55e84883
+c418415d5dc36690"]
+_7fff8f908028 [style=filled] [fillcolor=white] [label="ObjC class Swift._StringBreadcrumbs
+ 0x7fff8f908028 (104 bytes)
+f07f908fff7f0000
+20a08f8fff7f0000
+40511e68ff7f0000
+0000000028000000
+0287620001000000
+0200000000000000
+2000000007000000
+7800000010000000..."]
+_7fff8f908028 -> _7fff8f907ff0 [color=white] [fontcolor=white] [label="@0"]
+_7fff8f908028 -> _7fff8f8fa020 [color=white] [fontcolor=white] [label="@8"]
+_7fff8f908028 -> _7fff681e5140 [color=white] [fontcolor=white] [label="@16"]
+_7fff8f908028 -> _100628702 [color=white] [fontcolor=white] [label="@32"]
+_7fff8f908028 -> _7fff68d1c744 [color=white] [fontcolor=white] [label="@64"]
+_7fff8f908028 -> _7fff68c96640 [color=white] [fontcolor=white] [label="@96"]
+_7fff68ce7710 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject debugDescription]
+ 0x7fff68ce7710 (48 bytes)
+554889e55350e84b
+ba02004889c34889
+c7e86abd02004889
+df89c6e850fbe1ff
+4889c74883c4085b
+5de99cbb02006690"]
+_100015038 [style=filled] [fillcolor=white] [label="_METACLASS_DATA_memorydumper2.DeepClassSuper3
+ 0x100015038 (72 bytes)
+8100000028000000
+2800000000000000
+0000000000000000
+3032010001000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000..."]
+_100015038 -> _100013230 [color=white] [fontcolor=white] [label="@24"]
+_10059b500 [style=filled] [fillcolor=white] [label="malloc 0x10059b500 (32 bytes)
+010008a000000000
+c84e010001000000
+b855010001000000
+0000000000000000"]
+_10059b500 -> _100014ec8 [color=white] [fontcolor=white] [label="@8"]
+_10059b500 -> _1000155b8 [color=white] [fontcolor=white] [label="@16"]
+_7fff823e9760 [style=filled] [fillcolor=white] [label="_OBJC_$_CLASS_METHODS_Swift._SwiftObject
+ 0x7fff823e9760 (536 bytes)
+1b00000016000000
+12dd6f73ff7f0000
+bbfd5074ff7f0000
+9071ce68ff7f0000
+1ddd6f73ff7f0000
+bbfd5074ff7f0000
+6071ce68ff7f0000
+93dd6f73ff7f0000..."]
+_7fff823e9760 -> _7fff736fdd12 [color=white] [fontcolor=white] [label="@8"]
+_7fff823e9760 -> _7fff7450fdbb [color=white] [fontcolor=white] [label="@16"]
+_7fff823e9760 -> _7fff68ce7190 [color=white] [fontcolor=white] [label="@24"]
+_7fff823e9760 -> _7fff736fdd1d [color=white] [fontcolor=white] [label="@32"]
+_7fff823e9760 -> _7fff7450fdbb [color=white] [fontcolor=white] [label="@40"]
+_7fff823e9760 -> _7fff68ce7160 [color=white] [fontcolor=white] [label="@48"]
+_7fff823e9760 -> _7fff736fdd93 [color=white] [fontcolor=white] [label="@56"]
+_7fff823e9760 -> _7fff7450fde2 [color=white] [fontcolor=white] [label="@64"]
+_7fff823e9760 -> _7fff68ce71c0 [color=white] [fontcolor=white] [label="@72"]
+_7fff823e9760 -> _7fff736fdda4 [color=white] [fontcolor=white] [label="@80"]
+_7fff823e9760 -> _7fff7450fdae [color=white] [fontcolor=white] [label="@88"]
+_7fff823e9760 -> _7fff68ce7570 [color=white] [fontcolor=white] [label="@96"]
+_7fff823e9760 -> _7fff736fddb8 [color=white] [fontcolor=white] [label="@104"]
+_7fff823e9760 -> _7fff7450fded [color=white] [fontcolor=white] [label="@112"]
+_7fff823e9760 -> _7fff68ce7450 [color=white] [fontcolor=white] [label="@120"]
+_7fff823e9760 -> _7fff736fddcc [color=white] [fontcolor=white] [label="@128"]
+_7fff823e9760 -> _7fff7450fd7a [color=white] [fontcolor=white] [label="@136"]
+_7fff823e9760 -> _7fff68ce7350 [color=white] [fontcolor=white] [label="@144"]
+_7fff823e9760 -> _7fff736fddd3 [color=white] [fontcolor=white] [label="@152"]
+_7fff823e9760 -> _7fff7450fd4d [color=white] [fontcolor=white] [label="@160"]
+_7fff823e9760 -> _7fff68ce7360 [color=white] [fontcolor=white] [label="@168"]
+_7fff823e9760 -> _7fff736fdddb [color=white] [fontcolor=white] [label="@176"]
+_7fff823e9760 -> _7fff7450fd7a [color=white] [fontcolor=white] [label="@184"]
+_7fff823e9760 -> _7fff68ce7370 [color=white] [fontcolor=white] [label="@192"]
+_7fff823e9760 -> _7fff736fdde7 [color=white] [fontcolor=white] [label="@200"]
+_7fff823e9760 -> _7fff7450fda6 [color=white] [fontcolor=white] [label="@208"]
+_7fff823e9760 -> _7fff68ce7380 [color=white] [fontcolor=white] [label="@216"]
+_7fff823e9760 -> _7fff736fddf8 [color=white] [fontcolor=white] [label="@224"]
+_7fff823e9760 -> _7fff7450fd7a [color=white] [fontcolor=white] [label="@232"]
+_7fff823e9760 -> _7fff68ce76e0 [color=white] [fontcolor=white] [label="@240"]
+_7fff823e9760 -> _7fff736fde04 [color=white] [fontcolor=white] [label="@248"]
+_7fff823e9760 -> _7fff7450fd7a [color=white] [fontcolor=white] [label="@256"]
+_7fff823e9760 -> _7fff68ce7710 [color=white] [fontcolor=white] [label="@264"]
+_7fff823e9760 -> _7fff737056c4 [color=white] [fontcolor=white] [label="@272"]
+_7fff823e9760 -> _7fff7450fded [color=white] [fontcolor=white] [label="@280"]
+_7fff823e9760 -> _7fff68ce74b0 [color=white] [fontcolor=white] [label="@288"]
+_7fff823e9760 -> _7fff73708f62 [color=white] [fontcolor=white] [label="@296"]
+_7fff823e9760 -> _7fff7450fd4d [color=white] [fontcolor=white] [label="@304"]
+_7fff823e9760 -> _7fff68ce70f0 [color=white] [fontcolor=white] [label="@312"]
+_7fff823e9760 -> _7fff7370e08c [color=white] [fontcolor=white] [label="@320"]
+_7fff823e9760 -> _7fff7450fde2 [color=white] [fontcolor=white] [label="@328"]
+_7fff823e9760 -> _7fff68ce7420 [color=white] [fontcolor=white] [label="@336"]
+_7fff823e9760 -> _7fff7371a5eb [color=white] [fontcolor=white] [label="@344"]
+_7fff823e9760 -> _7fff745115ac [color=white] [fontcolor=white] [label="@352"]
+_7fff823e9760 -> _7fff68ce7100 [color=white] [fontcolor=white] [label="@360"]
+_7fff823e9760 -> _7fff7371a5fa [color=white] [fontcolor=white] [label="@368"]
+_7fff823e9760 -> _7fff7450fd7a [color=white] [fontcolor=white] [label="@376"]
+_7fff823e9760 -> _7fff68ce7130 [color=white] [fontcolor=white] [label="@384"]
+_7fff823e9760 -> _7fff7374b8c9 [color=white] [fontcolor=white] [label="@392"]
+_7fff823e9760 -> _7fff7453af81 [color=white] [fontcolor=white] [label="@400"]
+_7fff823e9760 -> _7fff68ce74d0 [color=white] [fontcolor=white] [label="@408"]
+_7fff823e9760 -> _7fff7374b8dc [color=white] [fontcolor=white] [label="@416"]
+_7fff823e9760 -> _7fff7453af81 [color=white] [fontcolor=white] [label="@424"]
+_7fff823e9760 -> _7fff68ce7510 [color=white] [fontcolor=white] [label="@432"]
+_7fff823e9760 -> _7fff7377ee10 [color=white] [fontcolor=white] [label="@440"]
+_7fff823e9760 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@448"]
+_7fff823e9760 -> _7fff68ce7390 [color=white] [fontcolor=white] [label="@456"]
+_7fff823e9760 -> _7fff7377ee20 [color=white] [fontcolor=white] [label="@464"]
+_7fff823e9760 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@472"]
+_7fff823e9760 -> _7fff68ce73a0 [color=white] [fontcolor=white] [label="@480"]
+_7fff823e9760 -> _7fff7377ee2b [color=white] [fontcolor=white] [label="@488"]
+_7fff823e9760 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@496"]
+_7fff823e9760 -> _7fff68ce73b0 [color=white] [fontcolor=white] [label="@504"]
+_7fff823e9760 -> _7fff7377ee3f [color=white] [fontcolor=white] [label="@512"]
+_7fff823e9760 -> _7fff7450fd19 [color=white] [fontcolor=white] [label="@520"]
+_7fff823e9760 -> _7fff68ce73c0 [color=white] [fontcolor=white] [label="@528"]
+_100000004 [style=filled] [fillcolor=white] [label="unknown 0x100000004 (128 bytes)
+0700000103000000
+0200000027000000
+c011000085002000
+0000000019000000
+480000005f5f5041
+47455a45524f0000
+0000000000000000
+0000000000000000...
+Strings:
+__PAGEZERO
+__TEXT"]
+_7fff7377ee9c [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377ee9c (128 bytes)
+69734e5344617465
+5f5f0069734e5344
+696374696f6e6172
+795f5f0069734e53
+4f626a6563745f5f
+0069734e534f7264
+657265645365745f
+5f0069734e534e75...
+Strings:
+isNSDate__
+isNSDictionary__
+isNSObject__
+isNSOrderedSet__
+isNSNumber__
+isNSSet__
+isNSString__
+isNSTimeZone__
+isNSValue__"]
+_10000cde0 [style=filled] [fillcolor=white] [label="memorydumper2.DeepClass.d.modify : Swift.Int
+ 0x10000cde0 (64 bytes)
+554889e541554883
+ec184983c52831c0
+89c1ba2100000048
+897df04c89ef488b
+75f04c896de8e8fb
+510000488d050e00
+0000488b55e84883
+c418415d5dc36690"]
+_7fff86b67ee8 [style=filled] [fillcolor=white] [label="_OBJC_CLASS_RO_$___NSAtom
+ 0x7fff86b67ee8 (72 bytes)
+1200000000000000
+0800000000000000
+0000000000000000
+c23f5c2fff7f0000
+0000000000000000
+0000000000000000
+c07eb686ff7f0000
+0000000000000000..."]
+_10059b582 [style=filled] [fillcolor=white] [label="unknown 0x10059b582 (128 bytes)
+088000000000a850
+010001000000b057
+0100010000000000
+000000000000eba5
+7173ff7f0000461b
+a2a9000000000000
+0000000000000000
+000000000000faa5..."]
+_7fff7450fded [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7450fded (128 bytes)
+63323440303a383a
+3136005676313640
+303a38005e7b5f4e
+535a6f6e653d7d31
+3640303a38006332
+3440303a38402250
+726f746f636f6c22
+31360040224e5353...
+Strings:
+c24@0:8:16
+Vv16@0:8
+^{_NSZone=}16@0:8
+c24@0:8@\"Protocol\"16
+@\"NSString\"16@0:8
+v32@0:8@16@24
+v32@0:8@\"CKAccountStore\"16@\"CKStoreAc"]
+_7fff7377eec5 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377eec5 (128 bytes)
+69734e534f726465
+7265645365745f5f
+0069734e534e756d
+6265725f5f006973
+4e535365745f5f00
+69734e5353747269
+6e675f5f0069734e
+5354696d655a6f6e...
+Strings:
+isNSOrderedSet__
+isNSNumber__
+isNSSet__
+isNSString__
+isNSTimeZone__
+isNSValue__
+refCounts
+_swiftTypeMetadata
+_swiftTypeName"]
+_7fff736fddb8 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fddb8 (128 bytes)
+726573706f6e6473
+546f53656c656374
+6f723a0072657461
+696e0072656c6561
+7365006175746f72
+656c656173650072
+657461696e436f75
+6e74007a6f6e6500...
+Strings:
+respondsToSelector:
+retain
+release
+autorelease
+retainCount
+zone
+description
+debugDescription
+account:didChangeWithType:inStore:o"]
+_7fff7377ee2b [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377ee2b (128 bytes)
+616c6c6f77735765
+616b526566657265
+6e63650072657461
+696e5765616b5265
+666572656e636500
+5f636f7079446573
+6372697074696f6e
+005f636654797065...
+Strings:
+allowsWeakReference
+retainWeakReference
+_copyDescription
+_cfTypeID
+isNSArray__
+isNSCFConstantString__
+isNSData__
+isNSDate__
+isNS"]
+_7fff736fdd04 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fdd04 (128 bytes)
+6973457175616c3a
+0068617368007375
+706572636c617373
+00636c6173730073
+656c660070657266
+6f726d53656c6563
+746f723a00706572
+666f726d53656c65...
+Strings:
+isEqual:
+hash
+superclass
+class
+self
+performSelector:
+performSelector:withObject:
+performSelector:withObject:withObject:
+isProxy"]
+_7fff68d1c744 [style=filled] [fillcolor=white] [label="nominal type descriptor for Swift._StringBreadcrumbs
+ 0x7fff68d1c744 (52 bytes)
+5000008008adffff
+e4ffffff9086f5ff
+d00b020000000000
+020000000d000000
+0300000002000000
+0a0000000c000000
+01000000"]
+_7fff68ce77a0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject isNSDate__]
+ 0x7fff68ce77a0 (16 bytes)
+554889e531c05dc3
+0f1f840000000000"]
+_7fff68ce7480 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject respondsToSelector:]
+ 0x7fff68ce7480 (48 bytes)
+4885d2741d554889
+e548b8f8ffffffff
+7f00004823074889
+c74889d65de9d6bc
+020031c0c3662e0f
+1f84000000000090"]
+_7fff68ce73e0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject isKindOfClass:]
+ 0x7fff68ce73e0 (64 bytes)
+554889e548b8f8ff
+ffffff7f00004823
+07741b662e0f1f84
+00000000000f1f00
+4839d0740d488b40
+084885c075f231c0
+eb02b0010fb6c05d
+c30f1f8000000000"]
+_10000cb70 [style=filled] [fillcolor=white] [label="memorydumper2.DeepClassSuper3.__allocating_init() -> memorydumper2.DeepClassSuper3
+ 0x10000cb70 (48 bytes)
+554889e5415550be
+28000000ba070000
+004c89efe8775400
+004989c5e80f0000
+004883c408415d5d
+c30f1f8000000000"]
+_7fff68ce7570 [style=filled] [fillcolor=white] [label="+[Swift._SwiftObject conformsToProtocol:]
+ 0x7fff68ce7570 (80 bytes)
+554889e541565331
+c04885d274374889
+fb4885ff742f4989
+d60f1f8000000000
+4889df4c89f6e8ad
+bb020084c0751448
+89dfe8c5bb020048
+89c34885c075e131...
+Strings:
+AVS1
+[A^]"]
+_7fff7450fd19 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7450fd19 (128 bytes)
+63313640303a3800
+40323440303a3840
+3136004033324030
+3a38403136403234
+0071313640303a38
+0076323440303a38
+7131360076313640
+303a380040323440...
+Strings:
+c16@0:8
+@24@0:8@16
+@32@0:8@16@24
+q16@0:8
+v24@0:8q16
+v16@0:8
+@24@0:8@?16
+@24@0:8:16
+v24@0:8@16
+@16@0:8
+@\"NSBundle\"
+@\"NSString\""]
+_7fff68d33805 [style=filled] [fillcolor=white] [label="swift::Demangle::Demangler::demangleOperatorIdentifier()::op_char_table
+ 0x7fff68d33805 (128 bytes)
+54512c5200737570
+6572636c61737300
+54232c5200646573
+6372697074696f6e
+005440224e535374
+72696e67222c522c
+4300646562756744
+6573637269707469...
+Strings:
+TQ,R
+superclass
+T#,R
+description
+T@\"NSString\",R,C
+debugDescription
+closure argument was escaped in withoutActuallyEscaping block"]
+_7fff7450fd61 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7450fd61 (128 bytes)
+40323440303a383a
+3136007632344030
+3a3840313600403f
+0040313640303a38
+0040224e5342756e
+646c65220040224e
+53537472696e6722
+0076323440303a38...
+Strings:
+@24@0:8:16
+v24@0:8@16
+@16@0:8
+@\"NSBundle\"
+@\"NSString\"
+v24@0:8@?16
+Q16@0:8
+c24@0:8@16
+#16@0:8
+@32@0:8:16@24
+@40@0:8:16@24@32"]
+_7fff736fddcc [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fddcc (128 bytes)
+72657461696e0072
+656c656173650061
+75746f72656c6561
+7365007265746169
+6e436f756e74007a
+6f6e650064657363
+72697074696f6e00
+6465627567446573...
+Strings:
+retain
+release
+autorelease
+retainCount
+zone
+description
+debugDescription
+account:didChangeWithType:inStore:oldAccount:
+changeFro"]
+_100000005 [style=filled] [fillcolor=white] [label="unknown 0x100000005 (128 bytes)
+0000010300000002
+00000027000000c0
+1100008500200000
+0000001900000048
+0000005f5f504147
+455a45524f000000
+0000000000000000
+0000000000000001...
+Strings:
+__PAGEZERO
+__TEXT"]
+_10000cd20 [style=filled] [fillcolor=white] [label="memorydumper2.DeepClass.d.getter : Swift.Int
+ 0x10000cd20 (96 bytes)
+554889e54883ec40
+4c89e84883c02831
+c9488d55e8be2000
+00004889c7488975
+e04889d6488b45e0
+488955d84889c24c
+896dd0e8ae520000
+488b45d0488b4028..."]
+_10000c570 [style=filled] [fillcolor=white] [label="memorydumper2.DeepClassSuper1.__allocating_init() -> memorydumper2.DeepClassSuper1
+ 0x10000c570 (48 bytes)
+554889e5415550be
+18000000ba070000
+004c89efe8775a00
+004989c5e80f0000
+004883c408415d5d
+c30f1f8000000000"]
+_7fff68ce77e0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject isNSNumber__]
+ 0x7fff68ce77e0 (16 bytes)
+554889e531c05dc3
+0f1f840000000000"]
+_10059b940 [style=filled] [fillcolor=white] [label="malloc 0x10059b940 (64 bytes)
+23dd6f73ff7f0000
+7825cf68fe7f0000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0100000000000000
+40b9590001000000"]
+_10059b940 -> _7fff736fdd23 [color=white] [fontcolor=white] [label="@0"]
+_10059b940 -> _10059b940 [color=white] [fontcolor=white] [label="@56"]
+_10059b4e0 [style=filled] [fillcolor=white] [label="malloc 0x10059b4e0 (32 bytes)
+010008a000000000
+804f010001000000
+8856010001000000
+0000000000000000"]
+_10059b4e0 -> _100014f80 [color=white] [fontcolor=white] [label="@8"]
+_10059b4e0 -> _100015688 [color=white] [fontcolor=white] [label="@16"]
+_7fff68ce7770 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject isNSArray__]
+ 0x7fff68ce7770 (16 bytes)
+554889e531c05dc3
+0f1f840000000000"]
+_7fff736fdd84 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff736fdd84 (128 bytes)
+69734b696e644f66
+436c6173733a0069
+734d656d6265724f
+66436c6173733a00
+636f6e666f726d73
+546f50726f746f63
+6f6c3a0072657370
+6f6e6473546f5365...
+Strings:
+isKindOfClass:
+isMemberOfClass:
+conformsToProtocol:
+respondsToSelector:
+retain
+release
+autorelease
+retainCount
+zone
+description"]
+_7fff68ce72a0 [style=filled] [fillcolor=white] [label="-[Swift._SwiftObject retain]
+ 0x7fff68ce72a0 (32 bytes)
+554889e553504889
+fbe8b200fbff4889
+d84883c4085b5dc3
+0f1f840000000000"]
+_7fff7377eeb8 [style=filled] [fillcolor=white] [label="GCC_except_table740
+ 0x7fff7377eeb8 (128 bytes)
+69734e534f626a65
+63745f5f0069734e
+534f726465726564
+5365745f5f006973
+4e534e756d626572
+5f5f0069734e5353
+65745f5f0069734e
+53537472696e675f...
+Strings:
+isNSObject__
+isNSOrderedSet__
+isNSNumber__
+isNSSet__
+isNSString__
+isNSTimeZone__
+isNSValue__
+refCounts
+_swiftTypeMetadata"]
+_7fff86b79560 [style=filled] [fillcolor=white] [label="OBJC_METACLASS_$___NSAtom
+ 0x7fff86b79560 (40 bytes)
+6095b786ff7f0000
+3895b786ff7f0000
+40511e68ff7f0000
+0000000031200000
+b070500001000000"]
+_7fff86b79560 -> _7fff86b79560 [color=white] [fontcolor=white] [label="@0"]
+_7fff86b79560 -> _7fff86b79538 [color=white] [fontcolor=white] [label="@8"]
+_7fff86b79560 -> _7fff681e5140 [color=white] [fontcolor=white] [label="@16"]
+_7fff86b79560 -> _1005070b0 [color=white] [fontcolor=white] [label="@32"]
+_100015508 [style=filled] [fillcolor=white] [label="metaclass for memorydumper2.DeepClassSuper1
+ 0x100015508 (40 bytes)
+48a08f8fff7f0000
+48a08f8fff7f0000
+40511e68ff7f0000
+0000000031200000
+00b5590001000000"]
+_100015508 -> _7fff8f8fa048 [color=white] [fontcolor=white] [label="@0"]
+_100015508 -> _7fff8f8fa048 [color=white] [fontcolor=white] [label="@8"]
+_100015508 -> _7fff681e5140 [color=white] [fontcolor=white] [label="@16"]
+_100015508 -> _10059b500 [color=white] [fontcolor=white] [label="@32"]
+}

@@ -1,0 +1,818 @@
+digraph memory_dump_graph {
+graph [bgcolor=black]
+_7ffeefbff308 [style=filled] [fillcolor=white] [label="unknown 0x7ffeefbff308 (128 bytes)
+a8ed3d82ff7f0000
+50c7918fff7f0000
+18c7918fff7f0000
+b8c4918fff7f0000
+80f2bfeffe7f0000
+80f2bfeffe7f0000
+7800000000000000
+804d010001000000...
+Strings:
+ types
+Protocol
+Protocol"]
+_7ffeefbff308 -> _7fff823deda8 [color=white] [fontcolor=white] [label="@0"]
+_7ffeefbff308 -> _7fff8f91c750 [color=white] [fontcolor=white] [label="@8"]
+_7ffeefbff308 -> _7fff8f91c718 [color=white] [fontcolor=white] [label="@16"]
+_7ffeefbff308 -> _7fff8f91c4b8 [color=white] [fontcolor=white] [label="@24"]
+_7ffeefbff308 -> _7ffeefbff280 [color=white] [fontcolor=white] [label="@32"]
+_7ffeefbff308 -> _7ffeefbff280 [color=white] [fontcolor=white] [label="@40"]
+_7ffeefbff308 -> _100014d80 [color=white] [fontcolor=white] [label="@56"]
+_7ffeefbff308 -> _100014de0 [color=white] [fontcolor=white] [label="@72"]
+_7ffeefbff308 -> _100015a20 [color=white] [fontcolor=white] [label="@96"]
+_100012acc [style=filled] [fillcolor=white] [label="nominal type descriptor for memorydumper2.ProtocolHolder
+ 0x100012acc (92 bytes)
+51000000a4fdffff
+e8ffffff68c9ffff
+fc0d000003000000
+0200000000000000
+0000000024733133
+6d656d6f72796475
+6d7065723231336f
+626a63436c617373...
+Strings:
+$s13memorydumper213objcClassName3ptrSSSgAA7PointerV_tF"]
+_7fff68bcd920 [style=filled] [fillcolor=white] [label="protocol witness for Swift.FixedWidthInteger.remainderReportingOverflow(dividingBy: A) -> (partialValue: A, overflow: Swift.Bool) in conformance Swift.UInt : Swift.FixedWidthInteger in Swift
+ 0x7fff68bcd920 (48 bytes)
+554889e5488b0e49
+8b45004885c97411
+31d248f7f131c948
+89d048890789c85d
+c3b101ebf5662e0f
+1f84000000000090"]
+_7fff8f904938 [style=filled] [fillcolor=white] [label="protocol witness table for Swift.Int : Swift.Strideable in Swift
+ 0x7fff8f904938 (64 bytes)
+9862d168ff7f0000
+b87a3d82ff7f0000
+876ad368ff7f0000
+8f6ad368ff7f0000
+9f4ad368ff7f0000
+7063bd68ff7f0000
+9063bd68ff7f0000
+c063bd68ff7f0000"]
+_100012aa0 [style=filled] [fillcolor=white] [label="nominal type descriptor for memorydumper2.ClassP
+ 0x100012aa0 (44 bytes)
+51000000d0fdffff
+f0ffffffb4c1ffff
+e80d000004000000
+0200000050726f74
+6f636f6c486f6c64
+65720000
+Strings:
+ProtocolHolder"]
+_1000149f8 [style=filled] [fillcolor=white] [label="protocol witness table for memorydumper2.ClassP : memorydumper2.P in memorydumper2
+ 0x1000149f8 (32 bytes)
+5028010001000000
+00c0000001000000
+20c0000001000000
+40c0000001000000"]
+_1000149f8 -> _100012850 [color=white] [fontcolor=white] [label="@0"]
+_1000149f8 -> _10000c000 [color=white] [fontcolor=white] [label="@8"]
+_1000149f8 -> _10000c020 [color=white] [fontcolor=white] [label="@16"]
+_1000149f8 -> _10000c040 [color=white] [fontcolor=white] [label="@24"]
+_100000020 [style=filled] [fillcolor=white] [label="unknown 0x100000020 (128 bytes)
+1900000048000000
+5f5f504147455a45
+524f000000000000
+0000000000000000
+0000000001000000
+0000000000000000
+0000000000000000
+0000000000000000...
+Strings:
+__PAGEZERO
+__TEXT"]
+_100000020 -> _100000000 [color=white] [fontcolor=white] [label="@32"]
+_100000020 -> _100000000 [color=white] [fontcolor=white] [label="@96"]
+_10000ed10 [style=filled] [fillcolor=white] [label="initializeWithCopy value witness for memorydumper2.ProtocolHolder
+ 0x10000ed10 (240 bytes)
+554889e54883ec50
+4889f84889f14c8b
+46184c8947184c8b
+4e204c894f204d8b
+48f848897df84889
+c7488975f04889ce
+488955e84c89c248
+8945e048894dd841..."]
+_10000b9f0 [style=filled] [fillcolor=white] [label="protocol witness for memorydumper2.P.h() -> () in conformance memorydumper2.StructSmallP : memorydumper2.P in memorydumper2
+ 0x10000b9f0 (16 bytes)
+554889e5498b7d00
+e823ffffff5dc390"]
+_10000c040 [style=filled] [fillcolor=white] [label="protocol witness for memorydumper2.P.h() -> () in conformance memorydumper2.ClassP : memorydumper2.P in memorydumper2
+ 0x10000c040 (32 bytes)
+554889e5498b7d00
+498b7508498b5510
+498b4d18e847fdff
+ff5dc30f1f440000"]
+_7fff68bd2ba0 [style=filled] [fillcolor=white] [label="protocol witness for Swift.BinaryInteger.init<A where A1: Swift.BinaryInteger>(clamping: A1) -> A in conformance Swift.Int : Swift.BinaryInteger in Swift
+ 0x7fff68bd2ba0 (64 bytes)
+554889e541574156
+4154534989d64989
+f74989fc4889c3e8
+94d308004889c148
+8d3522c280194889
+d84c89e74c89fa4d
+89f0e84930ebff5b
+415c415e415f5dc3
+Strings:
+AWAVATSI
+[A\\A^A_]"]
+_10000ee00 [style=filled] [fillcolor=white] [label="assignWithCopy value witness for memorydumper2.ProtocolHolder
+ 0x10000ee00 (112 bytes)
+554889e54883ec20
+4889f84889f14889
+7df84889c7488975
+f04889ce488955e8
+e84b000000488b45
+f848052800000048
+8b4df04881c12800
+00004889c74889ce..."]
+_7fff68d36997 [style=filled] [fillcolor=white] [label="associated conformance Sus17FixedWidthIntegers6StrideSx_sAA
+ 0x7fff68d36997 (7 bytes)
+0728b8f2ff0000"]
+_7fff68d36a61 [style=filled] [fillcolor=white] [label="associated conformance SiSzs9MagnitudeSj_Sz
+ 0x7fff68d36a61 (7 bytes)
+07bebbf2ff0000"]
+_10000bce0 [style=filled] [fillcolor=white] [label="protocol witness for memorydumper2.P.f() -> () in conformance memorydumper2.StructBigP : memorydumper2.P in memorydumper2
+ 0x10000bce0 (32 bytes)
+554889e5498b7d00
+498b7508498b5510
+498b4d18e807fdff
+ff5dc30f1f440000"]
+_100000000 [style=filled] [fillcolor=white] [label="__dso_handle
+ 0x100000000 (1 bytes)
+cf"]
+_7fff68bd2530 [style=filled] [fillcolor=white] [label="protocol witness for Swift.BinaryInteger.init<A where A1: Swift.BinaryInteger>(A1) -> A in conformance Swift.Int : Swift.BinaryInteger in Swift
+ 0x7fff68bd2530 (1584 bytes)
+554889e541574156
+41554154534881ec
+a80000004c898568
+ffffff4889d34989
+f64989fc48898540
+ffffff488b46f848
+8945a0488b484048
+83c10f4883e1f048...
+Strings:
+AWAVAUATSH
+[A\\A]A^A_]"]
+_7fff68d36a71 [style=filled] [fillcolor=white] [label="symbolic _____ Si5WordsV
+ 0x7fff68d36a71 (5 bytes)
+97cc691900"]
+_10000f0b0 [style=filled] [fillcolor=white] [label="assignWithTake value witness for memorydumper2.ProtocolHolder
+ 0x10000f0b0 (208 bytes)
+554889e54883ec40
+4889f848897df848
+89c7488955f04889
+75e8e8b1e5ffff48
+8b45f8488b4de848
+89c74889ceba2800
+0000e8212f000048
+8b45f84805280000..."]
+_100012830 [style=filled] [fillcolor=white] [label="protocol conformance descriptor for memorydumper2.StructSmallP : memorydumper2.P in memorydumper2
+ 0x100012830 (16 bytes)
+e401000020020000
+8021000000000000"]
+_7fff68bcd8f0 [style=filled] [fillcolor=white] [label="protocol witness for Swift.FixedWidthInteger.dividedReportingOverflow(by: A) -> (partialValue: A, overflow: Swift.Bool) in conformance Swift.UInt : Swift.FixedWidthInteger in Swift
+ 0x7fff68bcd8f0 (48 bytes)
+554889e5488b0e49
+8b45004885c9740e
+31d248f7f131c948
+890789c85dc3b101
+ebf5662e0f1f8400
+000000000f1f4000"]
+_100014928 [style=filled] [fillcolor=white] [label="vtable for DumpCMemory::SecondSuperclass
+ 0x100014928 (64 bytes)
+0004000000000000
+1000000000000000
+5035010001000000
+c0c5000001000000
+0000000000000000
+0004000000000000
+1000000000000000
+7035010001000000"]
+_100014928 -> _100013550 [color=white] [fontcolor=white] [label="@16"]
+_100014928 -> _10000c5c0 [color=white] [fontcolor=white] [label="@24"]
+_100014928 -> _100013570 [color=white] [fontcolor=white] [label="@56"]
+_100012a7c [style=filled] [fillcolor=white] [label="nominal type descriptor for memorydumper2.StructBigP
+ 0x100012a7c (36 bytes)
+51000000f4fdffff
+ecffffff78bfffff
+cc0d000004000000
+02000000436c6173
+73500000
+Strings:
+ClassP"]
+_7fff823deda8 [style=filled] [fillcolor=white] [label="type metadata for Swift.UInt
+ 0x7fff823deda8 (24 bytes)
+0002000000000000
+b0f8d168ff7f0000
+0000000000000000"]
+_7fff823deda8 -> _7fff68d1f8b0 [color=white] [fontcolor=white] [label="@8"]
+_10000f180 [style=filled] [fillcolor=white] [label="getEnumTagSinglePayload value witness for memorydumper2.ProtocolHolder
+ 0x10000f180 (256 bytes)
+554889e531c039f0
+8975fc48897df00f
+84d70000008b45fc
+3dffffff7f767f31
+c0488b4df04889ca
+4881c278000000a8
+0148894de8488955
+e07502eb0731c089..."]
+_7fff823d7ae8 [style=filled] [fillcolor=white] [label="protocol witness table for Swift.Int : Swift.Hashable in Swift
+ 0x7fff823d7ae8 (40 bytes)
+d862d168ff7f0000
+107b3d82ff7f0000
+d064bd68ff7f0000
+e064bd68ff7f0000
+0065bd68ff7f0000"]
+_7fff68bd2390 [style=filled] [fillcolor=white] [label="protocol witness for Swift.BinaryInteger.init<A where A1: Swift.BinaryFloatingPoint>(A1) -> A in conformance Swift.Int : Swift.BinaryInteger in Swift
+ 0x7fff68bd2390 (48 bytes)
+554889e54c8d152d
+82d2264c8d1d46ca
+80194c8d0da7db08
+0041524153e80e00
+00004883c4105dc3
+0f1f840000000000
+Strings:
+ARAS"]
+_7fff68d25178 [style=filled] [fillcolor=white] [label="protocol conformance descriptor for Swift.UInt : Swift.FixedWidthInteger in Swift
+ 0x7fff68d25178 (28 bytes)
+9c50ffff34a7ffff
+b0f0bd2600000200
+1d000100f417f6ff
+5045bf26"]
+_7fff68d36987 [style=filled] [fillcolor=white] [label="associated conformance Sus17FixedWidthIntegers9MagnitudeSj_sAA
+ 0x7fff68d36987 (7 bytes)
+07e8b7f2ff0000"]
+_7fff68bd2350 [style=filled] [fillcolor=white] [label="protocol witness for Swift.BinaryInteger.init<A where A1: Swift.BinaryFloatingPoint>(exactly: A1) -> A? in conformance Swift.Int : Swift.BinaryInteger in Swift
+ 0x7fff68bd2350 (64 bytes)
+554889e541574156
+4154534989d64989
+f74989fc4889c3e8
+e4db08004889c148
+8d3572ca80194889
+d84c89e74c89fa4d
+89f0e87937ebff5b
+415c415e415f5dc3
+Strings:
+AWAVATSI
+[A\\A^A_]"]
+_7fff68bcd870 [style=filled] [fillcolor=white] [label="protocol witness for static Swift.FixedWidthInteger.bitWidth.getter : Swift.Int in conformance Swift.UInt : Swift.FixedWidthInteger in Swift
+ 0x7fff68bcd870 (16 bytes)
+554889e5b8400000
+005dc30f1f440000"]
+_7fff68bd2b60 [style=filled] [fillcolor=white] [label="protocol witness for Swift.BinaryInteger.init<A where A1: Swift.BinaryInteger>(truncatingIfNeeded: A1) -> A in conformance Swift.Int : Swift.BinaryInteger in Swift
+ 0x7fff68bd2b60 (64 bytes)
+554889e541574156
+4155534889f34989
+fd4989c64889f748
+89d6ff52784989c7
+488b43f84c89ef48
+89deff50084d893e
+5b415d415e415f5d
+c30f1f8000000000
+Strings:
+AWAVAUSH
+>[A]A^A_]"]
+_7fff68d25194 [style=filled] [fillcolor=white] [label="protocol conformance descriptor for Swift.UInt : Swift.UnsignedInteger in Swift
+ 0x7fff68d25194 (28 bytes)
+d051ffff18a7ffff
+6c276b1900000200
+0200010038d0f3ff
+b445bf26"]
+_7fff823d7a70 [style=filled] [fillcolor=white] [label="protocol witness table for Swift.Int : Swift.CustomStringConvertible in Swift
+ 0x7fff823d7a70 (16 bytes)
+8862d168ff7f0000
+5063bd68ff7f0000"]
+_10000b9d0 [style=filled] [fillcolor=white] [label="protocol witness for memorydumper2.P.f() -> () in conformance memorydumper2.StructSmallP : memorydumper2.P in memorydumper2
+ 0x10000b9d0 (16 bytes)
+554889e5498b7d00
+e803ffffff5dc390"]
+_10000bd20 [style=filled] [fillcolor=white] [label="protocol witness for memorydumper2.P.h() -> () in conformance memorydumper2.StructBigP : memorydumper2.P in memorydumper2
+ 0x10000bd20 (32 bytes)
+554889e5498b7d00
+498b7508498b5510
+498b4d18e827fdff
+ff5dc30f1f440000"]
+_7fff68d25274 [style=filled] [fillcolor=white] [label="protocol conformance descriptor for Swift.Int : Swift.BinaryInteger in Swift
+ 0x7fff68d25274 (28 bytes)
+e84dffff74a6ffff
+44f5bd2600000200
+2500010000000000
+d448bf26"]
+_10000b9e0 [style=filled] [fillcolor=white] [label="protocol witness for memorydumper2.P.g() -> () in conformance memorydumper2.StructSmallP : memorydumper2.P in memorydumper2
+ 0x10000b9e0 (16 bytes)
+554889e5498b7d00
+e813ffffff5dc390"]
+_7fff823d7928 [style=filled] [fillcolor=white] [label="protocol witness table for Swift.UInt : Swift.LosslessStringConvertible in Swift
+ 0x7fff823d7928 (24 bytes)
+a861d168ff7f0000
+40793d82ff7f0000
+900fbd68ff7f0000"]
+_100015a20 [style=filled] [fillcolor=white] [label="memorydumper2.holder : memorydumper2.ProtocolHolder
+ 0x100015a20 (128 bytes)
+736d616c6c000000
+0000000000000000
+0000000000000000
+684c010001000000
+b849010001000000
+20ac870101000000
+c0f4bfeffe7f0000
+0000000002000000...
+Strings:
+small"]
+_100015a20 -> _100014c68 [color=white] [fontcolor=white] [label="@24"]
+_100015a20 -> _1000149b8 [color=white] [fontcolor=white] [label="@32"]
+_100015a20 -> _10187ac20 [color=white] [fontcolor=white] [label="@40"]
+_100015a20 -> _7ffeefbff4c0 [color=white] [fontcolor=white] [label="@48"]
+_100015a20 -> _100014ce0 [color=white] [fontcolor=white] [label="@64"]
+_100015a20 -> _1000149d8 [color=white] [fontcolor=white] [label="@72"]
+_100015a20 -> _10187ac50 [color=white] [fontcolor=white] [label="@80"]
+_100015a20 -> _100014d60 [color=white] [fontcolor=white] [label="@104"]
+_100015a20 -> _1000149f8 [color=white] [fontcolor=white] [label="@112"]
+_10000c000 [style=filled] [fillcolor=white] [label="protocol witness for memorydumper2.P.f() -> () in conformance memorydumper2.ClassP : memorydumper2.P in memorydumper2
+ 0x10000c000 (32 bytes)
+554889e5498b7d00
+498b7508498b5510
+498b4d18e827fdff
+ff5dc30f1f440000"]
+_1000149d8 [style=filled] [fillcolor=white] [label="protocol witness table for memorydumper2.StructBigP : memorydumper2.P in memorydumper2
+ 0x1000149d8 (32 bytes)
+4028010001000000
+e0bc000001000000
+00bd000001000000
+20bd000001000000"]
+_1000149d8 -> _100012840 [color=white] [fontcolor=white] [label="@0"]
+_1000149d8 -> _10000bce0 [color=white] [fontcolor=white] [label="@8"]
+_1000149d8 -> _10000bd00 [color=white] [fontcolor=white] [label="@16"]
+_1000149d8 -> _10000bd20 [color=white] [fontcolor=white] [label="@24"]
+_7fff823dede8 [style=filled] [fillcolor=white] [label="type metadata for Swift.Int
+ 0x7fff823dede8 (24 bytes)
+0002000000000000
+ecf8d168ff7f0000
+0000000000000000"]
+_7fff68c87ad0 [style=filled] [fillcolor=white] [label="protocol witness for static Swift.FixedWidthInteger.min.getter : A in conformance Swift.UInt : Swift.FixedWidthInteger in Swift
+ 0x7fff68c87ad0 (16 bytes)
+554889e5e807e9f4
+ff5dc30f1f440000"]
+_7fff8f91c718 [style=filled] [fillcolor=white] [label="InitialAllocationPool
+ 0x7fff8f91c718 (128 bytes)
+9451d268ff7f0000
+c8c5918fff7f0000
+0000000000000000
+0000000000000000
+50c7918fff7f0000
+e8ed3d82ff7f0000
+7452d268ff7f0000
+7452d268ff7f0000..."]
+_7fff8f91c718 -> _7fff68d25194 [color=white] [fontcolor=white] [label="@0"]
+_7fff8f91c718 -> _7fff8f91c5c8 [color=white] [fontcolor=white] [label="@8"]
+_7fff8f91c718 -> _7fff8f91c750 [color=white] [fontcolor=white] [label="@32"]
+_7fff8f91c718 -> _7fff823dede8 [color=white] [fontcolor=white] [label="@40"]
+_7fff8f91c718 -> _7fff68d25274 [color=white] [fontcolor=white] [label="@48"]
+_7fff8f91c718 -> _7fff68d25274 [color=white] [fontcolor=white] [label="@56"]
+_7fff8f91c718 -> _7fff823d7a70 [color=white] [fontcolor=white] [label="@64"]
+_7fff8f91c718 -> _7fff823d7ae8 [color=white] [fontcolor=white] [label="@72"]
+_7fff8f91c718 -> _7fff8f9048e8 [color=white] [fontcolor=white] [label="@80"]
+_7fff8f91c718 -> _7fff8f904938 [color=white] [fontcolor=white] [label="@88"]
+_7fff8f91c718 -> _7fff68d36a61 [color=white] [fontcolor=white] [label="@96"]
+_7fff8f91c718 -> _7fff68d36a69 [color=white] [fontcolor=white] [label="@104"]
+_7fff8f91c718 -> _7fff68d36a71 [color=white] [fontcolor=white] [label="@112"]
+_7fff8f91c718 -> _7fff68bd2340 [color=white] [fontcolor=white] [label="@120"]
+_7fff68bd2340 [style=filled] [fillcolor=white] [label="protocol witness for static Swift.BinaryInteger.isSigned.getter : Swift.Bool in conformance Swift.Int : Swift.BinaryInteger in Swift
+ 0x7fff68bd2340 (16 bytes)
+554889e5b0015dc3
+0f1f840000000000"]
+_100014de0 [style=filled] [fillcolor=white] [label="type metadata for memorydumper2.ProtocolHolder
+ 0x100014de0 (32 bytes)
+0002000000000000
+cc2a010001000000
+0000000028000000
+5000000000000000"]
+_100014de0 -> _100012acc [color=white] [fontcolor=white] [label="@8"]
+_10000bd00 [style=filled] [fillcolor=white] [label="protocol witness for memorydumper2.P.g() -> () in conformance memorydumper2.StructBigP : memorydumper2.P in memorydumper2
+ 0x10000bd00 (32 bytes)
+554889e5498b7d00
+498b7508498b5510
+498b4d18e817fdff
+ff5dc30f1f440000"]
+_100012850 [style=filled] [fillcolor=white] [label="protocol conformance descriptor for memorydumper2.ClassP : memorydumper2.P in memorydumper2
+ 0x100012850 (16 bytes)
+c40100004c020000
+a021000000000000"]
+_7fff8f91c5c8 [style=filled] [fillcolor=white] [label="InitialAllocationPool
+ 0x7fff8f91c5c8 (128 bytes)
+b051d268ff7f0000
+40793d82ff7f0000
+b8793d82ff7f0000
+4044908fff7f0000
+9044908fff7f0000
+a769d368ff7f0000
+af69d368ff7f0000
+b769d368ff7f0000..."]
+_10000ec70 [style=filled] [fillcolor=white] [label="initializeBufferWithCopyOfBuffer value witness for memorydumper2.ProtocolHolder
+ 0x10000ec70 (80 bytes)
+554889e54883ec20
+488b0648897df848
+89c7488955f04889
+45e8e86334000048
+8b4df8488b55e848
+8911488b314881c6
+10000000488945e0
+4889f04883c4205d..."]
+_100012a54 [style=filled] [fillcolor=white] [label="nominal type descriptor for memorydumper2.StructSmallP
+ 0x100012a54 (40 bytes)
+510000001cfeffff
+e8ffffff40bdffff
+d80d000001000000
+0200000053747275
+6374426967500000
+Strings:
+StructBigP"]
+_100012a54 -> _100000dd8 [color=white] [fontcolor=white] [label="@16"]
+_1000011e0 [style=filled] [fillcolor=white] [label="unknown 0x1000011e0 (1984 bytes)
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000..."]
+_7ffeefbff4c0 [style=filled] [fillcolor=white] [label="unknown 0x7ffeefbff4c0 (128 bytes)
+c9ac3769ff7f0000
+0000000000000000
+0200000000000000
+c0f6bfeffe7f0000
+3ef7bfeffe7f0000
+0000000000000000
+42f7bfeffe7f0000
+d3f7bfeffe7f0000..."]
+_7fff68bcd8d0 [style=filled] [fillcolor=white] [label="protocol witness for Swift.FixedWidthInteger.multipliedReportingOverflow(by: A) -> (partialValue: A, overflow: Swift.Bool) in conformance Swift.UInt : Swift.FixedWidthInteger in Swift
+ 0x7fff68bcd8d0 (32 bytes)
+554889e5498b4500
+48f7260f90c14889
+0789c85dc3662e0f
+1f84000000000090"]
+_10187ac50 [style=filled] [fillcolor=white] [label="malloc 0x10187ac50 (48 bytes)
+2849010001000000
+0200000002000000
+636c617373000000
+4040404040404040
+5050505050505050
+6060606060606060
+Strings:
+class
+@@@@@@@@PPPPPPPP````````"]
+_10187ac50 -> _100014928 [color=white] [fontcolor=white] [label="@0"]
+_7fff68d36a69 [style=filled] [fillcolor=white] [label="associated conformance SiSzs5WordsSz_Sk
+ 0x7fff68d36a69 (7 bytes)
+07c6bbf2ff0000"]
+_100014ce0 [style=filled] [fillcolor=white] [label="type metadata for memorydumper2.StructBigP
+ 0x100014ce0 (32 bytes)
+0002000000000000
+7c2a010001000000
+0000000008000000
+1000000018000000"]
+_100014ce0 -> _100012a7c [color=white] [fontcolor=white] [label="@8"]
+_10000f080 [style=filled] [fillcolor=white] [label="__swift_memcpy120_8
+ 0x10000f080 (48 bytes)
+554889e54883ec10
+48897df8b8780000
+00488955f04889c2
+e86b2f0000488b45
+f84883c4105dc366
+0f1f840000000000"]
+_7fff68c8b960 [style=filled] [fillcolor=white] [label="protocol witness for Swift.BinaryInteger._lowWord.getter : Swift.UInt in conformance Swift.Int : Swift.BinaryInteger in Swift
+ 0x7fff68c8b960 (16 bytes)
+554889e55de9f661
+d5ff660f1f440000"]
+_100014d80 [style=filled] [fillcolor=white] [label="value witness table for memorydumper2.ProtocolHolder
+ 0x100014d80 (88 bytes)
+70ec000001000000
+c0ec000001000000
+10ed000001000000
+00ee000001000000
+80f0000001000000
+b0f0000001000000
+80f1000001000000
+80f2000001000000..."]
+_100014d80 -> _10000ec70 [color=white] [fontcolor=white] [label="@0"]
+_100014d80 -> _10000ecc0 [color=white] [fontcolor=white] [label="@8"]
+_100014d80 -> _10000ed10 [color=white] [fontcolor=white] [label="@16"]
+_100014d80 -> _10000ee00 [color=white] [fontcolor=white] [label="@24"]
+_100014d80 -> _10000f080 [color=white] [fontcolor=white] [label="@32"]
+_100014d80 -> _10000f0b0 [color=white] [fontcolor=white] [label="@40"]
+_100014d80 -> _10000f180 [color=white] [fontcolor=white] [label="@48"]
+_100014d80 -> _10000f280 [color=white] [fontcolor=white] [label="@56"]
+_10000f280 [style=filled] [fillcolor=white] [label="storeEnumTagSinglePayload value witness for memorydumper2.ProtocolHolder
+ 0x10000f280 (448 bytes)
+554889e531c04989
+f84d89c14981c178
+00000081faffffff
+7f8975fc48897df0
+4c8945e84c894de0
+8945dc7608b80100
+00008945dc8b45dc
+8b4dfc81f9ffffff..."]
+_100013550 [style=filled] [fillcolor=white] [label="symbolic _____ So22NSStringCompareOptionsV
+ 0x100013550 (444 bytes)
+0100000000000000
+00000000a0fdffff
+0100000000000000
+0000000096fdffff
+0200000000000000
+00000000b2fdffff
+bafdffff01000000
+0000000000000000...
+Strings:
+setLaunchPath:
+setArguments:
+setStandardInput:
+setStandardOutput:
+launch
+fileHandleForReading
+readDataToEndOfFile
+sharedWorkspace
+openFile:withApplication:
+fileHandleForWriting
+writeData:
+closeFile
+init
+address
+pointer
+offset
+buffer
+isMalloc
+symbolName
+depth
+memory
+children
+didScan
+region
+some
+getAvailable
+dli_fname
+dli_fbase
+dli_sname
+dli_saddr
+rawValue"]
+_100014c68 [style=filled] [fillcolor=white] [label="type metadata for memorydumper2.StructSmallP
+ 0x100014c68 (24 bytes)
+0002000000000000
+542a010001000000
+0000000000000000"]
+_100014c68 -> _100012a54 [color=white] [fontcolor=white] [label="@8"]
+_7fff8f91c4b8 [style=filled] [fillcolor=white] [label="InitialAllocationPool
+ 0x7fff8f91c4b8 (128 bytes)
+7851d268ff7f0000
+c8c5918fff7f0000
+28793d82ff7f0000
+8769d368ff7f0000
+8f69d368ff7f0000
+9769d368ff7f0000
+9f69d368ff7f0000
+70d8bc68ff7f0000..."]
+_7fff8f91c4b8 -> _7fff68d25178 [color=white] [fontcolor=white] [label="@0"]
+_7fff8f91c4b8 -> _7fff8f91c5c8 [color=white] [fontcolor=white] [label="@8"]
+_7fff8f91c4b8 -> _7fff823d7928 [color=white] [fontcolor=white] [label="@16"]
+_7fff8f91c4b8 -> _7fff68d36987 [color=white] [fontcolor=white] [label="@24"]
+_7fff8f91c4b8 -> _7fff68d3698f [color=white] [fontcolor=white] [label="@32"]
+_7fff8f91c4b8 -> _7fff68d36997 [color=white] [fontcolor=white] [label="@40"]
+_7fff8f91c4b8 -> _7fff68d3699f [color=white] [fontcolor=white] [label="@48"]
+_7fff8f91c4b8 -> _7fff68bcd870 [color=white] [fontcolor=white] [label="@56"]
+_7fff8f91c4b8 -> _7fff68bcd880 [color=white] [fontcolor=white] [label="@64"]
+_7fff8f91c4b8 -> _7fff68c87ad0 [color=white] [fontcolor=white] [label="@72"]
+_7fff8f91c4b8 -> _7fff68bcd890 [color=white] [fontcolor=white] [label="@80"]
+_7fff8f91c4b8 -> _7fff68bcd8b0 [color=white] [fontcolor=white] [label="@88"]
+_7fff8f91c4b8 -> _7fff68bcd8d0 [color=white] [fontcolor=white] [label="@96"]
+_7fff8f91c4b8 -> _7fff68bcd8f0 [color=white] [fontcolor=white] [label="@104"]
+_7fff8f91c4b8 -> _7fff68bcd920 [color=white] [fontcolor=white] [label="@112"]
+_7fff8f91c4b8 -> _7fff68bcd950 [color=white] [fontcolor=white] [label="@120"]
+_10000c020 [style=filled] [fillcolor=white] [label="protocol witness for memorydumper2.P.g() -> () in conformance memorydumper2.ClassP : memorydumper2.P in memorydumper2
+ 0x10000c020 (32 bytes)
+554889e5498b7d00
+498b7508498b5510
+498b4d18e837fdff
+ff5dc30f1f440000"]
+_10000c5c0 [style=filled] [fillcolor=white] [label="type metadata accessor for __C.OS_dispatch_queue
+ 0x10000c5c0 (64 bytes)
+554889e54883ec10
+498b7d10488b05d5
+7c00004c896df8ff
+d0488b45f8488b78
+20e8a65a0000be28
+000000ba07000000
+488b7df8e8a55a00
+004883c4105dc390"]
+_10000ecc0 [style=filled] [fillcolor=white] [label="destroy value witness for memorydumper2.ProtocolHolder
+ 0x10000ecc0 (80 bytes)
+554889e54883ec10
+4889f848897df848
+89c7488975f0e8a5
+e9ffff488b45f848
+05280000004889c7
+e893e9ffff488b45
+f848055000000048
+89c7e881e9ffff48..."]
+_7fff68d1f8b0 [style=filled] [fillcolor=white] [label="nominal type descriptor for Swift.UInt
+ 0x7fff68d1f8b0 (28 bytes)
+510000009c7bffff
+f0ffffff84a3f5ff
+78ec010001000000
+02000000"]
+_100013570 [style=filled] [fillcolor=white] [label="symbolic _____ So22NSStringCompareOptionsV
+ 0x100013570 (412 bytes)
+0200000000000000
+00000000b2fdffff
+bafdffff01000000
+0000000000000000
+aafdffff7365744c
+61756e6368506174
+683a007365744172
+67756d656e74733a...
+Strings:
+setLaunchPath:
+setArguments:
+setStandardInput:
+setStandardOutput:
+launch
+fileHandleForReading
+readDataToEndOfFile
+sharedWorkspace
+openFile:withApplication:
+fileHandleForWriting
+writeData:
+closeFile
+init
+address
+pointer
+offset
+buffer
+isMalloc
+symbolName
+depth
+memory
+children
+didScan
+region
+some
+getAvailable
+dli_fname
+dli_fbase
+dli_sname
+dli_saddr
+rawValue"]
+_7fff68bcd950 [style=filled] [fillcolor=white] [label="protocol witness for Swift.FixedWidthInteger.multipliedFullWidth(by: A) -> (high: A, low: A.Magnitude) in conformance Swift.UInt : Swift.FixedWidthInteger in Swift
+ 0x7fff68bcd950 (32 bytes)
+554889e5498b4500
+48f7224889174889
+065dc3662e0f1f84
+00000000000f1f00"]
+_1000149b8 [style=filled] [fillcolor=white] [label="protocol witness table for memorydumper2.StructSmallP : memorydumper2.P in memorydumper2
+ 0x1000149b8 (32 bytes)
+3028010001000000
+d0b9000001000000
+e0b9000001000000
+f0b9000001000000"]
+_1000149b8 -> _100012830 [color=white] [fontcolor=white] [label="@0"]
+_1000149b8 -> _10000b9d0 [color=white] [fontcolor=white] [label="@8"]
+_1000149b8 -> _10000b9e0 [color=white] [fontcolor=white] [label="@16"]
+_1000149b8 -> _10000b9f0 [color=white] [fontcolor=white] [label="@24"]
+_100014d60 [style=filled] [fillcolor=white] [label="type metadata for memorydumper2.ClassP
+ 0x100014d60 (32 bytes)
+0002000000000000
+a02a010001000000
+0000000008000000
+1000000018000000"]
+_100014d60 -> _100012aa0 [color=white] [fontcolor=white] [label="@8"]
+_7fff68bcd890 [style=filled] [fillcolor=white] [label="protocol witness for Swift.FixedWidthInteger.addingReportingOverflow(A) -> (partialValue: A, overflow: Swift.Bool) in conformance Swift.UInt : Swift.FixedWidthInteger in Swift
+ 0x7fff68bcd890 (32 bytes)
+554889e5498b4d00
+48030e0f92c04889
+0f5dc3662e0f1f84
+00000000000f1f00"]
+_7fff68bcd8b0 [style=filled] [fillcolor=white] [label="protocol witness for Swift.FixedWidthInteger.subtractingReportingOverflow(A) -> (partialValue: A, overflow: Swift.Bool) in conformance Swift.UInt : Swift.FixedWidthInteger in Swift
+ 0x7fff68bcd8b0 (32 bytes)
+554889e5498b4d00
+482b0e0f92c04889
+0f5dc3662e0f1f84
+00000000000f1f00"]
+_7fff68d3698f [style=filled] [fillcolor=white] [label="associated conformance Sus17FixedWidthIntegers9MagnitudeSj_SU
+ 0x7fff68d3698f (7 bytes)
+0720b8f2ff0000"]
+_100000dd8 [style=filled] [fillcolor=white] [label="unknown 0x100000dd8 (3016 bytes)
+1800008038000000
+1800000002000000
+0000c20300000100
+4072706174682f6c
+6962737769667443
+6c6f75644b69742e
+64796c6962000000
+0c00000038000000...
+Strings:
+@rpath/libswiftCloudKit.dylib
+@rpath/libswiftCore.dylib
+@rpath/libswiftCoreData.dylib
+@rpath/libswiftCoreFoundation.dylib
+@rpath/libswiftCoreGraphics.dylib
+@rpath/libswiftCoreImage.dylib
+@rpath/libswiftCoreLocation.dylib
+@rpath/libswiftDarwin.dylib
+@rpath/libswiftDispatch.dylib
+@rpath/libswiftFoundation.dylib
+@rpath/libswiftIOKit.dylib
+@rpath/libswiftMetal.dylib
+@rpath/libswiftObjectiveC.dylib
+@rpath/libswiftQuartzCore.dylib
+@rpath/libswiftXPC.dylib
+/usr/lib/swift
+@executable_path/../Frameworks
+@loader_path/../Frameworks"]
+_7ffeefbff280 [style=filled] [fillcolor=white] [label="unknown 0x7ffeefbff280 (120 bytes)
+736d616c6c000000
+08f3bfeffe7f0000
+2000000001000000
+684c010001000000
+b849010001000000
+20ac870101000000
+e011000001000000
+03000000fe7f0000...
+Strings:
+small"]
+_7ffeefbff280 -> _7ffeefbff308 [color=white] [fontcolor=white] [label="@8"]
+_7ffeefbff280 -> _100000020 [color=white] [fontcolor=white] [label="@16"]
+_7ffeefbff280 -> _100014c68 [color=white] [fontcolor=white] [label="@24"]
+_7ffeefbff280 -> _1000149b8 [color=white] [fontcolor=white] [label="@32"]
+_7ffeefbff280 -> _10187ac20 [color=white] [fontcolor=white] [label="@40"]
+_7ffeefbff280 -> _1000011e0 [color=white] [fontcolor=white] [label="@48"]
+_7ffeefbff280 -> _100014ce0 [color=white] [fontcolor=white] [label="@64"]
+_7ffeefbff280 -> _1000149d8 [color=white] [fontcolor=white] [label="@72"]
+_7ffeefbff280 -> _10187ac50 [color=white] [fontcolor=white] [label="@80"]
+_7ffeefbff280 -> _100014d60 [color=white] [fontcolor=white] [label="@104"]
+_7ffeefbff280 -> _1000149f8 [color=white] [fontcolor=white] [label="@112"]
+_7fff68d3699f [style=filled] [fillcolor=white] [label="associated conformance Sus17FixedWidthIntegers6StrideSx_SZ
+ 0x7fff68d3699f (7 bytes)
+0730b8f2ff0000"]
+_7fff68bcd880 [style=filled] [fillcolor=white] [label="protocol witness for static Swift.FixedWidthInteger.max.getter : A in conformance Swift.UInt : Swift.FixedWidthInteger in Swift
+ 0x7fff68bcd880 (16 bytes)
+554889e548c700ff
+ffffff5dc30f1f00"]
+_100012840 [style=filled] [fillcolor=white] [label="protocol conformance descriptor for memorydumper2.StructBigP : memorydumper2.P in memorydumper2
+ 0x100012840 (16 bytes)
+d401000038020000
+9021000000000000"]
+_7fff68bd2be0 [style=filled] [fillcolor=white] [label="protocol witness for Swift.BinaryInteger.words.getter : A.Words in conformance Swift.Int : Swift.BinaryInteger in Swift
+ 0x7fff68bd2be0 (16 bytes)
+554889e5498b4d00
+4889085dc30f1f00"]
+_7fff8f9048e8 [style=filled] [fillcolor=white] [label="protocol witness table for Swift.Int : Swift.Numeric in Swift
+ 0x7fff8f9048e8 (80 bytes)
+7862d168ff7f0000
+807a3d82ff7f0000
+7849908fff7f0000
+776ad368ff7f0000
+7f6ad368ff7f0000
+2959d368ff7f0000
+105dbd68ff7f0000
+f062bd68ff7f0000..."]
+_7fff8f91c750 [style=filled] [fillcolor=white] [label="InitialAllocationPool
+ 0x7fff8f91c750 (128 bytes)
+7452d268ff7f0000
+707a3d82ff7f0000
+e87a3d82ff7f0000
+e848908fff7f0000
+3849908fff7f0000
+616ad368ff7f0000
+696ad368ff7f0000
+716ad368ff7f0000..."]
+_7fff8f91c750 -> _7fff68d25274 [color=white] [fontcolor=white] [label="@0"]
+_7fff8f91c750 -> _7fff823d7a70 [color=white] [fontcolor=white] [label="@8"]
+_7fff8f91c750 -> _7fff823d7ae8 [color=white] [fontcolor=white] [label="@16"]
+_7fff8f91c750 -> _7fff8f9048e8 [color=white] [fontcolor=white] [label="@24"]
+_7fff8f91c750 -> _7fff8f904938 [color=white] [fontcolor=white] [label="@32"]
+_7fff8f91c750 -> _7fff68d36a61 [color=white] [fontcolor=white] [label="@40"]
+_7fff8f91c750 -> _7fff68d36a69 [color=white] [fontcolor=white] [label="@48"]
+_7fff8f91c750 -> _7fff68d36a71 [color=white] [fontcolor=white] [label="@56"]
+_7fff8f91c750 -> _7fff68bd2340 [color=white] [fontcolor=white] [label="@64"]
+_7fff8f91c750 -> _7fff68bd2350 [color=white] [fontcolor=white] [label="@72"]
+_7fff8f91c750 -> _7fff68bd2390 [color=white] [fontcolor=white] [label="@80"]
+_7fff8f91c750 -> _7fff68bd2530 [color=white] [fontcolor=white] [label="@88"]
+_7fff8f91c750 -> _7fff68bd2b60 [color=white] [fontcolor=white] [label="@96"]
+_7fff8f91c750 -> _7fff68bd2ba0 [color=white] [fontcolor=white] [label="@104"]
+_7fff8f91c750 -> _7fff68bd2be0 [color=white] [fontcolor=white] [label="@112"]
+_7fff8f91c750 -> _7fff68c8b960 [color=white] [fontcolor=white] [label="@120"]
+_10187ac20 [style=filled] [fillcolor=white] [label="malloc 0x10187ac20 (48 bytes)
+2849010001000000
+0200000002000000
+6c61726765000000
+1010101010101010
+2020202020202020
+3030303030303030
+Strings:
+large
+        00000000"]
+_10187ac20 -> _100014928 [color=white] [fontcolor=white] [label="@0"]
+}

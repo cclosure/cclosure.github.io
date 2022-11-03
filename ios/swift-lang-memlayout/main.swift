@@ -1,3 +1,0 @@
-protocol ProtocolX {
-    func foo()
-}

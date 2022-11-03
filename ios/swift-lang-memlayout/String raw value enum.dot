@@ -1,5 +1,0 @@
-digraph memory_dump_graph {
-graph [bgcolor=black]
-_7ffeefbff390 [style=filled] [fillcolor=white] [label="unknown 0x7ffeefbff390 (5 bytes)
-0001020304"]
-}

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>iOS开发：NSZombie的实现 | { }</title>
+
+
+    <meta name="keywords" content="iOS, runtime, 技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="写在前面在iOS开发调试内存问题时，Xcode提供了一个内存管理调试选项：Zombie Objects。打开这个选项，可以在访问已释放内存对象的方法时，进行警告。这里探讨下这个僵尸对象内部实现原理，以及动手去实现自定义的一个僵尸对象类。相关知识点主要涉及Objc的对象模型及消息机制。">
+<meta name="keywords" content="iOS,runtime">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS开发：NSZombie的实现">
+<meta property="og:url" content="http://blog.knpc21.com/ios/ios-nszombie-implementation/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="写在前面在iOS开发调试内存问题时，Xcode提供了一个内存管理调试选项：Zombie Objects。打开这个选项，可以在访问已释放内存对象的方法时，进行警告。这里探讨下这个僵尸对象内部实现原理，以及动手去实现自定义的一个僵尸对象类。相关知识点主要涉及Objc的对象模型及消息机制。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-03-31T12:54:38.000Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="iOS开发：NSZombie的实现">
+<meta name="twitter:description" content="写在前面在iOS开发调试内存问题时，Xcode提供了一个内存管理调试选项：Zombie Objects。打开这个选项，可以在访问已释放内存对象的方法时，进行警告。这里探讨下这个僵尸对象内部实现原理，以及动手去实现自定义的一个僵尸对象类。相关知识点主要涉及Objc的对象模型及消息机制。">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        iOS开发：NSZombie的实现
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2017/03/" class="post-meta__date button">2017-03-31</a>
+        
+    <span class="separate-dot"></span><a href="/categories/iOS/" class="button">iOS</a>
+
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <h4 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h4><p>在iOS开发调试内存问题时，Xcode提供了一个内存管理调试选项：Zombie Objects。打开这个选项，可以在访问已释放内存对象的方法时，进行警告。这里探讨下这个僵尸对象内部实现原理，以及动手去实现自定义的一个僵尸对象类。相关知识点主要涉及Objc的对象模型及消息机制。</p>
+<a id="more"></a>
+<h4 id="属性修饰符"><a href="#属性修饰符" class="headerlink" title="属性修饰符"></a>属性修饰符</h4><p>Objc中对象是基于引用计数进行内存管理的。并且编译器支持由开发者通过声明的方式定义属性，而由编译器自动合成相应的访问方法。对象的属性特性由我们声明的、用于控制由编译器生成的存取访问接口的特性（attribute），正确的使用特性修饰符才能有效避免对象内存管理错误。</p>
+<p>Objc的对象属性声明主要包括以下四种特性修饰符：</p>
+<ol>
+<li><p>原子性</p>
+<p>主要包括<code>atomic</code>及<code>nonatomic</code>两个修饰，默认情况下编译器会添加加锁代码来保证原子性访问。如果自行编写访问器代码，则自行控制加锁提供原子性访问。</p>
+</li>
+<li><p>读写控制</p>
+<p>主要包括<code>readonly</code>、<code>readwrite</code>控制是否可读写，即是否相应提供<code>getter</code>、<code>setter</code>访问方法。</p>
+<p>需要注意的是，这仅是对由编译器生成的属性存取接口的控制，对属性所指向的对象本身没有约束。举例，如若一个属性指向一个<code>NSMutableArray</code>类型对象，并且声明为<code>readonly</code>，那么只提供了<code>getter</code>属性访问器，但是对应的属性对象本身是可变的。</p>
+</li>
+<li><p>内存管理</p>
+<p>属性封装的是数据，而数据必须有明确的所有权管理，这也是只影响<code>setter</code>访问器的，也就是在<code>setter</code>方法中，是否需要持有新值亦或是单纯的赋值给相应的实例变量。主要包括：</p>
+<ul>
+<li><code>assign</code>：仅用于对数值类型的值的简单赋值；</li>
+<li><code>strong</code>：声明了持有关系，当一个新值被设置时，新值首先被<code>retain</code>持有，旧值被<code>release</code>释放，然后执行赋值；</li>
+<li><code>weak</code>：声明了非持有关系，新值被设置时，新值不会被<code>retain</code>，旧值也不会被<code>release</code>，基本与<code>assign</code>相同，但当对象被释放时，该值还会被设置为<code>nil</code>；</li>
+<li><code>unsafe_unretained</code>：类似于<code>assign</code>，声明了非持有关系，但是用于对象类型，对象被释放时不会被置空；</li>
+<li><code>copy</code>：声明了持有关系，但不同于<code>strong</code>的是，它不对新值做持有而是做了复制；常用于<code>NSString</code>这种内部可变的类型。</li>
+</ul>
+<p>还有对应实例变量的几个修饰符：<code>__strong</code>、 <code>__weak</code>、 <code>__unsafe_unretained</code>、 <code>__autoreleasing</code>。</p>
+</li>
+<li><p>方法名称</p>
+<p>也就是用于指定<code>getter</code>及<code>setter</code>的名称。</p>
+</li>
+</ol>
+<p>需要关注的也就是上述的“内存管理”的属性特性修饰，通常因为不当的使用<code>assign</code>或<code>unsafe_unretained</code>导致野指针及对野指针访问crash。</p>
+<h4 id="僵尸对象的内存诊断"><a href="#僵尸对象的内存诊断" class="headerlink" title="僵尸对象的内存诊断"></a>僵尸对象的内存诊断</h4><p>当访问野指针时，如果野指针所在的内存区域尚未被覆盖使用，则一切方法调用如常；一般情况下该野指针原先占用内存区域会被覆盖，此时访问野指针行为将是不确定的。比如，开发过程中可能会遇到这样的情况：crash并报错”[classXXX methodYYY]….unrecognized selector sent to instance 0x608000001fc0”，而classXXX没有这样的方法声明，相反selector是另外一个类的方法。这种情况是，野指针所指向区域刚巧覆盖了一个classXXX的实例对象。而大多数情况可能是其他未知类型数据，所报的则是“EXC_BAD_ACCESS”之类错误。</p>
+<p>Xcode所加的Zombie Object的内存诊断则可以明确的指出错误原因是因为实例对象被释放、野指针访问的内存问题。测试报错如下：“ -[NTLObject call]: message sent to deallocated instance 0x608000036040”。</p>
+<p>既然测试对象NTLObject已经被“释放”了，那具体报错信息是怎么得到的？怎么知道野指针原来指向的对象类型？以及当前所调用导致出错的方法？</p>
+<p>事实上测试对象并未被释放（这导致调试时大量对象得不到释放会有内存问题），因为编译器替换了根对象的释放方法，并将原对象的<code>isa</code>指针指向了动态生成的一个僵尸类，来实现对旧对象指针访问时的报错处理。这是基本的处理思路。</p>
+<h4 id="NSZombie实现原理"><a href="#NSZombie实现原理" class="headerlink" title="NSZombie实现原理"></a>NSZombie实现原理</h4><p>在测试例子中，添加调试代码输出释放前后对象的类信息（包括类名、父类、元类、实例变量、方法列表等），可以看到，对于测试对象<code>NTLObject</code>，在对象“释放”后，对象<code>isa</code>指向了一个<code>_NSZombie_NTLObject</code>的类，其父类为空，元类为<code>_NSZombie_</code>。下面我们来重建自定义的僵尸类如NTLZombie，实现：</p>
+<ul>
+<li>对象僵尸化，也就是对象释放后会变成一个“僵尸对象”</li>
+<li>方法捕获，因为对象重新指向了新的类，新的类不可能全部实现原类的方法；</li>
+</ul>
+<h5 id="对象的内存释放"><a href="#对象的内存释放" class="headerlink" title="对象的内存释放"></a>对象的内存释放</h5><p>对象僵尸化，我们首先需要阻止对象被释放，否则对野指针的调用直接导致内存访问错误（这正是NSZombie要监测的问题）。</p>
+<p>Objc中的对象（继承<code>NSObject</code>）都是在堆中分配的内存（关于这点另有撰文介绍），libobjc（实际上还有Core Foundation框架）将对象实例其实现为一个<code>objc_object</code>的结构体（参考objc4-647源码）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">@interface NSObject &lt;NSObject&gt; &#123;</span><br><span class="line">    Class isa;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">struct objc_object &#123;</span><br><span class="line">private:</span><br><span class="line">    isa_t isa;</span><br><span class="line"></span><br><span class="line">public:</span><br><span class="line">    // object may have -.cxx_destruct implementation?</span><br><span class="line">    bool hasCxxDtor();</span><br><span class="line"></span><br><span class="line">    // Optimized calls to retain/release methods</span><br><span class="line">    id retain();</span><br><span class="line">    void release();</span><br><span class="line">    id autorelease();</span><br><span class="line"></span><br><span class="line">    // Implementations of retain/release methods</span><br><span class="line">    id rootRetain();</span><br><span class="line">    bool rootRelease();</span><br><span class="line">    // ...</span><br><span class="line"></span><br><span class="line">    // Implementation of dealloc methods</span><br><span class="line">    bool rootIsDeallocating();</span><br><span class="line">    void clearDeallocating();</span><br><span class="line">    void rootDealloc();</span><br><span class="line">    // ...</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    // ... Side-table 方法</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>对于对象的创建，所有对象创建时都调用基类<code>NSObject</code>的<code>+alloc</code>方法（不自定义构建函数的话），将通过：</p>
+<blockquote>
+<ul>
+<li>(id)alloc<ul>
+<li>_objc_rootAlloc(self)<ul>
+<li>callAlloc(cls, false /*checkNil*/, true /*allocWithZone*/)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>申请内存后进行<code>isa</code>的初始化及构建函数的调用。</p>
+<p>对于对象的释放，则是编译器添加代码，自动调用各继承层次的<code>-dealloc</code>方法，进行非自动管理内存的释放；对于实例变量及本身堆内存的释放则是在根类调用：</p>
+<blockquote>
+<ul>
+<li>[NSObject dealloc]<ul>
+<li>_objc_rootDealloc(self);<ul>
+<li>obj-&gt;rootDealloc();<ul>
+<li>object_dispose((id)this);<ul>
+<li>_object_dispose(obj);<ul>
+<li>objc_destructInstance(anObject);</li>
+<li>free(anObject)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>释放内存，并将原内存块数据<code>isa</code>指向一个“已释放类”（<code>freedObjectClass</code>，12字节的被特殊置位的内存块），避免消息发送时对<code>Nil</code>类的检查。关键步骤是<code>objc_destructInstance</code>，其实现为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">objc_destructInstance</span><span class="params">(id obj)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (obj) &#123;</span><br><span class="line">        Class isa = obj-&gt;getIsa();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (isa-&gt;hasCxxDtor()) &#123;</span><br><span class="line">            object_cxxDestruct(obj);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (isa-&gt;instancesHaveAssociatedObjects()) &#123;</span><br><span class="line">            _object_remove_assocations(obj);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!UseGC) objc_clear_deallocating(obj);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主要包含三个步骤：</p>
+<ol>
+<li><code>object_cxxDestruct</code>，对象的析构</li>
+<li><code>_object_remove_assocations</code>，移除关联对象，从<code>AssociationsManager</code>中移除相应的<code>ObjectAssociationMap</code></li>
+<li><code>objc_clear_deallocating</code>，清理弱引用</li>
+</ol>
+<p>步骤1，沿继承链向上逐级调用析构方法（类中对应selector为<code>SEL_cxx_destruct</code>的方法，<code>.cxx_destruct</code>），这个方法是编译器添加的实现，大概过程是遍历声明中的所有实例变量，调用<code>objc_storeStrong</code>函数进行<code>release</code>及置空操作。（注：<code>SEL_cxx_destruct</code>对应的是<code>.cxx_destruct</code>方法，这个是编译器添加的代码，后来搜索到了swift开源代码中的CodeGenModule.cpp，再然后发现sunny也做过相应的介绍，可以参考sunny的介绍）</p>
+<p>步骤3，另外对于对象弱引用，libobc是将其保存到一个<code>SideTable</code>的类对象（C++）中，步骤3调用<code>objc_object::sidetable_clearDeallocating()</code>进行弱引用清理，具体可见后文的附1。</p>
+<p>因此，为避免对象被真的释放了，我们需要替换根类的<code>-dealloc</code>方法。</p>
+<h5 id="对象僵尸化"><a href="#对象僵尸化" class="headerlink" title="对象僵尸化"></a>对象僵尸化</h5><p>我们对象原本被释放后再访问需要触发警告，首先原本的方法调用不能正常进行，再者要能记录调用的方法进行报警。被“释放”后的对象需要能实现这点，就需要我们所谓对象僵尸化，将被“释放”的对象的<code>isa</code>指向另一个类型，否则原本的类实例依然能查找到相应的方法实现（后文有介绍），达不到警告的需求。</p>
+<p>所以所谓的对象僵尸化，是我们将被“释放”的对象的<code>isa</code>指向一个新的“僵尸”类，并由僵尸类处理方法调用异常问题。这里有一个问题，我们如何保存对象原来的类信息？既然原本的对象已经被“释放”了，内存空间作废了，能不能利用上？</p>
+<p>对象实例<code>objc_object</code>的内存布局中，首先是<code>isa</code>指针，紧跟着各继承层次的<code>ivar</code>实例变量。假如使用实例变量所在内存区域来保存原来的类的信息的话，是没有保证的（有些类并没有声明实例变量）。因此，原来类信息无法保存到实例对象内存区域，僵尸对象类也不能是一个固定的类，否则实例对象无法识别原来类信息。因此对于每一个被僵尸化的类，需要动态注册一个类，并保存原来的类信息。通过log出来可以看到，苹果的做法是，将原来类名作为僵尸类的后缀，并且替换了旧的<code>dealloc</code>方法为<code>__dealloc_zombie</code>。</p>
+<p>具体实现，可以通过objc/runtime提供的接口，动态创建一个僵尸类：（代码应加锁，代码示例参考mikeash）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Class makeZombieClass(Class class) &#123;</span><br><span class="line">  NSString *className = NSStringFromClass(class);</span><br><span class="line">  NSString *zombieClassName = [@&quot;_NSZombie_&quot; stringByAppendingString:className];</span><br><span class="line">  Class zombieClass = NSClassFromString(zombieClassName);</span><br><span class="line">  if(zombieClass) return zombieClass;</span><br><span class="line">  </span><br><span class="line">  zombieClass = objc_allocateClassPair(nil, [zombieClassName UTF8String], 0);</span><br><span class="line">  </span><br><span class="line">  // ... 消息捕捉处理</span><br><span class="line">  </span><br><span class="line">  objc_registerClassPair(zombieClass);</span><br><span class="line">  return zombieClass;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>替换<code>dealloc</code>方法，修改对象的<code>isa</code>类型指针：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">void __dealloc_zombie(id obj, SEL _cmd) &#123;</span><br><span class="line">  Class cls = makeZombieClass(object_getClass(obj));</span><br><span class="line">  object_setClass(obj, cls);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>并在僵尸化时进行方法替换：（注意，不是对僵尸类添加<code>dealloc</code>方法）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Method m = class_getInstanceMethod([NSObject class], @selector(dealloc));</span><br><span class="line">method_setImplementation(m, (IMP)__dealloc_zombie);</span><br></pre></td></tr></table></figure>
+<p>此后当对象被释放时，其<code>isa</code>将指向<code>_NSZombie_XXXObject</code>类对象，由后者进行消息传递的管理。</p>
+<h5 id="消息捕获"><a href="#消息捕获" class="headerlink" title="消息捕获"></a>消息捕获</h5><p>新的僵尸类，未实现任何方法，在未做任何处理时，向原来的对象指针发送消息，会导致异常抛出。当然也不能继承原有类，否则消息方法的IMP还是能被搜索到。（注：实际上苹果的Zombie实现中，动态生成的僵尸类，其<code>superclass</code>为<code>nil</code>）</p>
+<p>再来回顾一下objc的消息机制（消息查找具体可见源码<code>lookUpImpOrForward</code>方法实现），举例：调用<code>[object message]</code>向<code>Object</code>对象发送消息<code>message</code></p>
+<ol>
+<li><p>首先编译器层面会转换为<code>objc_msgSend</code>函数的调用：<code>((void (*)(id, SEL))(void *)objc_msgSend)((id)object, sel_registerName(&quot;message&quot;));</code>，对父类发消息或者根据函数返回值不同<code>objc_msgSend</code>会被替换为<code>objc_msgSendSuper</code>或<code>objc_msgSend_stret</code>。</p>
+</li>
+<li><p>根据<code>isa</code>继承链，在类信息中进行方法查找，若能找到相应的方法IMP则调用该方法，否则按以下3-6进行动态消息解析、消息转发（及异常抛出）。方法IMP的查找见下面附3详述。</p>
+</li>
+<li><p>动态消息解析（Method Resolution）</p>
+<p>当步骤2中无法查找得到方法实现时， 将调用<code>+resolveInstanceMethod:</code> 或者 <code>+resolveClassMethod:</code>方法，可以动态提供一个函数实现。如果你添加了函数并返回 YES， 那运行时系统就会重新启动一次消息发送的过程（triedResolver保证仅一次）。对对象进行<code>respondsToSelector</code> 自省也可能会导致动态消息解析。（题外话，动态消息解析可以用在ORM方案中，我们可以在类初始化或者调用时进行方法的绑定）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">if (resolver  &amp;&amp;  !triedResolver) &#123;</span><br><span class="line">  rwlock_unlock_read(&amp;runtimeLock);</span><br><span class="line">  _class_resolveMethod(cls, sel, inst);</span><br><span class="line">  // Don&apos;t cache the result; we don&apos;t hold the lock so it may have </span><br><span class="line">  // changed already. Re-do the search from scratch instead.</span><br><span class="line">  triedResolver = YES;</span><br><span class="line">  goto retry;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在无法动态解析方法时，将在类对象的方法缓存中加入占位的方法缓存入口，进入消息转发。（CoreFoundation中<code>forwarding_prep_0_</code> -&gt; <code>_forwarding_</code>）</p>
+</li>
+<li><p>快速消息转发（Fast forwarding）</p>
+<p>对象实现<code>-forwardingTargetForSelector:</code>方法时，若返回非空对象，则消息被转发到该对象。（注：可以利用这个作为proxy）</p>
+<p>若返回空的快速转发对象，则进行正常的消息转发。</p>
+</li>
+<li><p>消息转发（Normal forwarding）</p>
+<p>基类的实现是：调用基类的<code>-doesNotRecognizeSelector</code>抛出异常。</p>
+<p>这通常是我们对消息处理的最后时机。runtime会构建一个<code>NSInvocation</code>的对象作为参数，调用方法<code>forwardInvocation</code>：</p>
+<ul>
+<li>首先，调用<code>-methodSignatureForSelector:</code>（CF实现）获得函数的方法签名（参数及返回值类型），若无法获得方法签名、返回nil，则直接导致<code>-doesNotRecognizeSelector:</code> 错误；否则可以对<code>NSInvocation</code>进行唤起：<code>-invokeWithTarget:</code>。（注：可以自行提供类型编码字符串获得方法签名<code>[NSMethodSignature signatureWithObjCTypes:&quot;v@:&quot;]</code> ）</li>
+<li><code>NSInvocation</code> 是对一个消息的描述，包括selector 以及参数等信息，还可以在 <code>-forwardInvocation:</code> 里修改传进来的 <code>NSInvocation</code> 对象，然后发送 <code>-invokeWithTarget:</code> 消息给它，传进去一个新的目标等，可以控制消息的转发。</li>
+</ul>
+<p><code>methodForSelector</code> 获取IMP时，在没有对应方法时，返回的是 _objc_msgForward ，但不会有消息转发的过程。</p>
+</li>
+</ol>
+<p>因此我们可以在<code>methodSignatureForSelector</code>方法中捕获到方法调用进行处理，或者提供相应的方法签名，在<code>forwardInvocation</code>中处理。</p>
+<h5 id="僵尸对象方法调用"><a href="#僵尸对象方法调用" class="headerlink" title="僵尸对象方法调用"></a>僵尸对象方法调用</h5><p>主要是修改方法签名的获取方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">NSMethodSignature *MethodSignatureForSelector_zombie(id obj, SEL _cmd, SEL selector) &#123;</span><br><span class="line">  Class class = object_getClass(obj);</span><br><span class="line">  NSString *className = NSStringFromClass(class);</span><br><span class="line">  className = [className substringFromIndex: [@&quot;_NSZombie_&quot; length]];</span><br><span class="line">  NSLog(@&quot;Selector %@ sent to deallocated instance %p of class %@&quot;,NSStringFromSelector(selector), obj, className);</span><br><span class="line">  </span><br><span class="line">  abort();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>并在上文代码“// … 消息捕捉处理”中添加方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">class_addMethod(zombieClass, @selector(methodSignatureForSelector:), (IMP)MethodSignatureForSelector_zombie, &quot;@@::&quot;);</span><br></pre></td></tr></table></figure>
+<p>僵尸对象的处理即完成。</p>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><h5 id="附1：对象释放清理弱引用过程"><a href="#附1：对象释放清理弱引用过程" class="headerlink" title="附1：对象释放清理弱引用过程"></a>附1：对象释放清理弱引用过程</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">objc_object::sidetable_clearDeallocating</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    SideTable *table = SideTable::tableForPointer(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// clear any weak table items</span></span><br><span class="line">    <span class="comment">// clear extra retain count and deallocating bit</span></span><br><span class="line">    <span class="comment">// (fixme warn or abort if extra retain count == 0 ?)</span></span><br><span class="line">    spinlock_lock(&amp;table-&gt;slock);</span><br><span class="line">    RefcountMap::iterator it = table-&gt;refcnts.find(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">if</span> (it != table-&gt;refcnts.end()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (it-&gt;second &amp; SIDE_TABLE_WEAKLY_REFERENCED) &#123;</span><br><span class="line">          	<span class="comment">// 引用表清理</span></span><br><span class="line">            weak_clear_no_lock(&amp;table-&gt;weak_table, (id)<span class="keyword">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        table-&gt;refcnts.erase(it);</span><br><span class="line">    &#125;</span><br><span class="line">    spinlock_unlock(&amp;table-&gt;slock);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SideTable</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SideTable</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">uint8_t</span> table_buf[SIDE_TABLE_STRIPE * SIDE_TABLE_SIZE];</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">spinlock_t</span> slock;</span><br><span class="line">    RefcountMap refcnts;</span><br><span class="line">    <span class="keyword">weak_table_t</span> weak_table;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> objc::DenseMap&lt;DisguisedPtr&lt;objc_object&gt;,<span class="keyword">size_t</span>,<span class="literal">true</span>&gt; RefcountMap;</span><br><span class="line"></span><br><span class="line"><span class="comment">/// The address of a __weak object reference</span></span><br><span class="line"><span class="keyword">typedef</span> objc_object ** <span class="keyword">weak_referrer_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The internal structure stored in the weak references table. </span></span><br><span class="line"><span class="comment"> * It maintains and stores</span></span><br><span class="line"><span class="comment"> * a hash set of weak references pointing to an object.</span></span><br><span class="line"><span class="comment"> * If out_of_line==0, the set is instead a small inline array.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> WEAK_INLINE_COUNT 4</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">weak_entry_t</span> &#123;</span></span><br><span class="line">    DisguisedPtr&lt;objc_object&gt; referent;</span><br><span class="line">    <span class="keyword">union</span> &#123;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">            <span class="keyword">weak_referrer_t</span> *referrers;</span><br><span class="line">            <span class="keyword">uintptr_t</span>        out_of_line : <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">uintptr_t</span>        num_refs : PTR_MINUS_1;</span><br><span class="line">            <span class="keyword">uintptr_t</span>        mask;</span><br><span class="line">            <span class="keyword">uintptr_t</span>        max_hash_displacement;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">            <span class="comment">// out_of_line=0 is LSB of one of these (don't care which)</span></span><br><span class="line">            <span class="keyword">weak_referrer_t</span>  inline_referrers[WEAK_INLINE_COUNT];</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The global weak references table. Stores object ids as keys,</span></span><br><span class="line"><span class="comment"> * and weak_entry_t structs as their values.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">weak_table_t</span> &#123;</span></span><br><span class="line">    <span class="keyword">weak_entry_t</span> *weak_entries;</span><br><span class="line">    <span class="keyword">size_t</span>    num_entries;</span><br><span class="line">    <span class="keyword">uintptr_t</span> mask;</span><br><span class="line">    <span class="keyword">uintptr_t</span> max_hash_displacement;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><code>SideTable</code>是用来保存对象引用计数及弱引用的类，其中包括3个公开属性自旋锁<code>slock</code>、引用计数散列表<code>refcnts</code>、弱引用表<code>weak_table</code>，并使用一个静态数组<code>table_buf</code>保存所有<code>SideTable</code>实例，提供工厂方法<code>tableForPointer</code>查找对应的table。</p>
+<ol>
+<li>首先是查找<code>refcnts</code>得到其引用计数，它是一个<code>DenseMap</code>类型，其值为<code>site_t</code>类型（其低位第0位是标记是否被弱引用），若存在弱引用则执行<code>weak_clear_no_lock</code>清理：</li>
+<li><code>weak_table_t</code>以被引用对象指针哈希化（<code>ptr_hash</code>）之后作为索引，<code>weak_entry_t</code>类型作为值，<code>weak_entry_t</code>保存了所有<code>weak</code>引用了该对象的指针的指针。对象<code>dealloc</code>后执行到该步骤，会将该对象的所有弱引用指针置为<code>nil</code>，并从<code>weak_table</code>中移除该entry。</li>
+</ol>
+<p>另外，上面所提到的<code>table_buf</code>是在可执行文件被操作系统加载、链接符号绑定之后的初始化进行创建的，具体调用可查看入口点<code>_objc_init</code>方法。</p>
+<h5 id="附2：objc-class"><a href="#附2：objc-class" class="headerlink" title="附2：objc_class"></a>附2：objc_class</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">struct objc_class : objc_object &#123;</span><br><span class="line">    Class superclass;</span><br><span class="line">    const char *name;</span><br><span class="line">    uint32_t version;</span><br><span class="line">    uint32_t info;</span><br><span class="line">    uint32_t instance_size;</span><br><span class="line">    struct old_ivar_list *ivars;</span><br><span class="line">    struct old_method_list **methodLists;</span><br><span class="line">    Cache cache;</span><br><span class="line">    struct old_protocol_list *protocols;</span><br><span class="line">    // CLS_EXT only</span><br><span class="line">    const uint8_t *ivar_layout;</span><br><span class="line">    struct old_class_ext *ext;</span><br><span class="line">    // ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上是Objc-2.0以前的类对象结构定义，Objc-2.0之后大概是这样</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">//Class的实际结构</span><br><span class="line">struct objc_class : objc_object &#123;</span><br><span class="line">	// Class ISA;</span><br><span class="line">	Class superclass;</span><br><span class="line">	cache_t cache;             // formerly cache pointer and vtable</span><br><span class="line"></span><br><span class="line">	//class_data_bits_t可理解为class_rw_t加一些标志位的组合</span><br><span class="line">	class_data_bits_t bits;    // class_rw_t * plus custom rr/alloc flags</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">struct class_rw_t &#123;</span><br><span class="line">    // Be warned that Symbolication knows the layout of this structure.</span><br><span class="line">    uint32_t flags;</span><br><span class="line">    uint32_t version;</span><br><span class="line"></span><br><span class="line">    const class_ro_t *ro;</span><br><span class="line"></span><br><span class="line">    method_array_t methods;</span><br><span class="line">    property_array_t properties;</span><br><span class="line">    protocol_array_t protocols;</span><br><span class="line"></span><br><span class="line">    Class firstSubclass;</span><br><span class="line">    Class nextSiblingClass;</span><br><span class="line"></span><br><span class="line">    char *demangledName;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct class_ro_t &#123;</span><br><span class="line">    uint32_t flags;</span><br><span class="line">    uint32_t instanceStart;</span><br><span class="line">    uint32_t instanceSize;</span><br><span class="line">#ifdef __LP64__</span><br><span class="line">    uint32_t reserved;</span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">    const uint8_t * ivarLayout;</span><br><span class="line">    </span><br><span class="line">    const char * name;</span><br><span class="line">    method_list_t * baseMethodList;</span><br><span class="line">    protocol_list_t * baseProtocols;</span><br><span class="line">    const ivar_list_t * ivars;</span><br><span class="line"></span><br><span class="line">    const uint8_t * weakIvarLayout;</span><br><span class="line">    property_list_t *baseProperties;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>主要是对类信息等数据的封装，从概念上没有太大差异。</p>
+<h5 id="附3：IMP查找"><a href="#附3：IMP查找" class="headerlink" title="附3：IMP查找"></a>附3：IMP查找</h5><p><code>objc_msgSend()</code>会调用<code>class_getMethodImplementation(cls, sel)</code>继而调用<code>lookUpImpOrNil</code>进行方法查找，若查找失败，则返回<code>_objc_msgForward</code>的IMP，这个实现了具体的消息转发过程（见上文）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">imp = lookUpImpOrNil(cls, sel, nil, </span><br><span class="line">                         YES/*initialize*/, YES/*cache*/, YES/*resolver*/);</span><br><span class="line"></span><br><span class="line">IMP lookUpImpOrNil(Class cls, SEL sel, id inst, </span><br><span class="line">                   bool initialize, bool cache, bool resolver)</span><br><span class="line">&#123;</span><br><span class="line">    IMP imp = lookUpImpOrForward(cls, sel, inst, initialize, cache, resolver);</span><br><span class="line">    if (imp == _objc_msgForward_impcache) return nil;</span><br><span class="line">    else return imp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>lookUpImpOrForward</code>正是上文提到的消息查找：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">IMP <span class="title">lookUpImpOrForward</span><span class="params">(Class cls, SEL sel, id inst, </span></span></span><br><span class="line"><span class="function"><span class="params">                       <span class="keyword">bool</span> initialize, <span class="keyword">bool</span> cache, <span class="keyword">bool</span> resolver)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    IMP imp = nil;</span><br><span class="line">    <span class="keyword">bool</span> triedResolver = NO;</span><br><span class="line"></span><br><span class="line">    runtimeLock.assertUnlocked();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 优化的快速缓存查找</span></span><br><span class="line">    <span class="keyword">if</span> (cache) &#123;</span><br><span class="line">        imp = cache_getImp(cls, sel);</span><br><span class="line">        <span class="keyword">if</span> (imp) <span class="keyword">return</span> imp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    runtimeLock.read();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!cls-&gt;isRealized()) &#123;</span><br><span class="line">        runtimeLock.unlockRead();</span><br><span class="line">        runtimeLock.write();</span><br><span class="line">      	</span><br><span class="line">      	<span class="comment">// 类初始化+initialize方法</span></span><br><span class="line">        realizeClass(cls);</span><br><span class="line"></span><br><span class="line">        runtimeLock.unlockWrite();</span><br><span class="line">        runtimeLock.read();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (initialize  &amp;&amp;  !cls-&gt;isInitialized()) &#123;</span><br><span class="line">        runtimeLock.unlockRead();</span><br><span class="line">      	<span class="comment">// +initialize等</span></span><br><span class="line">        _class_initialize (_class_getNonMetaClass(cls, inst));</span><br><span class="line">        runtimeLock.read();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"> retry:    </span><br><span class="line">    runtimeLock.assertReading();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 当前类 缓存查找</span></span><br><span class="line">    imp = cache_getImp(cls, sel);</span><br><span class="line">    <span class="keyword">if</span> (imp) <span class="keyword">goto</span> done;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 当前类 方法列表遍历查找并缓存（Try this class's method lists）</span></span><br><span class="line">    &#123;</span><br><span class="line">        Method meth = getMethodNoSuper_nolock(cls, sel);</span><br><span class="line">        <span class="keyword">if</span> (meth) &#123;</span><br><span class="line">            log_and_fill_cache(cls, meth-&gt;imp, sel, inst, cls);</span><br><span class="line">            imp = meth-&gt;imp;</span><br><span class="line">            <span class="keyword">goto</span> done;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 父类 缓存及方法列表查找 Try superclass caches and method lists.</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">unsigned</span> attempts = unreasonableClassCount();</span><br><span class="line">        <span class="keyword">for</span> (Class curClass = cls;</span><br><span class="line">             curClass != nil;</span><br><span class="line">             curClass = curClass-&gt;superclass)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// Halt if there is a cycle in the superclass chain.</span></span><br><span class="line">            <span class="keyword">if</span> (--attempts == <span class="number">0</span>) &#123;</span><br><span class="line">                _objc_fatal(<span class="string">"Memory corruption in class list."</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// Superclass cache.</span></span><br><span class="line">            imp = cache_getImp(curClass, sel);</span><br><span class="line">            <span class="keyword">if</span> (imp) &#123;</span><br><span class="line">                <span class="keyword">if</span> (imp != (IMP)_objc_msgForward_impcache) &#123;</span><br><span class="line">                    <span class="comment">// Found the method in a superclass. Cache it in this class.</span></span><br><span class="line">                    log_and_fill_cache(cls, imp, sel, inst, curClass);</span><br><span class="line">                    <span class="keyword">goto</span> done;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">// Found a forward:: entry in a superclass.</span></span><br><span class="line">                    <span class="comment">// Stop searching, but don't cache yet; call method </span></span><br><span class="line">                    <span class="comment">// resolver for this class first.</span></span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// Superclass method list.</span></span><br><span class="line">            Method meth = getMethodNoSuper_nolock(curClass, sel);</span><br><span class="line">            <span class="keyword">if</span> (meth) &#123;</span><br><span class="line">                log_and_fill_cache(cls, meth-&gt;imp, sel, inst, curClass);</span><br><span class="line">                imp = meth-&gt;imp;</span><br><span class="line">                <span class="keyword">goto</span> done;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 方法动态解析 No implementation found. Try method resolver once.</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (resolver  &amp;&amp;  !triedResolver) &#123;</span><br><span class="line">        runtimeLock.unlockRead();</span><br><span class="line">        _class_resolveMethod(cls, sel, inst);</span><br><span class="line">        runtimeLock.read();</span><br><span class="line">        <span class="comment">// Don't cache the result; we don't hold the lock so it may have </span></span><br><span class="line">        <span class="comment">// changed already. Re-do the search from scratch instead.</span></span><br><span class="line">        triedResolver = YES;</span><br><span class="line">        <span class="keyword">goto</span> retry;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// No implementation found, and method resolver didn't help. </span></span><br><span class="line">    <span class="comment">// 消息转发 Use forwarding.</span></span><br><span class="line"></span><br><span class="line">    imp = (IMP)_objc_msgForward_impcache;</span><br><span class="line">    cache_fill(cls, sel, imp, inst);</span><br><span class="line"></span><br><span class="line"> done:</span><br><span class="line">    runtimeLock.unlockRead();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> imp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码中的<code>realizeClass</code>主要处理类对象初始化过程：</p>
+<ul>
+<li>父类（<code>superclass</code>）、元类（<code>metaclass</code>）及根类处理</li>
+<li>实例大小设置</li>
+<li>构造函数调用</li>
+<li>附加类别方法（到方法列表）（所以方法的查找以类别的优先，类别的加载在符号绑定后的回调）</li>
+</ul>
+<p>另外需要说明的是<code>SEL</code>类型，这实际上可以看做是一个整型值，实际有一份字符串与SEL之间的映射表，详细可查看<code>__sel_registerName</code>方法。这个在方法缓存中也可以看到，缓存的存取是以SEL为key的，key的类型被定义为<code>typedef uintptr_t cache_key_t;</code>、<code>typedef unsigned long uintptr_t;</code>。</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>本文作者：</strong>Jason
+        </p>
+        <p>
+            <strong>
+                本文鏈接：
+            </strong>
+            <a href="http://blog.knpc21.com/ios/ios-nszombie-implementation/">http://blog.knpc21.com/ios/ios-nszombie-implementation/</a>
+        </p>
+        
+            <strong>
+                <p>文章默认使用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 协议进行许可，使用时请注意遵守协议。</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>更新於 2017-03-31</p></div> 
+    <div class="post-entry__tags"><a href="/tags/iOS/" class="post-tags__link button"># iOS</a><a href="/tags/runtime/" class="post-tags__link button"># runtime</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/ios/mutilthread-gcd-basic/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            iOS开发：多线程之GCD基础知识
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/undefined/vps-hexo-blogging/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            VPS搭建博客——不完全指南
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>評論</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到頂部" title="回到頂部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-K2Q2J84"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-K2Q2J84');
+    </script>
+ 
+
+ 
+
+ 
+
+
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "1d741b4fcb7f4062933be3f4b0eb6571"}'></script>
+    </script>
+    
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

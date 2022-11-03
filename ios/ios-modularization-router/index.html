@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>iOS开发：关于模块化与路由 | { }</title>
+
+
+    <meta name="keywords" content="iOS, 架构, 技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="说一下iOS应用开发中的模块化跟路由的事情。">
+<meta name="keywords" content="iOS,架构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS开发：关于模块化与路由">
+<meta property="og:url" content="http://blog.knpc21.com/ios/ios-modularization-router/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="说一下iOS应用开发中的模块化跟路由的事情。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2016-12-03T08:18:28.000Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="iOS开发：关于模块化与路由">
+<meta name="twitter:description" content="说一下iOS应用开发中的模块化跟路由的事情。">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        iOS开发：关于模块化与路由
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2016/12/" class="post-meta__date button">2016-12-03</a>
+        
+    <span class="separate-dot"></span><a href="/categories/iOS/" class="button">iOS</a>
+
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>说一下iOS应用开发中的模块化跟路由的事情。<br><a id="more"></a></p>
+<p>前一段时间，一位同事一直怂我折腾这件事，关于组件化。组件化成了今年的热门，然后还有瓜。我大概也看了FRDIntent的邮件的探讨，挺有意思的。</p>
+<p>我觉得大家也都认同一点，没有任何一套程序架构是通用的。大家都在谈组件化或者模块化（下文统一用”模块化”），瓜吃到了最后的时候，我觉得争辩的时候都混淆这个了——他们讨论的原本不是同一件事情。一个在说模块化怎么解耦，一个在说路由。</p>
+<p>路由是路由，模块化是模块化。二者并不对立。</p>
+<h3 id="关于路由"><a href="#关于路由" class="headerlink" title="关于路由"></a>关于路由</h3><p><strong>路由</strong>本来就是一个提供寻址的功能，你可以使用路由表（或其他映射手段），来减少调用路径的硬编码；如果没有路由，顶多也就是手动写死功能调用的逻辑。但毕竟使用路由，还是可以通过注册/回调来减少一些麻烦。假如用推送的场景举个例子：</p>
+<p>在推送的payload中使用一个<code>action</code>的字段来标记推送业务类别，那么可以将各个不同业务的推送消息的处理逻辑，分别抽离成一个个单独的<code>service</code>（遵循特定的推送处理接口），并建立映射表<code>action</code>-&gt;<code>service</code> 。当接收到推送时，按约定的格式打包好数据，查找对应的<code>service</code>进行处理即可。</p>
+<p>我们建立的映射表也是一种路由。这样的好处是，无论是否添加新的推送业务，推送的核心处理模块无需修改，只需要新增相应的<code>service</code>即可。这是一层解耦。再有，如果旧版客户端接收到了一个新的推送业务，因为映射表查找不到相应的<code>service</code>可以直接忽略了也不会有其他并发症。</p>
+<p>跟原先的做法相比，可维护性提高，易于动态调用，并且单独的业务便于测试。</p>
+<h3 id="关于模块化"><a href="#关于模块化" class="headerlink" title="关于模块化"></a>关于模块化</h3><p>再说到<strong>模块化</strong>。大家的标题都是“组件化”，但是实际讨论的貌似是“业务模块”或者说“功能模块”？“组件”，Components，更偏向于独立、可重用的系统“零部件”，所以个人觉得业务层面或许称之为“模块”更合适些。按照分层架构，业务模块层会基于下层的基础服务（组件）进行开发。组件处于纵向的层级中，组件的职责相对单一，对上层不能有依赖关系；而业务模块是在整个架构的最上层，模块间存在横向的关系——某种程度来说，业务间存在无可避免的耦合。这个逻辑依赖关系，是业务内置的，是没办法通过软件工程的手段去除的。</p>
+<p>这样模块化就更好理解了。要尽量做到高内聚。要面向接口编程，提供接口、依赖接口，尽可能将耦合度降低到内在要求。路由当然也会起到一部分解耦的功用。</p>
+<p>说到底，都是通过增加”间接层”来实现。</p>
+<blockquote>
+<p>There is no problem in computer science that can’t be solved by adding another level of indirection.</p>
+</blockquote>
+<p>显式的命名为“Mediator”也好，还是实现成一个“Router”也好，其实不重要。</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>本文作者：</strong>Jason
+        </p>
+        <p>
+            <strong>
+                本文鏈接：
+            </strong>
+            <a href="http://blog.knpc21.com/ios/ios-modularization-router/">http://blog.knpc21.com/ios/ios-modularization-router/</a>
+        </p>
+        
+            <strong>
+                <p>文章默认使用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 协议进行许可，使用时请注意遵守协议。</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>更新於 2016-12-03</p></div> 
+    <div class="post-entry__tags"><a href="/tags/iOS/" class="post-tags__link button"># iOS</a><a href="/tags/架构/" class="post-tags__link button"># 架构</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/ios/ios-safari-cookie/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            iOS开发：跨开发商的应用数据共享
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/ios/ios-view-transitioning-animation/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            iOS开发：自定义转场动画
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>評論</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到頂部" title="回到頂部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-K2Q2J84"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-K2Q2J84');
+    </script>
+ 
+
+ 
+
+ 
+
+
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "1d741b4fcb7f4062933be3f4b0eb6571"}'></script>
+    </script>
+    
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

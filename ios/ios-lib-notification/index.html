@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>iOS开发：自定义通知横幅 | { }</title>
+
+
+    <meta name="keywords" content="iOS, 技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="所有的终端产品都应该打造好自己的通知系统。 横幅通知，是终端应用实现消息传递的一种有效方式——它套用了「中断」这种经典的消息处理模式，可以穿透不同的上下文来投递消息。苹果是十分重视用户消息通知的。从一开始打造了APNs，到后来多次重构iOS系统的用户通知框架，足见其用心。">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS开发：自定义通知横幅">
+<meta property="og:url" content="http://blog.knpc21.com/ios/ios-lib-notification/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="所有的终端产品都应该打造好自己的通知系统。 横幅通知，是终端应用实现消息传递的一种有效方式——它套用了「中断」这种经典的消息处理模式，可以穿透不同的上下文来投递消息。苹果是十分重视用户消息通知的。从一开始打造了APNs，到后来多次重构iOS系统的用户通知框架，足见其用心。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-03-30T03:16:11.000Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="iOS开发：自定义通知横幅">
+<meta name="twitter:description" content="所有的终端产品都应该打造好自己的通知系统。 横幅通知，是终端应用实现消息传递的一种有效方式——它套用了「中断」这种经典的消息处理模式，可以穿透不同的上下文来投递消息。苹果是十分重视用户消息通知的。从一开始打造了APNs，到后来多次重构iOS系统的用户通知框架，足见其用心。">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        iOS开发：自定义通知横幅
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2019/03/" class="post-meta__date button">2019-03-30</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>所有的终端产品都应该打造好自己的通知系统。</p>
+<p>横幅通知，是终端应用实现消息传递的一种有效方式——它套用了「中断」这种经典的消息处理模式，可以穿透不同的上下文来投递消息。苹果是十分重视用户消息通知的。从一开始打造了APNs，到后来多次重构iOS系统的用户通知框架，足见其用心。</p>
+<a id="more"></a>
+<p>但对于App内的消息通知而言，iOS系统本地通知是比较鸡肋的——无法定制横幅的样式。现在要探讨的是，如何写一个自定义通知横幅的组件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">注：自定义通知横幅是17年的代码，整理为独立组件。</span><br></pre></td></tr></table></figure>
+<h2 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h2><p>App内的自定义通知横幅跟App外的系统通知横幅，功能特性是基本一致的：</p>
+<ol>
+<li>通知消息接收、UI展示事件回调</li>
+<li>用户交互事件回调</li>
+<li>消息展示的UI定制</li>
+<li>消息展示队列实现</li>
+</ol>
+<p>整体可以参考<code>UserNotification</code>框架：我们认为原始消息的有效载荷是核心，消息的展示过程是一个服务的过程。将消息加入队列，是发起申请服务的请求；展示给用户的是任务的描述（通知）；用户对消息的处置是服务对请求任务的响应。</p>
+<p>有几个技术细节需要考虑：</p>
+<ol>
+<li>数据的交付。从接收到消息，到UI展示，最后到交互事件回调，这里有明确的数据流动。通知组件，怎么建立模型，怎么将数据打包并交付到业务层？</li>
+<li>界面的定制。通知组件，如何支持业务层定制UI或交互特性？苹果是通过插件支持限制范围内的部分UI定制。交还多少控制权更合适？</li>
+<li>服务请求队列。FIFO、优先级、可取消等特性的实现。</li>
+</ol>
+<p>数据的交付。假设我们从业务端拿到的是JSON数据，是否需要将JSON转为模型实体数据（约束为特定的字段）？如果UI是支持自由定制的，考虑拓展性，那么是不能将载荷数据转为实体模型的。我们最终也是选择始终提供原始载荷数据（Payload），也就是，在UI定制阶段或者用户交互阶段，业务层是可以直接拿到原始载荷数据的。</p>
+<p>界面的定制。因为界面除了UI的展示，还直接有用户的交互事件，交互事件是直接影响消息的流转流程的——手动关闭或者查看消息后，消息的展示队列会流转到下一条消息来展示。事件处理，需要中转，在组件内部完成流转，以及对业务层做事件分发。这部分需要将依赖注入到UI控件内。UI的定制一般通过接口实现或类继承来实现，交互逻辑是完全定制的。</p>
+<p>队列，其实可以分为消息队列与展示队列。消息队列接收业务层推入的消息载荷，优先级+FIFO；展示队列则只是FIFO，通常情况下，展示队列还是个串行的队列——同一时间只能展示一个。消息队列与展示队列其实是一个生产消费的问题。</p>
+<h3 id="设计方案"><a href="#设计方案" class="headerlink" title="设计方案"></a>设计方案</h3><ol>
+<li><p><code>Payload</code> 数据载荷，这是流程的起点；</p>
+</li>
+<li><p><code>HLTNotificationRequest</code>-&gt;<code>Payload</code>，<code>Request</code>是申请服务的请求，持有<code>Payload</code>；</p>
+</li>
+<li><p><code>HLTNotification</code>-&gt;<code>HLTNotificationRequest</code>，<code>Notification</code>是任务的描述，当任务进入展示队列后，<code>Request</code>转化为<code>Notification</code>；</p>
+</li>
+<li><p><code>HLTNotificationView</code>-&gt;<code>HLTNotification</code>，<code>NotificationView</code>是通知界面，这里实现为通过类继承来实现UI定制；</p>
+</li>
+<li><p><code>HLTNotificationResponse</code>-&gt;<code>HLTNotification</code>，服务的响应，从<code>NotifiationView</code>拿到的数据；</p>
+</li>
+<li><code>HLTNotificationManager</code>，流程流转的管理。</li>
+</ol>
+<p>实际实现上可能有些出入，队列实现的比较简单，需要后续优化一下。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>终端应用是直接面向用户的，用户体验为王。</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>本文作者：</strong>Jason
+        </p>
+        <p>
+            <strong>
+                本文鏈接：
+            </strong>
+            <a href="http://blog.knpc21.com/ios/ios-lib-notification/">http://blog.knpc21.com/ios/ios-lib-notification/</a>
+        </p>
+        
+            <strong>
+                <p>文章默认使用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 协议进行许可，使用时请注意遵守协议。</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>更新於 2019-03-30</p></div> 
+    <div class="post-entry__tags"><a href="/tags/iOS/" class="post-tags__link button"># iOS</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/tech/sqlite-basic/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            SQLite的基本用法介绍
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/ios/ios-lib-storekit/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            iOS开发：苹果内购组件
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>評論</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到頂部" title="回到頂部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-K2Q2J84"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-K2Q2J84');
+    </script>
+ 
+
+ 
+
+ 
+
+
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "1d741b4fcb7f4062933be3f4b0eb6571"}'></script>
+    </script>
+    
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

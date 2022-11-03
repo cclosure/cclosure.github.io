@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>how-arc-working | { }</title>
+
+
+    <meta name="keywords" content="ARC, 技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="我们都知道ARC是苹果通过编译器在编译期支持的功能。但要问编译器对ARC是怎么支持的，很多人大概率说不出所以然来。">
+<meta name="keywords" content="ARC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="how-arc-working">
+<meta property="og:url" content="http://blog.knpc21.com/ios/ios-how-arc-working/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="我们都知道ARC是苹果通过编译器在编译期支持的功能。但要问编译器对ARC是怎么支持的，很多人大概率说不出所以然来。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/MemoryMgmt/Art/memory_management_2x.png">
+<meta property="og:updated_time" content="2022-09-26T14:30:28.000Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="how-arc-working">
+<meta name="twitter:description" content="我们都知道ARC是苹果通过编译器在编译期支持的功能。但要问编译器对ARC是怎么支持的，很多人大概率说不出所以然来。">
+<meta name="twitter:image" content="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/MemoryMgmt/Art/memory_management_2x.png">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        how-arc-working
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2022/09/" class="post-meta__date button">2022-09-23</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header">
+	
+        <div class="post-thumbnail" style="background-image: url('https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/MemoryMgmt/Art/memory_management_2x.png');"></div>
+    
+</div>
+    <div class="post__content">
+        <p>我们都知道ARC是苹果通过编译器在编译期支持的功能。但要问编译器对ARC是怎么支持的，很多人大概率说不出所以然来。</p>
+<a id="more"></a>
+<p>Objective-C的内存管理依靠引用计数，在对象被持有时增加计数，在对象被原持有对象释放的时候减少计数。在ARC之前，开发者是需要牢记<code>retain</code>跟<code>release</code>的。</p>
+<p>我们来看一个示例程序：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Hello</span> : <span class="title">NSObject</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Hello</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> main() &#123;</span><br><span class="line">	Hello *hello = [[Hello alloc] init];</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们通过Clang前端来检查编译各阶段的情况。</p>
+<p><code>clang -fobjc-arc -framework Foundation -fmodules -fsyntax-only -Xclang -ast-dump hello.m</code></p>
+<p>输出AST：</p>
+<p><img src="hello_ast.jpg" alt></p>
+<p>在输出的AST中我们能找到与ARC相关的内容非常少，也没有看到插入objc_storeStrong等符号。唯一相关的是ARCConsumeObject。</p>
+<p><code>clang -fobjc-arc -framework Foundation -S -emit-llvm hello.m</code><br>生成IR代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">define i32 @main() #0 &#123;</span><br><span class="line">  %1 = alloca i32, align 4</span><br><span class="line">  %2 = alloca %0*, align 8</span><br><span class="line">  store i32 0, i32* %1, align 4</span><br><span class="line">  %3 = load %struct._class_t*, %struct._class_t** @&quot;OBJC_CLASSLIST_REFERENCES_$_&quot;, align 8</span><br><span class="line">  %4 = bitcast %struct._class_t* %3 to i8*</span><br><span class="line">  %5 = call i8* @objc_alloc_init(i8* %4)</span><br><span class="line">  %6 = bitcast i8* %5 to %0*</span><br><span class="line">  store %0* %6, %0** %2, align 8</span><br><span class="line">  store i32 0, i32* %1, align 4</span><br><span class="line">  %7 = bitcast %0** %2 to i8**</span><br><span class="line">  call void @llvm.objc.storeStrong(i8** %7, i8* null) #1</span><br><span class="line">  %8 = load i32, i32* %1, align 4</span><br><span class="line">  ret i32 %8</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>clang -fobjc-arc -framework Foundation -S hello.ll -o hello.s</code><br>生成汇编：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line">	.section	__TEXT,__text,regular,pure_instructions</span><br><span class="line">	.build_version macos, 11, 0	sdk_version 12, 1</span><br><span class="line">	.globl	_main                           ## -- Begin function main</span><br><span class="line">	.p2align	4, 0x90</span><br><span class="line">_main:                                  ## @main</span><br><span class="line">	.cfi_startproc</span><br><span class="line">## %bb.0:</span><br><span class="line">	pushq	%rbp</span><br><span class="line">	.cfi_def_cfa_offset 16</span><br><span class="line">	.cfi_offset %rbp, -16</span><br><span class="line">	movq	%rsp, %rbp</span><br><span class="line">	.cfi_def_cfa_register %rbp</span><br><span class="line">	subq	$16, %rsp</span><br><span class="line">	movl	$0, -4(%rbp)</span><br><span class="line">	movq	_OBJC_CLASSLIST_REFERENCES_$_(%rip), %rdi</span><br><span class="line">	callq	_objc_alloc_init</span><br><span class="line">	xorl	%ecx, %ecx</span><br><span class="line">	movl	%ecx, %esi</span><br><span class="line">	movq	%rax, -16(%rbp)</span><br><span class="line">	movl	$0, -4(%rbp)</span><br><span class="line">	leaq	-16(%rbp), %rdi</span><br><span class="line">	callq	_objc_storeStrong</span><br><span class="line">	movl	-4(%rbp), %eax</span><br><span class="line">	addq	$16, %rsp</span><br><span class="line">	popq	%rbp</span><br><span class="line">	retq</span><br><span class="line">	.cfi_endproc</span><br><span class="line">                                        ## -- End function</span><br><span class="line">	.section	__TEXT,__objc_classname,cstring_literals</span><br><span class="line">L_OBJC_CLASS_NAME_:                     ## @OBJC_CLASS_NAME_</span><br><span class="line">	.asciz	&quot;Hello&quot;</span><br><span class="line"></span><br><span class="line">	.section	__DATA,__objc_const</span><br><span class="line">	.p2align	3                               ## @&quot;_OBJC_METACLASS_RO_$_Hello&quot;</span><br><span class="line">__OBJC_METACLASS_RO_$_Hello:</span><br><span class="line">	.long	129                             ## 0x81</span><br><span class="line">	.long	40                              ## 0x28</span><br><span class="line">	.long	40                              ## 0x28</span><br><span class="line">	.space	4</span><br><span class="line">	.quad	0</span><br><span class="line">	.quad	L_OBJC_CLASS_NAME_</span><br><span class="line">	.quad	0</span><br><span class="line">	.quad	0</span><br><span class="line">	.quad	0</span><br><span class="line">	.quad	0</span><br><span class="line">	.quad	0</span><br><span class="line"></span><br><span class="line">	.section	__DATA,__objc_data</span><br><span class="line">	.globl	_OBJC_METACLASS_$_Hello         ## @&quot;OBJC_METACLASS_$_Hello&quot;</span><br><span class="line">	.p2align	3</span><br><span class="line">_OBJC_METACLASS_$_Hello:</span><br><span class="line">	.quad	_OBJC_METACLASS_$_NSObject</span><br><span class="line">	.quad	_OBJC_METACLASS_$_NSObject</span><br><span class="line">	.quad	__objc_empty_cache</span><br><span class="line">	.quad	0</span><br><span class="line">	.quad	__OBJC_METACLASS_RO_$_Hello</span><br><span class="line"></span><br><span class="line">	.section	__DATA,__objc_const</span><br><span class="line">	.p2align	3                               ## @&quot;_OBJC_CLASS_RO_$_Hello&quot;</span><br><span class="line">__OBJC_CLASS_RO_$_Hello:</span><br><span class="line">	.long	128                             ## 0x80</span><br><span class="line">	.long	8                               ## 0x8</span><br><span class="line">	.long	8                               ## 0x8</span><br><span class="line">	.space	4</span><br><span class="line">	.quad	0</span><br><span class="line">	.quad	L_OBJC_CLASS_NAME_</span><br><span class="line">	.quad	0</span><br><span class="line">	.quad	0</span><br><span class="line">	.quad	0</span><br><span class="line">	.quad	0</span><br><span class="line">	.quad	0</span><br><span class="line"></span><br><span class="line">	.section	__DATA,__objc_data</span><br><span class="line">	.globl	_OBJC_CLASS_$_Hello             ## @&quot;OBJC_CLASS_$_Hello&quot;</span><br><span class="line">	.p2align	3</span><br><span class="line">_OBJC_CLASS_$_Hello:</span><br><span class="line">	.quad	_OBJC_METACLASS_$_Hello</span><br><span class="line">	.quad	_OBJC_CLASS_$_NSObject</span><br><span class="line">	.quad	__objc_empty_cache</span><br><span class="line">	.quad	0</span><br><span class="line">	.quad	__OBJC_CLASS_RO_$_Hello</span><br><span class="line"></span><br><span class="line">	.section	__DATA,__objc_classrefs,regular,no_dead_strip</span><br><span class="line">	.p2align	3                               ## @&quot;OBJC_CLASSLIST_REFERENCES_$_&quot;</span><br><span class="line">_OBJC_CLASSLIST_REFERENCES_$_:</span><br><span class="line">	.quad	_OBJC_CLASS_$_Hello</span><br><span class="line"></span><br><span class="line">	.section	__DATA,__objc_classlist,regular,no_dead_strip</span><br><span class="line">	.p2align	3                               ## @&quot;OBJC_LABEL_CLASS_$&quot;</span><br><span class="line">l_OBJC_LABEL_CLASS_$:</span><br><span class="line">	.quad	_OBJC_CLASS_$_Hello</span><br><span class="line"></span><br><span class="line">	.section	__DATA,__objc_imageinfo,regular,no_dead_strip</span><br><span class="line">L_OBJC_IMAGE_INFO:</span><br><span class="line">	.long	0</span><br><span class="line">	.long	64</span><br><span class="line"></span><br><span class="line">.subsections_via_symbols</span><br></pre></td></tr></table></figure></p>
+<p>我们可以看到在AST阶段其实编译器并没有插入ARC相关代码，但在IR阶段便插入了<a href="mailto:`@llvm.objc.storeStrong" target="_blank" rel="noopener">`@llvm.objc.storeStrong</a><code>（即汇编的</code>_objc_storeStrong<code>）。所以唯一的线索是</code>ARCConsumeObject`。</p>
+<p>顺着这条线索，我们查阅到了：</p>
+<p>llvm-project/clang/lib/Sema/SemaExprObjC.cpp 中的Sema::CheckObjCConversion。</p>
+<p>正是ARC处理之处。我直接把这部分代码贴在下面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br></pre></td><td class="code"><pre><span class="line">Sema::ARCConversionResult</span><br><span class="line">Sema::CheckObjCConversion(SourceRange castRange, QualType castType,</span><br><span class="line">                          Expr *&amp;castExpr, CheckedConversionKind CCK,</span><br><span class="line">                          bool Diagnose, bool DiagnoseCFAudited,</span><br><span class="line">                          BinaryOperatorKind Opc) &#123;</span><br><span class="line">  QualType castExprType = castExpr-&gt;getType();</span><br><span class="line"></span><br><span class="line">  // For the purposes of the classification, we assume reference types</span><br><span class="line">  // will bind to temporaries.</span><br><span class="line">  QualType effCastType = castType;</span><br><span class="line">  if (const ReferenceType *ref = castType-&gt;getAs&lt;ReferenceType&gt;())</span><br><span class="line">    effCastType = ref-&gt;getPointeeType();</span><br><span class="line"></span><br><span class="line">  ARCConversionTypeClass exprACTC = classifyTypeForARCConversion(castExprType);</span><br><span class="line">  ARCConversionTypeClass castACTC = classifyTypeForARCConversion(effCastType);</span><br><span class="line">  if (exprACTC == castACTC) &#123;</span><br><span class="line">    // Check for viability and report error if casting an rvalue to a</span><br><span class="line">    // life-time qualifier.</span><br><span class="line">    if (castACTC == ACTC_retainable &amp;&amp;</span><br><span class="line">        (CCK == CCK_CStyleCast || CCK == CCK_OtherCast) &amp;&amp;</span><br><span class="line">        castType != castExprType) &#123;</span><br><span class="line">      const Type *DT = castType.getTypePtr();</span><br><span class="line">      QualType QDT = castType;</span><br><span class="line">      // We desugar some types but not others. We ignore those</span><br><span class="line">      // that cannot happen in a cast; i.e. auto, and those which</span><br><span class="line">      // should not be de-sugared; i.e typedef.</span><br><span class="line">      if (const ParenType *PT = dyn_cast&lt;ParenType&gt;(DT))</span><br><span class="line">        QDT = PT-&gt;desugar();</span><br><span class="line">      else if (const TypeOfType *TP = dyn_cast&lt;TypeOfType&gt;(DT))</span><br><span class="line">        QDT = TP-&gt;desugar();</span><br><span class="line">      else if (const AttributedType *AT = dyn_cast&lt;AttributedType&gt;(DT))</span><br><span class="line">        QDT = AT-&gt;desugar();</span><br><span class="line">      if (QDT != castType &amp;&amp;</span><br><span class="line">          QDT.getObjCLifetime() !=  Qualifiers::OCL_None) &#123;</span><br><span class="line">        if (Diagnose) &#123;</span><br><span class="line">          SourceLocation loc = (castRange.isValid() ? castRange.getBegin()</span><br><span class="line">                                                    : castExpr-&gt;getExprLoc());</span><br><span class="line">          Diag(loc, diag::err_arc_nolifetime_behavior);</span><br><span class="line">        &#125;</span><br><span class="line">        return ACR_error;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return ACR_okay;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // The life-time qualifier cast check above is all we need for ObjCWeak.</span><br><span class="line">  // ObjCAutoRefCount has more restrictions on what is legal.</span><br><span class="line">  if (!getLangOpts().ObjCAutoRefCount)</span><br><span class="line">    return ACR_okay;</span><br><span class="line"></span><br><span class="line">  if (isAnyCLike(exprACTC) &amp;&amp; isAnyCLike(castACTC)) return ACR_okay;</span><br><span class="line"></span><br><span class="line">  // Allow all of these types to be cast to integer types (but not</span><br><span class="line">  // vice-versa).</span><br><span class="line">  if (castACTC == ACTC_none &amp;&amp; castType-&gt;isIntegralType(Context))</span><br><span class="line">    return ACR_okay;</span><br><span class="line"></span><br><span class="line">  // Allow casts between pointers to lifetime types (e.g., __strong id*)</span><br><span class="line">  // and pointers to void (e.g., cv void *). Casting from void* to lifetime*</span><br><span class="line">  // must be explicit.</span><br><span class="line">  // Allow conversions between pointers to lifetime types and coreFoundation</span><br><span class="line">  // pointers too, but only when the conversions are explicit.</span><br><span class="line">  if (exprACTC == ACTC_indirectRetainable &amp;&amp;</span><br><span class="line">      (castACTC == ACTC_voidPtr ||</span><br><span class="line">       (castACTC == ACTC_coreFoundation &amp;&amp; isCast(CCK))))</span><br><span class="line">    return ACR_okay;</span><br><span class="line">  if (castACTC == ACTC_indirectRetainable &amp;&amp;</span><br><span class="line">      (exprACTC == ACTC_voidPtr || exprACTC == ACTC_coreFoundation) &amp;&amp;</span><br><span class="line">      isCast(CCK))</span><br><span class="line">    return ACR_okay;</span><br><span class="line"></span><br><span class="line">  switch (ARCCastChecker(Context, exprACTC, castACTC, false).Visit(castExpr)) &#123;</span><br><span class="line">  // For invalid casts, fall through.</span><br><span class="line">  case ACC_invalid:</span><br><span class="line">    break;</span><br><span class="line"></span><br><span class="line">  // Do nothing for both bottom and +0.</span><br><span class="line">  case ACC_bottom:</span><br><span class="line">  case ACC_plusZero:</span><br><span class="line">    return ACR_okay;</span><br><span class="line"></span><br><span class="line">  // If the result is +1, consume it here.</span><br><span class="line">  case ACC_plusOne:</span><br><span class="line">    castExpr = ImplicitCastExpr::Create(Context, castExpr-&gt;getType(),</span><br><span class="line">                                        CK_ARCConsumeObject, castExpr, nullptr,</span><br><span class="line">                                        VK_PRValue, FPOptionsOverride());</span><br><span class="line">    Cleanup.setExprNeedsCleanups(true);</span><br><span class="line">    return ACR_okay;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // If this is a non-implicit cast from id or block type to a</span><br><span class="line">  // CoreFoundation type, delay complaining in case the cast is used</span><br><span class="line">  // in an acceptable context.</span><br><span class="line">  if (exprACTC == ACTC_retainable &amp;&amp; isAnyRetainable(castACTC) &amp;&amp; isCast(CCK))</span><br><span class="line">    return ACR_unbridged;</span><br><span class="line"></span><br><span class="line">  // Issue a diagnostic about a missing @-sign when implicit casting a cstring</span><br><span class="line">  // to &apos;NSString *&apos;, instead of falling through to report a &quot;bridge cast&quot;</span><br><span class="line">  // diagnostic.</span><br><span class="line">  if (castACTC == ACTC_retainable &amp;&amp; exprACTC == ACTC_none &amp;&amp;</span><br><span class="line">      CheckConversionToObjCLiteral(castType, castExpr, Diagnose))</span><br><span class="line">    return ACR_error;</span><br><span class="line"></span><br><span class="line">  // Do not issue &quot;bridge cast&quot; diagnostic when implicit casting</span><br><span class="line">  // a retainable object to a CF type parameter belonging to an audited</span><br><span class="line">  // CF API function. Let caller issue a normal type mismatched diagnostic</span><br><span class="line">  // instead.</span><br><span class="line">  if ((!DiagnoseCFAudited || exprACTC != ACTC_retainable ||</span><br><span class="line">       castACTC != ACTC_coreFoundation) &amp;&amp;</span><br><span class="line">      !(exprACTC == ACTC_voidPtr &amp;&amp; castACTC == ACTC_retainable &amp;&amp;</span><br><span class="line">        (Opc == BO_NE || Opc == BO_EQ))) &#123;</span><br><span class="line">    if (Diagnose)</span><br><span class="line">      diagnoseObjCARCConversion(*this, castRange, castType, castACTC, castExpr,</span><br><span class="line">                                castExpr, exprACTC, CCK);</span><br><span class="line">    return ACR_error;</span><br><span class="line">  &#125;</span><br><span class="line">  return ACR_okay;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>总结一句话就是说，ARC是编译器在AST之后、生成IR中间代码之前插入的代码。</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新於 2022-09-26</p></div> 
+    <div class="post-entry__tags"><a href="/tags/ARC/" class="post-tags__link button"># ARC</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/ios/ios-skin-bundle/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            iOS多组件App皮肤配置方案及实践
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/ios/ios-launch-task/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            iOS启动任务管理
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>評論</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到頂部" title="回到頂部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-K2Q2J84"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-K2Q2J84');
+    </script>
+ 
+
+ 
+
+ 
+
+
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "1d741b4fcb7f4062933be3f4b0eb6571"}'></script>
+    </script>
+    
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

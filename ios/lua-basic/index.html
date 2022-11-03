@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>Lua语言入门基础 | { }</title>
+
+
+    <meta name="keywords" content="Lua, Wax, 技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="Wax是一个不怎么热门的App脚本化的框架，基于Lua引擎与Objc运行时特性来实现。苹果对JSPatch着力打压，而刚好我之前有过Wax相关的实践，正好可以介绍下。Wax相关内容主要包括（一）Lua语言基础（二）Wax的实现原理。 本文主要介绍Lua的一些基础概念与入门知识。">
+<meta name="keywords" content="Lua,Wax">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lua语言入门基础">
+<meta property="og:url" content="http://blog.knpc21.com/ios/lua-basic/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="Wax是一个不怎么热门的App脚本化的框架，基于Lua引擎与Objc运行时特性来实现。苹果对JSPatch着力打压，而刚好我之前有过Wax相关的实践，正好可以介绍下。Wax相关内容主要包括（一）Lua语言基础（二）Wax的实现原理。 本文主要介绍Lua的一些基础概念与入门知识。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://blog.knpc21.com/ios/lua-basic/lua-table.jpg">
+<meta property="og:updated_time" content="2017-03-14T13:02:00.000Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Lua语言入门基础">
+<meta name="twitter:description" content="Wax是一个不怎么热门的App脚本化的框架，基于Lua引擎与Objc运行时特性来实现。苹果对JSPatch着力打压，而刚好我之前有过Wax相关的实践，正好可以介绍下。Wax相关内容主要包括（一）Lua语言基础（二）Wax的实现原理。 本文主要介绍Lua的一些基础概念与入门知识。">
+<meta name="twitter:image" content="http://blog.knpc21.com/ios/lua-basic/lua-table.jpg">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        Lua语言入门基础
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2017/03/" class="post-meta__date button">2017-03-14</a>
+        
+    <span class="separate-dot"></span><a href="/categories/编程/" class="button">编程</a>
+
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <!-- ## Lua语言基础 -->
+<p>Wax是一个不怎么热门的App脚本化的框架，基于Lua引擎与Objc运行时特性来实现。苹果对JSPatch着力打压，而刚好我之前有过Wax相关的实践，正好可以介绍下。Wax相关内容主要包括（一）Lua语言基础（二）Wax的实现原理。</p>
+<p>本文主要介绍Lua的一些基础概念与入门知识。</p>
+<a id="more"></a>
+<p>需要说明的是，Wax是基于Lua的v5.1版本的（Wax第一次提交是在2009年6月），v5.2是在2011年末发布，C API有变动，且不兼容。本文中主要基于v5.1的manual对与wax框架相关的内容进行介绍。</p>
+<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>Lua是一个开源的脚本语言，官网是<a href="www.lua.org">www.lua.org</a>。但除了语言作者的Lua实现之外，还有<a href="http://luajit.org/" target="_blank" rel="noopener">LuaJIT</a>这样的非官方实现。我们讨论的是Lua官网的标准实现。</p>
+<p>Lua跟JavaScript有着很多相似的地方。比如JavaScript的prototype对应Lua的元表、元方法，还有变量对象与执行环境。当然Lua其实更早出现，v1.0在1993年发布（公众版本是’94年v1.1），一直至今遵循其简洁高效的设计目标。且作为一门TIOBE前30、核心库只有100KB（v5.1），且广泛应用于游戏编程、嵌入脚本的语言，也是非常值得学习的。</p>
+<p>Lua语法简单且有强大的数据描述结构。相比而言，JavaScript要复杂很多——至少看上去specification也是多很多。Lua是动态类型的，通过一个基于寄存器的虚拟机来解析字节码，并且是支持递进式垃圾回收的自动内存管理；被实现为一个用纯C编写的代码库（Lua核心，其他都是基于这些库来开发）。</p>
+<p>Lua通常是作为一个拓展语言被嵌入到宿主程序中，宿主程序可以调用Lua函数、读写Lua变量以及注册C函数提供给Lua调用。Lua核心库的C-API不多，能方便的被嵌入主程序提供脚本化支持，这也是Lua的设计目标及优点所在。</p>
+<p>需要说明的是，Lua编程其实涉及两方面：除了Lua脚本编程，还有与宿主程序的对接（基于Lua的C API编程）。像Wax这样的框架，主要是处理与宿主程序的对接，也就是Objc与Lua的互调与数据通信。</p>
+<h3 id="学习线路"><a href="#学习线路" class="headerlink" title="学习线路"></a>学习线路</h3><p>对于希望了解Lua的童鞋，建议根据需要选择学习路线：</p>
+<ol>
+<li>入门了解：可以参考Coolshell的<a href="http://coolshell.cn/tag/lua" target="_blank" rel="noopener">“简明Lua教程”</a>；</li>
+<li>Lua语法与C API：“<a href="http://www.lua.org/pil/" target="_blank" rel="noopener">Programming in Lua</a>”（简称PIL，Lua作者编写），主要介绍语法及Lua标准库、C接口API等细节；</li>
+<li>Lua的语言设计：<a href="http://www.lua.org/manual/5.3/" target="_blank" rel="noopener">语言手册</a>，manual，是Lua的语言规范，可以理解为原理介绍；</li>
+<li><a href="http://www.lua.org/doc/jucs05.pdf" target="_blank" rel="noopener">Lua5.0的实现</a>：作者的语言设计论文。</li>
+</ol>
+<p>学习Lua脚本编程的话1、2就够了。</p>
+<h3 id="Lua基本概念"><a href="#Lua基本概念" class="headerlink" title="Lua基本概念"></a>Lua基本概念</h3><h4 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h4><p>Lua中有8中基本类型：<code>nil</code>, <code>boolean</code>, <code>number</code>, <code>string</code>, <code>function</code>, <code>userdata</code>, <code>thread</code>, 以及 <code>table</code>。Lua是动态类型语言，这意味着<u>变量没有类型，值才有类型</u>。所有的值都是一等公民（<em>first-class values</em>），也就是包括<code>function</code>、<code>thread</code>等在内的所有类型值都可作为参数或返回值。</p>
+<p><strong><code>nil</code></strong>是一个值，表示一个有意义的值不存在时的状态。这个得提一下作者关于<u>值</u>的数据结构设计：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span> </span><br><span class="line">  <span class="keyword">int</span> t;</span><br><span class="line">  Value v;</span><br><span class="line">&#125; TObject;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">union</span> &#123; </span><br><span class="line">  GCObject *gc;</span><br><span class="line">  <span class="keyword">void</span> *p; </span><br><span class="line">  lua_Number n; </span><br><span class="line">  <span class="keyword">int</span> b;</span><br><span class="line">&#125; Value;</span><br></pre></td></tr></table></figure>
+<p>称之为<code>tagged-union</code>，打了标签的联合体，<code>(t, v)</code>标签-值对。</p>
+<p>在Lua的实现中，用t一个标志位即可表示<code>nil</code>值。具体的值则通过<code>Value</code>这个联合体表征，可以是由GC管理的对象<code>GCObject</code> *gc、C指针<code>p</code>表示的轻量用户数据、<code>lua_Number</code>表示<code>double</code>类型（<code>number</code>）、整型<code>b</code>表示<code>boolean</code>。<code>GCObject</code>可表示<code>string</code>、<code>table</code>、<code>function</code>、heavy <code>userdata</code>及<code>thread</code>。</p>
+<p><strong><code>string</code></strong>是有明确大小的字节数组，因此可以包含任意二进制数据，包括”\0”。</p>
+<p><strong><code>userdata</code></strong> （通常译为”用户数据“，若非特别指明，指的是”完全用户数据“）类型允许<u>将 C 中的数据保存在 Lua 变量中</u>。 用户数据类型的值是一个内存块。有两种用户数据：<u>完全用户数据</u>，指一块由 Lua 管理的内存对应的对象；<u>轻量用户数据</u>，则指一个简单的 C 指针，内存由宿主程序负责管理。用户数据在 Lua 中除了赋值与相等性判断之外没有其他预定义的操作。 通过使用 元表 （元表在下文介绍），程序员可以给完全用户数据定义一系列的操作。 你只能通过 C API 而无法在 Lua 代码中创建或者修改用户数据的值，这保证了数据仅被宿主程序所控制。wax有使用<code>userdata</code>将Objc中的值传递给Lua中使用。</p>
+<p><strong><code>table</code></strong>类型是Lua中主要的数据结构（通常译为”表“，下文中如无歧义”表“指代<code>table</code>类型的值），也是Lua脚本中唯一的可自定义的数据结构。<code>table</code>在lua中被实现为关联数组，它的索引可以是任意非nil值，值可以是任意值，<code>table</code>的大小动态增减。在Lua5.0之前table被实现为哈希表，v5.0中则针对数组做了优化：由哈希及数组组成，数组可以减少key的存储，且访问更直接，参考图：</p>
+<p><img src="lua-table.jpg" alt></p>
+<p><strong><code>thread</code></strong>则代表协程，协程是一种并发编程方式，高大上的内容Wax框架中没有涉及，不做介绍。</p>
+<p><strong><code>function</code></strong>表示Lua中的方法或者遵循Lua虚拟机交互接口的C函数（因为可以注册C函数到Lua中使用）。</p>
+<p><strong><code>table</code></strong>、<strong><code>function</code></strong>、<strong><code>thread</code></strong>以及<strong><code>userdata</code></strong>完全用户数据在 Lua 中被称为对象： 变量并不持有这些对象的值（value），而仅保存了对这些对象的引用（reference）。 赋值、参数传递、函数返回，都是针对引用而不是针对值的操作， 不会做任何形式的拷贝。</p>
+<p>使用<code>type</code>库函数可以返回一个<code>string</code>格式的值类型的描述。</p>
+<h4 id="关键词"><a href="#关键词" class="headerlink" title="关键词"></a>关键词</h4><p>主要是以下这些：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">and</span>, <span class="keyword">break</span>, <span class="keyword">do</span>, <span class="keyword">else</span>, <span class="keyword">elseif</span>, <span class="keyword">end</span>, <span class="literal">false</span>, <span class="keyword">for</span>, <span class="function"><span class="keyword">function</span>, <span class="title">if</span>, <span class="title">in</span>,</span></span><br><span class="line"><span class="function"><span class="title">local</span>, <span class="title">nil</span>, <span class="title">not</span>, <span class="title">or</span>, <span class="title">repeat</span>, <span class="title">return</span>, <span class="title">then</span>, <span class="title">true</span>, <span class="title">until</span>, <span class="title">while</span></span></span><br></pre></td></tr></table></figure>
+<p>真的是很少的了！</p>
+<h4 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h4><p>作为嵌入式语言，Lua中所有行为始于宿主程序中C代码对Lua库函数的调用，因此它也将错误处理的主导权交给宿主程序。</p>
+<p>在Lua中可以使用<code>error</code>来显式抛出错误，若希望在Lua中捕获错误，则使用<code>pcall</code>或<code>xpcall</code>在保护模式下调用函数。出现错误时，会抛出一个错误对象。使用 <code>xpcall</code> 或 <code>lua_pcall</code> 时， 需提供一个 消息处理函数用于错误抛出时调用。该函数需接收原始的错误消息，并返回一个新的错误消息。它在错误发生后栈尚未展开时调用， 因此可以利用栈来收集更多的信息， 比如通过探知栈来创建一组栈回溯信息。</p>
+<p>若需在C中捕捉异常，使用<code>lua_atpanic</code>指定一个回调方法。</p>
+<h4 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h4><p>Lua自动内存管理，运行GC（Garbage Collector，垃圾收集器）来回收内存，所有由Lua使用的内存都遵循自动内存管理，包含<code>table</code>、<code>function</code>、<code>string</code>等。使用两个参数来控制垃圾收集循环：垃圾收集间歇率及步进率，具体参数意义可参考manual中说明。可以通过在 C 中调用 <code>lua_gc</code> 或在 Lua 中调用 <code>collectgarbage</code> 来改变参数。主要介绍垃圾回收元方法及弱表，这在wax中都有使用。</p>
+<h5 id="垃圾回收元方法"><a href="#垃圾回收元方法" class="headerlink" title="垃圾回收元方法"></a>垃圾回收元方法</h5><p>对于<code>userdata</code>用户数据类型，可以通过C API来设置垃圾回收器元方法，这些元方法也被称之为“终结器（finalizer）“。”终结器“允许你来协调Lua的GC与外部的资源管理（如文件管理、网络、数据库连接或内存释放等）。</p>
+<p>对于元表中包含<code>__gc</code>元方法的<code>userdata</code>用户数据类型，GC不做立即回收，而是将<code>userdata</code>放到一个列表中，等当前回收循环接收后，以LIFO的方式，分别调用其<code>__gc</code>垃圾回收元方法，参数为<code>userdata</code>，此步骤中交由宿主程序处理其内存释放问题，而<code>userdata</code>用户数据类型值本身将在下一轮垃圾回收循环中被释放。</p>
+<h5 id="弱表"><a href="#弱表" class="headerlink" title="弱表"></a>弱表</h5><p>弱表指的是内部元素是弱引用的表。GC会忽略弱引用的对象，除非该对象只被弱引用。</p>
+<p>弱表可以有弱键、弱值或键值都是弱引用。弱键的表允许GC回收它的键而阻止回收它的值；键值都是弱引用的表则允许GC回收其键值。在任何情况下，只要键或值被回收，该键值对也会从表中移除。</p>
+<p>表的键值弱属性，由其元表的<code>__mode</code>域进行控制，弱键或弱值分别对应<code>k</code>或<code>v</code>。在将一个表指定为元表后，其中的<code>__mode</code>域就不应再修改，否则由这张元表控制的表的弱属性行为是未定义的。</p>
+<h3 id="语法规则"><a href="#语法规则" class="headerlink" title="语法规则"></a>语法规则</h3><p>主要提供完整的扩展BNF范式描述的语法规则（v5.3）。BNF中，{}表示0或多个，[]表示可选，|表示或者，:=表示定义。详细看PIL介绍，不展开介绍语法规则了。对于一些关键的概念则在下文中介绍。</p>
+<pre><code>chunk ::= block
+block ::= {stat} [retstat]
+stat ::=  ‘;’ | 
+     varlist ‘=’ explist | 
+     functioncall | 
+     label | 
+     break | 
+     goto Name | 
+     do block end | 
+     while exp do block end | 
+     repeat block until exp | 
+     if exp then block {elseif exp then block} [else block] end | 
+     for Name ‘=’ exp ‘,’ exp [‘,’ exp] do block end | 
+     for namelist in explist do block end | 
+     function funcname funcbody | 
+     local function Name funcbody | 
+     local namelist [‘=’ explist] 
+
+retstat ::= return [explist] [‘;’]
+
+label ::= ‘::’ Name ‘::’
+
+funcname ::= Name {‘.’ Name} [‘:’ Name]
+
+varlist ::= var {‘,’ var}
+
+var ::=  Name | prefixexp ‘[’ exp ‘]’ | prefixexp ‘.’ Name 
+
+namelist ::= Name {‘,’ Name}
+
+explist ::= exp {‘,’ exp}
+
+exp ::=  nil | false | true | Numeral | LiteralString | ‘...’ | functiondef | 
+     prefixexp | tableconstructor | exp binop exp | unop exp 
+
+prefixexp ::= var | functioncall | ‘(’ exp ‘)’
+
+functioncall ::=  prefixexp args | prefixexp ‘:’ Name args 
+
+args ::=  ‘(’ [explist] ‘)’ | tableconstructor | LiteralString 
+
+functiondef ::= function funcbody
+
+funcbody ::= ‘(’ [parlist] ‘)’ block end
+
+parlist ::= namelist [‘,’ ‘...’] | ‘...’
+
+tableconstructor ::= ‘{’ [fieldlist] ‘}’
+
+fieldlist ::= field {fieldsep field} [fieldsep]
+
+field ::= ‘[’ exp ‘]’ ‘=’ exp | Name ‘=’ exp | exp
+
+fieldsep ::= ‘,’ | ‘;’
+
+binop ::=  ‘+’ | ‘-’ | ‘*’ | ‘/’ | ‘//’ | ‘^’ | ‘%’ | 
+     ‘&amp;’ | ‘~’ | ‘|’ | ‘&gt;&gt;’ | ‘&lt;&lt;’ | ‘..’ | 
+     ‘&lt;’ | ‘&lt;=’ | ‘&gt;’ | ‘&gt;=’ | ‘==’ | ‘~=’ | 
+     and | or
+
+unop ::= ‘-’ | not | ‘#’ | ‘~’
+</code></pre><h3 id="元表及元方法"><a href="#元表及元方法" class="headerlink" title="元表及元方法"></a>元表及元方法</h3><p>Lua中的每一个值都可以有一个元表（metatable），这个元表是一个普通的Lua表，其中定义了原始值在特定操作下的行为。可以通过修改元表的相应的域，来改变这些行为。例如，当一个非数值的值作为加法操作的操作数时，Lua会检查其元表中对应”__add“域的方法，若存在则调用该方法来执行加法操作。</p>
+<p>元表中的这些键对应被称之为事件，对应的值则称之为元方法（metamethod）。在上面的例子中，”add“是事件而元方法则是执行加法操作的函数（function）。在Lua中可以通过<code>getmetatable</code>方法来获取任何值的元表；对于<code>table</code>类型的值可以通过<code>setmetatable</code>方法来替换其元表，但对于其他类型除非使用debug库不能修改其元表，如要改则需要调用C类型API。<code>gc</code>也是一个特定的事件，其对应的元方法用于配合GC进行内存处理等。</p>
+<p><code>table</code>及<code>userdata</code>（完全用户数据）类型的值可以有独立的元表（当然也可以多个table或userdata共享同一张元表），而其他类型的值每种类型共享一个元表。</p>
+<p>元表中以”前缀+事件名“作为对应的键，用来存放对应事件操作的元方法。如对应”add“操作（事件）的key为”__add“。元方法的访问不会触发另外的元方法，访问一个没有元表的对象的元方法不会失败（仅返回nil）。在Lua或C中可以通过<code>rawset</code>或<code>rawget</code>的方式，在不触发访问元表的情况下进行访问。</p>
+<p>有诸多内置的操作和元方法，如算术操作<code>add</code>等、比较操作<code>eq</code>等、索引<code>index</code>、索引赋值<code>newindex</code>以及函数调用<code>call</code>等。如果需要比较的话，大概相当于操作符重载的概念。具体可查看manual，这里主要介绍比较重要的三个：</p>
+<h4 id="index"><a href="#index" class="headerlink" title="index"></a>index</h4><p><code>index</code>操作主要是对值进行索引（或者称为subscript），对<code>table</code>类型相当于调用 table[key]，也就是一个查找操作。 当 table 不是表或是表 table 中不存在 key 这个键时，<code>index</code>被触发。 此时，会调用<code>__index</code>相应的元方法，可以是一个函数也可以是一张表。</p>
+<p>如果是一个函数，则以 table 和 key 作为参数调用它。 如果它是一张表，最终的结果就是以 key 取索引这张表的结果。 （这个索引过程是走常规的流程，而不是直接索引， 所以这次索引有可能引发另一次元方法。）</p>
+<p>需要先指出的是，通过C API可以向Lua注册函数，因此同样可以在C中注册<code>__index</code>这些域对应的函数，在宿主程序中接收相应的事件并将处理结果回传到Lua。这也是Wax中所使用到的，用来索引Objc类及创建对象实例。</p>
+<h4 id="newindex"><a href="#newindex" class="headerlink" title="newindex"></a>newindex</h4><p><code>newindex</code>操作对值相应的域进行赋值，相当于 table[key] = value，赋值操作。和索引事件类似，当table 不是表或是表 table 中不存在 key 这个键的时候，会触发<code>newindex</code>事件，调用<code>__newindex</code>元方法（若存在的话）。</p>
+<h4 id="call"><a href="#call" class="headerlink" title="call"></a>call</h4><p><code>call</code>操作是函数调用， 当 Lua 尝试调用一个非函数的值的时候会触发这个事件 （即 func 不是一个函数）。 查找 func 的元方法， 如果找得到，就调用这个元方法， func 作为第一个参数传入，原来调用的参数（args）后依次排在后面。</p>
+<p>Lua的元表跟JavaScript的prototype有几分相像，在JavaScript中可以通过prototype原型链支持面向对象等特性，其实在Lua中同样可以利用元表及执行环境来实现。</p>
+<h4 id="执行环境"><a href="#执行环境" class="headerlink" title="执行环境"></a>执行环境</h4><p>除了元表，<code>thread</code>、<code>function</code>、<code>usertable</code>这些类型的对象还绑定了另外一张表，称之为其执行环境（environment）。与元表类似，执行环境也是一张普通的<code>table</code>类型的表，多个对象也可以共享同一个表。</p>
+<p>对<code>thread</code>类型，协程创建时，得到的<code>thread</code>对象与创建时的协程共享执行环境。</p>
+<p><code>userdata</code>类型及C函数与其创建函数共享执行环境。非嵌套Lua函数（由<code>loadfile</code>、<code>loadstring</code>、<code>load</code>创建）于创建时的协程共享执行环境。内嵌的Lua函数与其创建时的Lua函数共享执行环境。<code>userdata</code>绑定的执行环境对Lua是无意义的。</p>
+<p>Lua函数绑定的执行环境被用于访问函数中的全局变量，也作为其内部创建的内嵌Lua函数的默认执行环境。</p>
+<p>可以通过调用<code>setfenv</code>来改变Lua函数或者当前运行协程的执行环境，同理通过<code>getfenv</code>来获取其执行环境。对于其他类型的对象（<code>userdata</code>、C函数及其他协程），必须通过C的API来操作修改执行环境。</p>
+<p>另外，Lua 中含有一个被称为全局环境的表，它被保存在 C 注册表（后面还有介绍）的一个特别索引<code>LUA_RIDX_GLOBALS</code>下。 在 Lua 中，全局变量 <code>_G</code> 被初始化为这个值。</p>
+<p>但是，执行环境表有什么用，有什么必要修改？先来看一个实际的例子：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- Security.lua</span></span><br><span class="line">waxClass&#123;<span class="string">"Security"</span>,NSObject&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">verify</span><span class="params">(self, pwd)</span></span></span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- iPhone.lua</span></span><br><span class="line"><span class="built_in">require</span>(<span class="string">"Security"</span>)</span><br><span class="line">waxClass&#123;<span class="string">"iPhone"</span>,NSObject&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">unlock</span><span class="params">(self, pwd)</span></span></span><br><span class="line">  self:checkPwd(pwd)</span><br><span class="line">  Security:verify(pwd)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">checkPwd</span><span class="params">(self, pwd)</span></span></span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p><code>Security:verify(pwd)</code>以及<code>self:checkPwd(pwd)</code> 这些方法调用为什么能正常？明明<code>verify</code>并不是<code>Security</code>这个值的一个域，它仅是模块中定义的一个全局function变量吧？实际上，这个正是通过<u>替换执行环境</u>来实现的。（注：<code>function</code>及<code>self</code>的说明见后文）</p>
+<p>因此，<u>执行环境可以简单理解为包含其可访问全局变量的表</u>。下例中会报错“attempt to call global ‘print’ (a nil value)”，因为当前执行环境被替换一张空表，并没有<code>print</code>的域。</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 定义全局变量a</span></span><br><span class="line">a = <span class="number">1</span> </span><br><span class="line"><span class="built_in">setfenv</span>(<span class="number">1</span>, &#123;&#125;)</span><br><span class="line"><span class="built_in">print</span>(a)</span><br><span class="line"><span class="comment">-- 报错</span></span><br></pre></td></tr></table></figure>
+<p>通过<code>setfenv</code>可以指定函数的执行环境，第一个参数1表示当前执行环境，2表示上层调用方的执行环境，以此类推。Wax实现的正是将waxClass定义类所在的模块中的所有function的执行环境指定为对应class的userdata相关表了。</p>
+<p>另外，还需要指出的是，新版本的Lua已经废弃了<code>setfenv</code>的接口，而是采用了直接设置<code>_ENV</code>的方式来指定执行环境。</p>
+<h3 id="脚本加载及require"><a href="#脚本加载及require" class="headerlink" title="脚本加载及require"></a>脚本加载及require</h3><p><code>package</code>库提供了Lua中加载与编译模块的基本工具，导出了两个方法<code>require</code>及<code>module</code>到全局环境。</p>
+<h4 id="require"><a href="#require" class="headerlink" title="require"></a>require</h4><p><code>require (modname)</code>用来加载模块代码，首先会查找缓存表<code>package.loaded</code>，若modname模块被加载过，<code>require</code> 返回 <code>package.loaded[modname]</code> 中保存的值，否则尝试为该模块查找加载器 。</p>
+<p>加载器的查找，<code>require</code>是由<code>package.loaders</code>数组来引导的，默认配置的查找如下：</p>
+<p>首先 <code>require</code> 查找 <code>package.preload[modname]</code> 。 如果存在一个值，那它（应当是一个函数）就是那个加载器。 否则 <code>require</code> 使用<code>package.path</code> 配置的路径来查找Lua加载器。 如果也查找失败了，则使用<code>package.cpath</code>配置的路径去查找一个C加载器。 如果都失败了，就是用默认的all-in-one加载器 。</p>
+<p>一旦找到一个加载器，<code>require</code>将调用这个加载器（参数为<code>modname</code>），若加载器返回任何值（非空），则<code>require</code>将赋值到<code>package.loaded[modname]</code>；若没有返回值且<code>package.loaded[modname]</code>为空，则<code>require</code>将其赋值为<code>true</code>。<code>require</code>返回<code>package.loaded[modname]</code>最终的值。</p>
+<p>那么加载器会返回什么值呢？其实一般就取决于当前Lua模块的返回，加载器读入代码进行解析，当前模块可以返回一个<code>function</code>、<code>table</code>或者不返回等。在使用waxClass时，其实一般也没有返回。</p>
+<h4 id="package-loaders"><a href="#package-loaders" class="headerlink" title="package.loaders"></a>package.loaders</h4><p>这是一张用来控制模块加载的表。这张表中每一项都是一个搜索函数（接受一个<code>modname</code>的参数），<code>require</code>按升序调用其中的搜索器函数，调用结果返回另一个函数（也就是模块加载器函数）或者一个错误描述字符串。Lua初始配置了4个搜索函数，正如上面<code>require</code>中阐述那样。（注：v5.3修改为package.searchers）</p>
+<h4 id="module"><a href="#module" class="headerlink" title="module"></a>module</h4><p><code>module (name [, ···])</code>创建一个模块。按以下顺序创建模块：</p>
+<p><code>package.loaded[name]</code>包含一个表，否则如果有一个同名的全局表，否则创建一个表<code>t</code>并赋值给全局同名变量及<code>package.loaded[name]</code>。</p>
+<p><code>module</code>这个方法还初始化了t.Name，t.M以及t._PACKAGE（分别是参数name、模块自身以及包名），最后，模块设置<code>t</code>作为当前函数的新的执行环境及<code>package.loaded[name]</code>，使得<code>require</code>返回<code>t</code>。</p>
+<p>初次之外还提供了<code>dofile</code>、<code>loadfile</code>相关的函数。</p>
+<p>那可以<strong>自定义加载器</strong>吗？因为默认的加载器执行的是默认的文件读取并作为一个chuck读入执行，假如我们需要加解密脚本，这是不够的。答案也是明确的，可以自定义，这个将在wax中再介绍。另外，wax中还没有用到<code>module</code>。</p>
+<h3 id="function与self"><a href="#function与self" class="headerlink" title="function与self"></a>function与self</h3><h4 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h4><p>首先，什么是闭包？摘录Wikipedia上的定义如下：</p>
+<blockquote>
+<p>In programming languages, closures (also <u>lexical closures</u> or <u>function closures</u>) are techniques for implementing lexically scoped name binding in languages with first-class functions.</p>
+</blockquote>
+<p>中文解释是，引用了自由变量的函数称之为闭包。闭包最初是函数式编程语言实现的，现在如C这样的命令式编程语言其实也已经支持（Apple以<code>block</code>的形式为C添加了闭包的特性，由LLVM编译器支持）。</p>
+<p>当Lua编译一个<code>function</code>时，它生成了一个包含该函数的虚拟机指令、常量值以及一些调试信息的原型。在运行时，当Lua执行一个<code>function...end</code>表达式的时候，它创建一个新的闭包，每个闭包包含对相应函数原型的引用、环境表（查找全局变量）的引用以及一组<code>upvalue</code>（用于访问外部局部变量）的引用。</p>
+<p>对于访问外部局部变量，词法作用域与一等公民函数（闭包）的组合制造了众所周知的难题。下面的例子中，当<code>add2</code>函数调用时，其函数体访问了外部局部变量<code>x</code>，然而此时创建<code>add2</code>的函数<code>add</code>已经返回了，如果<code>x</code>是存在栈中的，这个变量所在栈幁理应已被回收导致访问出错。那Lua是怎样实现闭包捕获外部局部变量的？</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span> <span class="params">(x)</span></span> </span><br><span class="line">	<span class="keyword">return</span> 	<span class="function"><span class="keyword">function</span> <span class="params">(y)</span></span></span><br><span class="line">				<span class="keyword">return</span> x+y</span><br><span class="line">			<span class="keyword">end</span>  </span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">add2 = add(<span class="number">2</span>) </span><br><span class="line"><span class="built_in">print</span>(add2(<span class="number">5</span>))</span><br></pre></td></tr></table></figure>
+<p>Lua使用了一个称之为<code>upvalue</code>的结构来实现的。任意的外部局部变量都是通过一个<code>upvalue</code>间接访问的，该<code>upvalue</code>最初指向局部变量所在的栈元素，当变量离开作用域后，它会从栈移到<code>upvalue</code>中。因为所有对这个变量的访问是间接通过指向这个<code>upvalue</code>的指针来实现的，因此读写对Lua是透明的。不同于内部的函数，声明该变量的函数是直接访问栈来访问局部变量的。</p>
+<p>熟悉Objc中的<code>block</code>的实现的，是不是觉得有些似曾相识（关于<code>block</code>的实现另有说明 ）。对于堆中的对象，不做说明，因为它始终都是通过指向堆上的指针来访问的，前后一致。简单提一下，对于需捕获的栈中的局部变量，用<code>__block</code>修饰后，事实上编译器已经将其修改为<code>__Block_byref_{$var_name}_{$index}</code>命名的结构体了，也是通过间接访问来实现，该结构体中保存了原始的变量值。另外该结构体中包含一个指向本身类型的指针<code>__forwarding</code>，用来支持<code>__block</code>变量从栈转移到堆内存中，其访问方式为 <code>__blockVar-&gt;__forwording-&gt;localVar</code>。所以，原理是相通的，增加间接层。</p>
+<p>Lua通过保存一个仍指向栈中变量（称之为pending var）的链表来索引<code>upvalue</code>以供重用保证每个局部变量的<code>upvalue</code>唯一性。当Lua创建一个闭包时，会扫描它所有的外部变量，通过重用索引链表中的<code>upvalue</code>或新建一个来捕获外部局部变量。</p>
+<h4 id="self"><a href="#self" class="headerlink" title="self"></a>self</h4><p><code>self</code>是Lua中的一个关键字，用法请参照上面的 iPhone.lua。但上面的<code>self</code>用法其实只是个语法糖，下面的调用是一样的：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Person = &#123;<span class="string">"x"</span>=<span class="number">0</span>,<span class="string">"y"</span>=<span class="number">0</span>&#125;</span><br><span class="line">Person.foo = <span class="function"><span class="keyword">function</span><span class="params">(self, x)</span></span></span><br><span class="line">  self.x = x</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">"foo"</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> x = <span class="number">100</span></span><br><span class="line">Person.foo(Person, x) <span class="comment">--等同于：</span></span><br><span class="line">Person:foo(x)</span><br></pre></td></tr></table></figure>
+<p>在以冒号<code>:</code>调用的语法中， <code>self</code>是将调用者作为第一个隐含参数传递给函数。</p>
+<h3 id="C编程接口"><a href="#C编程接口" class="headerlink" title="C编程接口"></a>C编程接口</h3><p>这里主要是描述与宿主程序通信的C编程接口。主要关注几个关键的点：栈、索引、C闭包、注册表以及一些关键的API。</p>
+<p>Lua中的虚拟机状态机：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">lua_State</span> &#123;</span></span><br><span class="line">  CommonHeader;</span><br><span class="line">  lu_byte status;</span><br><span class="line">  StkId top;  <span class="comment">/* first free slot in the stack */</span></span><br><span class="line">  StkId base;  <span class="comment">/* base of current function */</span></span><br><span class="line">  global_State *l_G;</span><br><span class="line">  CallInfo *ci;  <span class="comment">/* call info for current function */</span></span><br><span class="line">  <span class="keyword">const</span> Instruction *savedpc;  <span class="comment">/* `savedpc' of current function */</span></span><br><span class="line">  StkId stack_last;  <span class="comment">/* last free slot in the stack */</span></span><br><span class="line">  StkId <span class="built_in">stack</span>;  <span class="comment">/* stack base */</span></span><br><span class="line">  CallInfo *end_ci;  <span class="comment">/* points after end of ci array*/</span></span><br><span class="line">  CallInfo *base_ci;  <span class="comment">/* array of CallInfo's */</span></span><br><span class="line">  <span class="keyword">int</span> stacksize;</span><br><span class="line">  <span class="keyword">int</span> size_ci;  <span class="comment">/* size of array `base_ci' */</span></span><br><span class="line">  <span class="keyword">unsigned</span> short nCcalls;  <span class="comment">/* number of nested C calls */</span></span><br><span class="line">  <span class="keyword">unsigned</span> short baseCcalls;  <span class="comment">/* nested C calls when resuming coroutine */</span></span><br><span class="line">  lu_byte hookmask;</span><br><span class="line">  lu_byte allowhook;</span><br><span class="line">  <span class="keyword">int</span> basehookcount;</span><br><span class="line">  <span class="keyword">int</span> hookcount;</span><br><span class="line">  lua_Hook hook;</span><br><span class="line">  TValue l_gt;  <span class="comment">/* table of globals */</span></span><br><span class="line">  TValue env;  <span class="comment">/* temporary place for environments */</span></span><br><span class="line">  GCObject *openupval;  <span class="comment">/* list of open upvalues in this stack */</span></span><br><span class="line">  GCObject *gclist;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">lua_longjmp</span> *<span class="title">errorJmp</span>;</span>  <span class="comment">/* current error recover point */</span></span><br><span class="line">  <span class="keyword">ptrdiff_t</span> errfunc;  <span class="comment">/* current error handling function (stack index) */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这是个线程独立的参数，所有的接口调用都基于这个状态变量，这是所有C接口函数都必须接受第一个参数。</p>
+<h4 id="栈与索引"><a href="#栈与索引" class="headerlink" title="栈与索引"></a>栈与索引</h4><p>Lua脚本与C之间的互调必须能进行参数传递、数据通信，Lua 使用一个虚拟栈来和C数据通信，栈上的的每个元素都是一个 Lua 值（nil，数字，字符串，等等）。</p>
+<p>当一个C函数被Lua中调用时，将得到一个新的独立于C函数的调用栈及原先Lua调用C的栈，包含了Lua传递给C函数的所有参数，且C函数可以将返回结果放入栈中返回给调用者。</p>
+<p>C接口中对栈的操作，通常可以通过一个索引参数来指定操作栈中特定位置的元素。索引可以是1~n的正索引（n为栈大小），也可以是-n~-1的负索引，负索引表示从栈顶开始的偏移量。举例，<code>lua_isnumber(L, i)</code>是读取栈中第i个元素判断是否数值类型。</p>
+<p>另外，一些接口方法隐含了入栈或出栈的操作，如<code>lua_gettable (lua_State *L, int index);</code>会读取index索引位置的表t，并以栈顶的值作为key，读取t[key]并将该值入栈。具体行为需要仔细阅读API说明。</p>
+<h5 id="lua-CFunction"><a href="#lua-CFunction" class="headerlink" title="lua_CFunction"></a>lua_CFunction</h5><p><code>typedef int (*lua_CFunction) (lua_State *L);</code></p>
+<p>这是能提供Lua调用的C 函数的类型定义，除此之外还约定了参数及返回值传递方法：C函数通过上述所提的栈来接受参数，参数以正序入栈，在函数开始时可以通过<code>lua_gettop(L)</code>来获取函数接收到的参数个数；返回值同样正序分别压入堆栈，并返回返回值的个数。在返回值之下的栈元素将被Lua丢弃。</p>
+<p>下面这个例子中的函数将接收若干数字参数，并返回它们的平均数与和：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">foo</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> n = lua_gettop(L);    <span class="comment">/* 参数的个数 */</span></span><br><span class="line">  lua_Number sum = <span class="number">0.0</span>;</span><br><span class="line">  <span class="keyword">int</span> i;</span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!lua_isnumber(L, i)) &#123;</span><br><span class="line">      lua_pushliteral(L, <span class="string">"incorrect argument"</span>);</span><br><span class="line">      lua_error(L);</span><br><span class="line">    &#125;</span><br><span class="line">    sum += lua_tonumber(L, i);</span><br><span class="line">  &#125;</span><br><span class="line">  lua_pushnumber(L, sum/n);        <span class="comment">/* 第一个返回值 */</span></span><br><span class="line">  lua_pushnumber(L, sum);         <span class="comment">/* 第二个返回值 */</span></span><br><span class="line">  <span class="keyword">return</span> <span class="number">2</span>;                   <span class="comment">/* 返回值的个数 */</span></span><br></pre></td></tr></table></figure>
+<h4 id="C闭包"><a href="#C闭包" class="headerlink" title="C闭包"></a>C闭包</h4><p>上面提到的，绑定自由变量的函数就是闭包。当一个C函数创建后，可以将其与某些值（称之为<code>upvalue</code>）绑定，生成C闭包。当C函数被调用时，它的那些<code>upvalue</code>位于伪索引处，这些索引由<code>lua_upvalueindex</code>产生，其中第n个<code>upvalue</code>位于<code>lua_upvalueindex(n)</code>的索引位置。该函数参数超过函数本身的总上值个数（但&lt;=256）时，产生一个可接受但无效的索引。</p>
+<p><code>void lua_pushcclosure (lua_State *L, lua_CFunction fn, int n);</code>这个是将C闭包压栈的接口函数。为了将值绑定到函数，需要先将这些值正序压入堆栈，然后调用上述函数创建出闭包并将这个C函数压到栈中。参数n告知需绑定的上值总数，该方法也会将这些值弹出栈。n最大值为255，当n为0时将创建一个轻量C函数，也就是一个指向C函数的指针。</p>
+<p><code>void lua_pushcfunction (lua_State *L, lua_CFunction f);</code>将一个 C 函数压栈。 这个函数接收一个C函数指针，并将一个类型为 function 的 Lua 值压栈。当这个栈顶的值被调用时，将触发对应的 C 函数。注册到 Lua 中的任何函数都必须遵循正确的协议来接收参数和返回值 （参见 lua_CFunction ）。该函数作为一个宏：<code>#define lua_pushcfunction(L,f)  lua_pushcclosure(L,f,0)</code>。</p>
+<h4 id="注册表（registry）"><a href="#注册表（registry）" class="headerlink" title="注册表（registry）"></a>注册表（registry）</h4><p>Lua提供了一个预定义的表，称之为注册表（registry），提供给C来存放任意Lua值。该表可以通过伪索引<code>LUA_REGISTRYINDEX</code>来访问。因为是全局的，所以应当注意选择合适的key以防碰撞/覆盖。</p>
+<p>注册表中的整数键用于引用机制，因此不应将整数键用作其他用途。</p>
+<p><code>LUA_RIDX_GLOBALS</code>则是全局表在注册表中的伪索引。</p>
+<h4 id="相关API"><a href="#相关API" class="headerlink" title="相关API"></a>相关API</h4><p>简单列举几个常用的API如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">luaL_newmetatable</span> <span class="params">(lua_State *L, <span class="keyword">const</span> <span class="keyword">char</span> *tname)</span></span>;</span><br><span class="line"><span class="comment">/*If the registry already has the key tname, returns 0. Otherwise, creates a new table to be used as a metatable for userdata, adds it to the registry with key tname, and returns 1.</span></span><br><span class="line"><span class="comment">In both cases pushes onto the stack the final value associated with tname in the registry.*/</span> 创建元表并加入注册表中</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">luaL_getmetatable</span> <span class="params">(lua_State *L, <span class="keyword">const</span> <span class="keyword">char</span> *tname)</span></span>;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Pushes onto the stack the metatable associated with name tname in the registry (see luaL_newmetatable).*/</span> 从注册表查询元表</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lua_setmetatable</span> <span class="params">(lua_State *L, <span class="keyword">int</span> index)</span></span>;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Pops a table from the stack and sets it as the new metatable for the value at the given acceptable index.*/</span> 设置表的元表</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">lua_newtable</span> <span class="params">(lua_State *L)</span></span>;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Creates a new empty table and pushes it onto the stack. It is equivalent to lua_createtable(L, 0, 0).*/</span> 创建表并压栈</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">lua_setfield</span> <span class="params">(lua_State *L, <span class="keyword">int</span> index, <span class="keyword">const</span> <span class="keyword">char</span> *k)</span></span>;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Does the equivalent to t[k] = v, where t is the value at the given valid index and v is the value at the top of the stack.</span></span><br><span class="line"><span class="comment">This function pops the value from the stack. As in Lua, this function may trigger a metamethod for the "newindex" event (see §2.8).*/</span> 设置特定位置表的kv</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">lua_pushvalue</span> <span class="params">(lua_State *L, <span class="keyword">int</span> index)</span></span>;</span><br><span class="line"><span class="comment">//Pushes a copy of the element at the given index onto the stack. 拷贝特定位置的值压栈</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">lua_pop</span> <span class="params">(lua_State *L, <span class="keyword">int</span> n)</span></span>;</span><br><span class="line"><span class="comment">//Pops n elements from the stack. 出栈</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">luaL_checkudata</span> <span class="params">(lua_State *L, <span class="keyword">int</span> narg, <span class="keyword">const</span> <span class="keyword">char</span> *tname)</span></span>;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Checks whether the function argument narg is a userdata of the type tname (see luaL_newmetatable)*/</span> 检查是否用户数据类型</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">lua_pushlightuserdata</span> <span class="params">(lua_State *L, <span class="keyword">void</span> *p)</span></span>;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Pushes a light userdata onto the stack.</span></span><br><span class="line"><span class="comment">Userdata represent C values in Lua. A light userdata represents a pointer. It is a value (like a number): you do not create it, it has no individual metatable, and it is not collected (as it was never created). A light userdata is equal to "any" light userdata with the same C address.*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">lua_newuserdata</span> <span class="params">(lua_State *L, <span class="keyword">size_t</span> size)</span></span>;</span><br><span class="line"><span class="comment">/*The lua_newuserdata function allocates a block of memory with the given size, pushes the corresponding userdatum on the stack, and returns the block address.*/</span>创建userdata值</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">lua_gettable</span> <span class="params">(lua_State *L, <span class="keyword">int</span> index)</span></span>;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Pushes onto the stack the value t[k], where t is the value at the given valid index and k is the value at the top of the stack.</span></span><br><span class="line"><span class="comment">This function pops the key from the stack (putting the resulting value in its place). As in Lua, this function may trigger a metamethod for the "index" event */</span> 从特定索引的table查询值并压栈</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">luaL_register</span> <span class="params">(lua_State *L,</span></span></span><br><span class="line"><span class="function"><span class="params">                    <span class="keyword">const</span> <span class="keyword">char</span> *libname,</span></span></span><br><span class="line"><span class="function"><span class="params">                    <span class="keyword">const</span> luaL_Reg *l)</span></span>;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Opens a library.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">When called with libname equal to NULL, it simply registers all functions in the list l (see luaL_Reg) into the table on the top of the stack. 若libname为空则将方法列表注册到栈顶的表</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">When called with a non-null libname, luaL_register creates a new table t, sets it as the value of the global variable libname, sets it as the value of package.loaded[libname], and registers on it all functions in the list l. If there is a table in package.loaded[libname] or in variable libname, reuses this table instead of creating a new one. 否则创建一个新表t将它设置为全局变量$libname及package.loaded[libname]，将方法注册到t</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">In any case the function leaves the table on the top of the stack.*/</span></span><br></pre></td></tr></table></figure>
+<h3 id="其他说明"><a href="#其他说明" class="headerlink" title="其他说明"></a>其他说明</h3><p>可以考虑阅读Lua的源码！</p>
+
+    </div>
+    
+    <div class="post__license">
+        <p>
+            <strong>本文作者：</strong>Jason
+        </p>
+        <p>
+            <strong>
+                本文鏈接：
+            </strong>
+            <a href="http://blog.knpc21.com/ios/lua-basic/">http://blog.knpc21.com/ios/lua-basic/</a>
+        </p>
+        
+            <strong>
+                <p>文章默认使用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a> 协议进行许可，使用时请注意遵守协议。</p>
+
+            </strong>
+        
+    </div>
+ 
+    <div class="post-footer__meta"><p>更新於 2017-03-14</p></div> 
+    <div class="post-entry__tags"><a href="/tags/Lua/" class="post-tags__link button"># Lua</a><a href="/tags/Wax/" class="post-tags__link button"># Wax</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/ios/vps-vultr-tour/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            VPS搭建博客——购买及环境配置(2018)
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/ios/ios-safari-cookie/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            iOS开发：跨开发商的应用数据共享
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>評論</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到頂部" title="回到頂部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-K2Q2J84"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-K2Q2J84');
+    </script>
+ 
+
+ 
+
+ 
+
+
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "1d741b4fcb7f4062933be3f4b0eb6571"}'></script>
+    </script>
+    
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

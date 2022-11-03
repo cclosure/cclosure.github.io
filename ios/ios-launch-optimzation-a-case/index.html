@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>一次iOS启动优化实践与启示 | { }</title>
+
+
+    <meta name="keywords" content="性能, 技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="启动耗时是客户端品质的核心指标之一。 一个团队对产品性能的关注，首先体现在App的启动体验上。 本文以近期一次启动优化的案例（P50及平均启动耗时下降45%），来看看那些性能问题可以如何解决，以及对我们日常开发的一些启示。">
+<meta name="keywords" content="性能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一次iOS启动优化实践与启示">
+<meta property="og:url" content="http://blog.knpc21.com/ios/ios-launch-optimzation-a-case/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="启动耗时是客户端品质的核心指标之一。 一个团队对产品性能的关注，首先体现在App的启动体验上。 本文以近期一次启动优化的案例（P50及平均启动耗时下降45%），来看看那些性能问题可以如何解决，以及对我们日常开发的一些启示。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://imgix-blog.setapp.com/2-how-to-change-screen-timeout-on-iphone-1920-646.png">
+<meta property="og:updated_time" content="2022-09-16T14:30:28.000Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="一次iOS启动优化实践与启示">
+<meta name="twitter:description" content="启动耗时是客户端品质的核心指标之一。 一个团队对产品性能的关注，首先体现在App的启动体验上。 本文以近期一次启动优化的案例（P50及平均启动耗时下降45%），来看看那些性能问题可以如何解决，以及对我们日常开发的一些启示。">
+<meta name="twitter:image" content="https://imgix-blog.setapp.com/2-how-to-change-screen-timeout-on-iphone-1920-646.png">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        一次iOS启动优化实践与启示
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2022/09/" class="post-meta__date button">2022-09-16</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header">
+	
+        <div class="post-thumbnail" style="background-image: url('https://imgix-blog.setapp.com/2-how-to-change-screen-timeout-on-iphone-1920-646.png');"></div>
+    
+</div>
+    <div class="post__content">
+        <p>启动耗时是客户端品质的核心指标之一。</p>
+<p>一个团队对产品性能的关注，首先体现在App的启动体验上。</p>
+<p>本文以近期一次启动优化的案例（P50及平均启动耗时下降45%），来看看那些性能问题可以如何解决，以及对我们日常开发的一些启示。</p>
+<a id="more"></a>
+<p>在本次的优化实践中，我们的目标分为两项： </p>
+<ul>
+<li>App实现启动速度监控 </li>
+<li>App启动时间减少30% </li>
+</ul>
+<p>其中，目标1旨在实现App启动速度监控上线，将用户端App启动过程分阶段（pre-main/post-main）耗时监控上报，跟踪用户端实际性能数据；目标2旨在通过代码优化等手段，实现App整体启动时间减少30%，提升用户体验。</p>
+<h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><p>启动的过程，按照WWDC2019上的定义，分为以下几个阶段：</p>
+<p><img src="app-launch-phase.jpg" alt></p>
+<ul>
+<li>System Interface：加载可执行文件，依据LoadCommands加载ld，dyld根据动态库依赖关系加载系统动态库、项目动态库，并进行rebase/binding修正符号符号指针；</li>
+<li>Runtime Init：语言runtime的加载、静态初始化方法；</li>
+<li>UIKit Init：程序main入口方法执行，初始化UIApplication，接入系统事件（和Runloop）及UIKit；</li>
+<li>Application Init：调用application:didFinishLaunchingWithOptions，之后调用applicationDidBecomeActive:；</li>
+<li>Initial Frame Render：首帧页面构建，首帧渲染；</li>
+<li>Extended：App进入前台，响应事件。</li>
+</ul>
+<p>我们一般使用从进程创建到首帧渲染完成的时间来衡量启动时间（MetricKit也以首帧时间为基准）。以客户端的开发指引来说，基于用户体验考虑，各种启动类型的最大可接受的时间为：</p>
+<ul>
+<li>冷启动应少于5s</li>
+<li>热启动应少于1.5s</li>
+</ul>
+<p>这是一个宽泛的底线目标。</p>
+<h2 id="基本过程"><a href="#基本过程" class="headerlink" title="基本过程"></a>基本过程</h2><p>我们的优化工作主要按以下两个基本过程进行：</p>
+<ol>
+<li>性能检测、监控</li>
+<li>性能优化</li>
+</ol>
+<p>性能检测主要包括Instruments测试以及代码插桩埋点两种方式。我们使用Instruments测试的基准环境是：</p>
+<ul>
+<li>（冷）启动全阶段时间，从icon点击（进程创建）到首帧渲染完成；</li>
+<li>基准测试设备，选择iPhone 8或目前仍在生产线的iPhone 11（以下Instruments的测试如未说明均指iPhone 11上的测试结果）；</li>
+<li>已登录状态启动进入首页作为主要测试场景；</li>
+</ul>
+<p>对于冷启动的测试，苹果的建议是关闭设备后晾个2-3分钟再重启。</p>
+<p>性能优化方面，我们按阶段及重点任务进行：</p>
+<ul>
+<li>加载阶段优化</li>
+<li>静态初始化阶段优化</li>
+<li>启动任务分级优化</li>
+<li>耗时函数优化</li>
+<li>主线程阻塞优化</li>
+</ul>
+<h2 id="性能检测"><a href="#性能检测" class="headerlink" title="性能检测"></a>性能检测</h2><p>一般来说，建立量化指标是进行优化的前置工作。App启动性能的检测我们可以分为两个方面，一是开发阶段的性能测量，二是线上的性能监控。其中开发阶段的性能测量，又以Instruments工具作为主要、常见的手段。再配合代码插桩等手段进行埋点，我们可以得到一个较全面的App启动数据。</p>
+<h3 id="Instruments性能检测"><a href="#Instruments性能检测" class="headerlink" title="Instruments性能检测"></a>Instruments性能检测</h3><p>Instruments新增的App Launch工具相当于集成了Time Profiler、System Trace等工具的整合。</p>
+<p>App Launch的测量主要包括启动过程各阶段的耗时测量、主线程阻塞检测及分析、PageFault页面中断分析等。这些都是常见内容，本文不再细述，我们直接列举一些检测到的结果或问题来实例分析：</p>
+<ol>
+<li>整体的耗时</li>
+</ol>
+<p><img src="applaunch_profile.png" alt></p>
+<p>时间消耗：</p>
+<ul>
+<li>初始化（premain）</li>
+<li><ul>
+<li>启动初始化 475ms</li>
+<li>系统接口初始化 1.9s（system interface initialization）</li>
+<li>静态运行时初始化 350ms（static runtime initialization）</li>
+</ul>
+</li>
+<li>启动阶段（main后）</li>
+<li><ul>
+<li>UIKit初始化 60ms</li>
+</ul>
+</li>
+<li><ul>
+<li>didFinishLaunchingWithOptions 1.15s</li>
+<li>首帧渲染 102ms</li>
+</ul>
+</li>
+</ul>
+<p>优化前Instruments整体达到了3.8-4.0s（iPhone 11/iOS 15.0，设备下同）。</p>
+<p>从预埋的数据监控，线上的数据表现有点难看（大概20w的数据）</p>
+<p><img src="profile_x.0.1.png" alt></p>
+<table>
+<thead>
+<tr>
+<th>版本</th>
+<th>均值</th>
+<th>P50</th>
+<th>P90</th>
+<th>P95</th>
+<th>std</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X.0.1</td>
+<td>3179.2</td>
+<td>2406.0</td>
+<td>6165.0</td>
+<td>7894.0</td>
+<td>2664.6</td>
+</tr>
+</tbody>
+</table>
+<p>90分位的数据是6165ms，这说明有10%以上的用户的启动耗时在6s以上，这已经超出我们正常体验的5s的可接受范围了。事实上，后来在排查并发锁问题的时候去检索线上数据，发现有较多低性能设备（375x667/414x736）出现了较多更超预期的启动时间，比如post-main阶段可能超过10s，让我一度怀疑是否埋点数据上报问题。</p>
+<ol start="2">
+<li>Page Fault的影响<br>二进制重排目前变成了启动优化绕不过去的优化手段之一，我们在优化过程中也特别留意了这方面相关的性能数据。</li>
+</ol>
+<p><img src="applaunch_pagefault.png" alt></p>
+<p>如上图，整个冷启动阶段测试到的数据是，File Backed Page in: 8269，耗时1.71s。而直接重新Profile热启动后，File Backed Page in的数据是是3908次，468ms。热启动测试不准，一方面也是因为在有缓存情况下，Page Fault有较大影响。</p>
+<ol start="3">
+<li>综合分析</li>
+</ol>
+<p>Instruments的性能检测需要结合Time Profiler、多线程状态、内存、系统日志等手段进行综合分析，尤其对于一些非稳定出现的问题。</p>
+<p>有一点需要注意的，iOS 15之后加载器已经更新为dyld4。dyld本来支持<code>DYLD_PRINT_STATISTICS</code>、<code>DYLD_PRINT_STATISTICS_DETAIL</code>等参数来输出日志，但dyld4之后这些日志打印都被取消了（有个别如<code>DYLD_PRINT_APIS</code>还保留）。事实上，dyld4已经删除/屏蔽了原来的<code>api_logs</code>的调用，同时改由进程的安全策略去控制是否Log了，有需要可以了解<code>DYLD_AMFI_FAKE</code>。同时需要注意的是，dyld的日志输出也是很消耗性能的，即使是使用dyld3，我们在分析耗时方法过程中最好关闭这些Log输出能力，减少干扰。</p>
+<p>dyld3日志引起的耗时<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">21</span>	<span class="number">1</span>	_dyld_start	dyld		</span><br><span class="line"><span class="number">20</span>	<span class="number">1</span>	dyldbootstrap::start(dyld3::MachOLoaded <span class="keyword">const</span>*, <span class="keyword">int</span>, <span class="keyword">char</span> <span class="keyword">const</span>**, dyld3::MachOLoaded <span class="keyword">const</span>*, <span class="keyword">unsigned</span> <span class="keyword">long</span>*)	dyld		</span><br><span class="line"><span class="number">19</span>	<span class="number">1</span>	dyld::_main(macho_header <span class="keyword">const</span>*, <span class="keyword">unsigned</span> <span class="keyword">long</span>, <span class="keyword">int</span>, <span class="keyword">char</span> <span class="keyword">const</span>**, <span class="keyword">char</span> <span class="keyword">const</span>**, <span class="keyword">char</span> <span class="keyword">const</span>**, <span class="keyword">unsigned</span> <span class="keyword">long</span>*)	dyld		</span><br><span class="line"><span class="number">18</span>	<span class="number">1</span>	dyld::launchWithClosure(dyld3::closure::LaunchClosure <span class="keyword">const</span>*, DyldSharedCache <span class="keyword">const</span>*, dyld3::MachOLoaded <span class="keyword">const</span>*, <span class="keyword">unsigned</span> <span class="keyword">long</span>, <span class="keyword">int</span>, <span class="keyword">char</span> <span class="keyword">const</span>**, <span class="keyword">char</span> <span class="keyword">const</span>**, <span class="keyword">char</span> <span class="keyword">const</span>**, Diagnostics&amp;, <span class="keyword">unsigned</span> <span class="keyword">long</span>*, <span class="keyword">unsigned</span> <span class="keyword">long</span>*, <span class="keyword">bool</span>*, <span class="keyword">bool</span>*)	dyld		</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="number">5</span>	<span class="number">1</span>	dyld3::_dyld_get_objc_selector(<span class="keyword">char</span> <span class="keyword">const</span>*)	libdyld.dylib		</span><br><span class="line"><span class="number">4</span>	<span class="number">1</span>	<span class="number">0x18524d840</span>	libdyld.dylib		</span><br><span class="line"><span class="number">3</span>	<span class="number">1</span>	dyld::vlog(<span class="keyword">char</span> <span class="keyword">const</span>*, <span class="keyword">char</span>*)	dyld		</span><br><span class="line"><span class="number">2</span>	<span class="number">1</span>	_simple_vdprintf	dyld		</span><br><span class="line"><span class="number">1</span>	<span class="number">1</span>	_flush	dyld		</span><br><span class="line"><span class="number">0</span>	<span class="number">1</span>	write	dyld</span><br></pre></td></tr></table></figure></p>
+<p>另外实践中，在Instruments的线程堆栈采样中，dyld4的一些方法也无法完整符号化。比如</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span>	mach_msg_overwrite_trap	dyld		</span><br><span class="line"><span class="number">1</span>	dyld4::RemoteNotificationResponder::sendMessage(<span class="keyword">int</span>, <span class="keyword">unsigned</span> <span class="keyword">int</span>, mach_msg_header_t*)	dyld		</span><br><span class="line"><span class="number">2</span>	dyld4::notifyMonitoringDyld(dyld4::RemoteNotificationResponder&amp;, <span class="keyword">bool</span>, <span class="keyword">unsigned</span> <span class="keyword">int</span>, mach_header <span class="keyword">const</span>**, <span class="keyword">char</span> <span class="keyword">const</span>**)	dyld		</span><br><span class="line"><span class="number">3</span>	dyld4::notifyMonitoringDyld(dyld4::RemoteNotificationResponder&amp;, <span class="keyword">bool</span>, <span class="keyword">unsigned</span> <span class="keyword">int</span>, mach_header <span class="keyword">const</span>**, <span class="keyword">char</span> <span class="keyword">const</span>**)	dyld		</span><br><span class="line"><span class="number">4</span>	dyld4::notifyMonitoringDyld(<span class="keyword">bool</span>, <span class="keyword">unsigned</span> <span class="keyword">int</span>, mach_header <span class="keyword">const</span>**, <span class="keyword">char</span> <span class="keyword">const</span>**)	dyld		</span><br><span class="line"><span class="number">5</span>	dyld4::prepare(dyld4::APIs&amp;, dyld3::MachOAnalyzer <span class="keyword">const</span>*)	dyld		</span><br><span class="line"><span class="number">6</span>	start	dyld</span><br></pre></td></tr></table></figure>
+<p>我们仅仅是知道此处触发了动态库的载入，但具体什么库怎么触发的毫无线索。<br>但在dyld3下我们可以看到较完整的堆栈信息，如下所示可看到是触发了Accessibility的动态库载入：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">17</span>	<span class="number">2</span>	_dispatch_main_queue_callback_4CF$VARIANT$armv81	libdispatch.dylib		</span><br><span class="line"><span class="number">16</span>	<span class="number">2</span>	<span class="number">0x18521c298</span>	libdispatch.dylib		</span><br><span class="line"><span class="number">15</span>	<span class="number">2</span>	_dispatch_call_block_and_release	libdispatch.dylib		</span><br><span class="line"><span class="number">14</span>	<span class="number">2</span>	-[AccessibilitySettingsLoader _initializeDelayedAccessibilitySettings]	AccessibilitySettingsLoader		</span><br><span class="line"><span class="number">13</span>	<span class="number">2</span>	soft_AXProcessIsSystemApplication	AccessibilitySettingsLoader		</span><br><span class="line"><span class="number">12</span>	<span class="number">2</span>	<span class="number">0x1cdc18254</span>	AccessibilitySettingsLoader		</span><br><span class="line"><span class="number">11</span>	<span class="number">2</span>	<span class="number">0x1c5c93f30</span>	SoftLinking		</span><br><span class="line"><span class="number">10</span>	<span class="number">2</span>	dlopen_internal(<span class="keyword">char</span> <span class="keyword">const</span>*, <span class="keyword">int</span>, <span class="keyword">void</span>*)	libdyld.dylib		</span><br><span class="line"><span class="number">9</span>	<span class="number">2</span>	dyld3::dlopen_internal(<span class="keyword">char</span> <span class="keyword">const</span>*, <span class="keyword">int</span>, <span class="keyword">void</span>*)	libdyld.dylib		</span><br><span class="line"><span class="number">8</span>	<span class="number">2</span>	dyld3::AllImages::dlopen(Diagnostics&amp;, <span class="keyword">char</span> <span class="keyword">const</span>*, <span class="keyword">bool</span>, <span class="keyword">bool</span>, <span class="keyword">bool</span>, <span class="keyword">bool</span>, <span class="keyword">bool</span>, <span class="keyword">void</span> <span class="keyword">const</span>*, <span class="keyword">bool</span>)	libdyld.dylib		</span><br><span class="line"><span class="number">7</span>	<span class="number">2</span>	dyld3::AllImages::loadImage(Diagnostics&amp;, <span class="keyword">char</span> <span class="keyword">const</span>*, <span class="keyword">unsigned</span> <span class="keyword">int</span>, dyld3::closure::DlopenClosure <span class="keyword">const</span>*, <span class="keyword">bool</span>, <span class="keyword">bool</span>, <span class="keyword">bool</span>, <span class="keyword">bool</span>, <span class="keyword">void</span> <span class="keyword">const</span>*)	libdyld.dylib		</span><br><span class="line"><span class="number">6</span>	<span class="number">2</span>	dyld3::AllImages::runImageCallbacks(dyld3::Array&lt;dyld3::LoadedImage&gt; <span class="keyword">const</span>&amp;)	libdyld.dylib		</span><br><span class="line"><span class="number">5</span>	<span class="number">2</span>	dyld3::AllImages::notifyMonitorLoads(dyld3::Array&lt;dyld3::LoadedImage&gt; <span class="keyword">const</span>&amp;)	libdyld.dylib		</span><br><span class="line"><span class="number">4</span>	<span class="number">2</span>	dyld::notifyMonitoringDyld(<span class="keyword">bool</span>, <span class="keyword">unsigned</span> <span class="keyword">int</span>, mach_header <span class="keyword">const</span>**, <span class="keyword">char</span> <span class="keyword">const</span>**)	dyld		</span><br><span class="line"><span class="number">3</span>	<span class="number">2</span>	dyld::notifyMonitoringDyld(dyld::RemoteNotificationResponder&amp;, <span class="keyword">bool</span>, <span class="keyword">unsigned</span> <span class="keyword">int</span>, mach_header <span class="keyword">const</span>**, <span class="keyword">char</span> <span class="keyword">const</span>**)	dyld		</span><br><span class="line"><span class="number">2</span>	<span class="number">2</span>	dyld::RemoteNotificationResponder::sendMessage(<span class="keyword">int</span>, <span class="keyword">unsigned</span> <span class="keyword">int</span>, mach_msg_header_t*)	dyld		</span><br><span class="line"><span class="number">1</span>	<span class="number">2</span>	mach_msg_overwrite	dyld		</span><br><span class="line"><span class="number">0</span>	<span class="number">2</span>	mach_msg_overwrite_trap	dyld</span><br></pre></td></tr></table></figure></p>
+<p>对照工程源码，发现原来有些业务进行了accessibilityLabel的配置。</p>
+<p>还有需要提一点的是，目前Xcode已经支持 <code>os_signpost</code> 进行日志打点，对于我们组件化的一些耗时统计也可以在Instruments上直观地看到。这在一些特殊需要的场景下我们可以更方便地结合Time Profiler等其他工具进行分析，找出性能瓶颈。</p>
+<h3 id="源码层面性能监测"><a href="#源码层面性能监测" class="headerlink" title="源码层面性能监测"></a>源码层面性能监测</h3><p>源码层面的性能测试，主要包括启动阶段耗时的监测、耗时方法的分析等。</p>
+<ol>
+<li>启动阶段耗时<br>在这次案例中，我们主要获取进程创建时间、main开始执行时间、didFinishLaunching时间及首帧渲染完成时间。</li>
+</ol>
+<p>进程创建时间，我摘录了段代码如下，都是业内公开的代码了：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="built_in">NSTimeInterval</span>)processStartTime</span><br><span class="line">&#123;   <span class="comment">// 单位是毫秒</span></span><br><span class="line">    <span class="keyword">struct</span> kinfo_proc kProcInfo;</span><br><span class="line">    <span class="keyword">if</span> ([<span class="keyword">self</span> processInfoForPID:[[<span class="built_in">NSProcessInfo</span> processInfo] processIdentifier] procInfo:&amp;kProcInfo]) &#123;</span><br><span class="line">        <span class="keyword">return</span> kProcInfo.kp_proc.p_un.__p_starttime.tv_sec * <span class="number">1000.0</span> + kProcInfo.kp_proc.p_un.__p_starttime.tv_usec / <span class="number">1000.0</span>;</span><br><span class="line">        </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">NSAssert</span>(<span class="literal">NO</span>, <span class="string">@"无法取得进程的信息"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+ (<span class="built_in">BOOL</span>)processInfoForPID:(<span class="keyword">int</span>)pid procInfo:(<span class="keyword">struct</span> kinfo_proc*)procInfo</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> cmd[<span class="number">4</span>] = &#123;<span class="built_in">CTL_KERN</span>, KERN_PROC, KERN_PROC_PID, pid&#125;;</span><br><span class="line">    size_t size = <span class="keyword">sizeof</span>(*procInfo);</span><br><span class="line">    <span class="keyword">return</span> sysctl(cmd, <span class="keyword">sizeof</span>(cmd)/<span class="keyword">sizeof</span>(*cmd), procInfo, &amp;size, <span class="literal">NULL</span>, <span class="number">0</span>) == <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但根据实测以及线上上报的数据来看，查询到的进程创建时间的数据可能会出现一些明显非法数据，比如大于10,000ms的数据。另外一个可复现的场景，即设备重启后，查询到的进程创建数据，要比点击icon的时间要早数秒。目前对这种情况尚无法定位问题，主要是设定规则过滤了非法数据，如果有同学有这方面处理经验可以分享下。</p>
+<p>首帧渲染时间，主要根据iOS上<code>CoreAnimation</code>的工作原理，相当于hook了<code>CATransaction</code>提交后的时机（其他hook方法同理）</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//注册block 13-</span></span><br><span class="line"><span class="built_in">CFRunLoopRef</span> mainRunloop = [[<span class="built_in">NSRunLoop</span> mainRunLoop] getCFRunLoop];</span><br><span class="line"><span class="built_in">CFRunLoopPerformBlock</span>(mainRunloop,<span class="built_in">NSDefaultRunLoopMode</span>,^()&#123;</span><br><span class="line">	<span class="built_in">NSTimeInterval</span> stamp = [[<span class="built_in">NSDate</span> date] timeIntervalSince1970];</span><br><span class="line">	<span class="built_in">NSLog</span>(<span class="string">@"runloop block launch end:%f"</span>,stamp);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//注册kCFRunLoopBeforeTimers回调 13+</span></span><br><span class="line"><span class="built_in">CFRunLoopRef</span> mainRunloop = [[<span class="built_in">NSRunLoop</span> mainRunLoop] getCFRunLoop];</span><br><span class="line"><span class="built_in">CFRunLoopActivity</span> activities = kCFRunLoopAllActivities;</span><br><span class="line"><span class="built_in">CFRunLoopObserverRef</span> observer = <span class="built_in">CFRunLoopObserverCreateWithHandler</span>(kCFAllocatorDefault, activities, <span class="literal">YES</span>, <span class="number">0</span>, ^(<span class="built_in">CFRunLoopObserverRef</span> observer, <span class="built_in">CFRunLoopActivity</span> activity) &#123;</span><br><span class="line">	<span class="keyword">if</span> (activity == kCFRunLoopBeforeTimers) &#123;</span><br><span class="line">		<span class="built_in">NSTimeInterval</span> stamp = [[<span class="built_in">NSDate</span> date] timeIntervalSince1970];</span><br><span class="line">		<span class="built_in">NSLog</span>(<span class="string">@"runloop beforetimers launch end:%f"</span>,stamp);</span><br><span class="line">		<span class="built_in">CFRunLoopRemoveObserver</span>(mainRunloop, observer, kCFRunLoopCommonModes);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">CFRunLoopAddObserver</span>(mainRunloop, observer, kCFRunLoopCommonModes);</span><br></pre></td></tr></table></figure>
+<p>源码层面的埋点统计要比Instruments的数据要小，一方面调试进程attach到app进程有时间损耗，另一方面Release版源码一般有屏蔽逻辑及更多的编译优化。但不影响我们分别进行性能检测。在本次案例中也是每个优化步骤都控制变量，可以通过测试数据的比对明确优化内容的效果。</p>
+<ol start="2">
+<li>耗时方法分析</li>
+</ol>
+<p>通过hook底层方法（objc_msgSend）可以插桩记录方法的耗时。其中以Facebook的基于fishhook的方式为常见。</p>
+<p>在 Mach-O 中，有 Bind 和 Lazy Bind 的两种符号绑定的表，基于 fishhook 的 Hook，是通过修改<code>__la_symbol</code> 和 <code>__nl_symbol</code> 两个符号表中被hook的符号的指针，后续便可以直接通过 <code>__la_symbol_ptr</code> 找到函数地址直接调用，在替换的方法中进行插桩。</p>
+<p>通过耗时方法分析，我们可以dump出启动过程中长耗时的方法列表，分析确认需要优化的代码。也可以按需定制策略对线上运行情况进行采样采集。<br>以下是排查到的耗时的一个示例。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 栈深度 | 耗时 | 方法</span></span><br><span class="line"> <span class="number">1</span>|<span class="number">6.18</span>| +[Bugly startWithAppId:config:]</span><br><span class="line"> <span class="number">2</span>|<span class="number">6.18</span>|	 +[Bugly startWithAppId:developmentDevice:config:]</span><br><span class="line"> <span class="number">3</span>|<span class="number">6.11</span>|		 -[BLYSDKManager startWithAppId:developmentDevice:config:]</span><br><span class="line"> <span class="number">4</span>|<span class="number">3.29</span>|			 -[BLYSDKManager start]</span><br><span class="line"> <span class="number">5</span>|<span class="number">1.09</span>|				 -[BLYSDKManager toggleModule:enable:]</span><br><span class="line"> <span class="number">6</span>|<span class="number">1.09</span>|					 -[BLYAnalyticsManager performSelector:]</span><br><span class="line"> <span class="number">7</span>|<span class="number">1.04</span>|						 -[BLYBundle isVersionChanged]</span><br><span class="line"> <span class="number">8</span>|<span class="number">1.03</span>|							 -[BLYDataManager fetchValueForKey:]</span><br><span class="line"> <span class="number">4</span>|<span class="number">1.34</span>|			 -[BLYSDKManager loadStrategy]</span><br><span class="line"> <span class="number">5</span>|<span class="number">1.33</span>|				 -[BLYDataManager fetchValueForKey:]</span><br><span class="line"> <span class="number">6</span>|<span class="number">1.33</span>|					 -[BLYDataManager keyValueStorage]</span><br><span class="line"> <span class="number">7</span>|<span class="number">1.32</span>|						 -[BLYDataManager savedKeyValueStorage]</span><br></pre></td></tr></table></figure>
+<p>实测我们看到的大部分情况排查到的耗时方法，是可以跟Time Profile采样到的线程堆栈对应的。</p>
+<h3 id="一些低性能问题"><a href="#一些低性能问题" class="headerlink" title="一些低性能问题"></a>一些低性能问题</h3><ol>
+<li>XPC性能问题</li>
+</ol>
+<p>XPC的调用，是引起性能问题的一个重要场景，比如下述的堆栈显示的是我们<code>cacheHeader</code>方法引起的XPC调用。比照代码可以发现实际是一个设备UUID的接口对Keychain的访问引发的。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span>	mach_msg_trap	libsystem_kernel.dylib		</span><br><span class="line"><span class="number">1</span>	_dispatch_mach_send_and_wait_for_reply	libdispatch.dylib		</span><br><span class="line"><span class="number">2</span>	dispatch_mach_send_with_result_and_wait_for_reply$VARIANT$armv81	libdispatch.dylib		</span><br><span class="line"><span class="number">3</span>	xpc_connection_send_message_with_reply_sync	libxpc.dylib		</span><br><span class="line"><span class="number">4</span>	__NSXPCCONNECTION_IS_WAITING_FOR_A_SYNCHRONOUS_REPLY__	Foundation		</span><br><span class="line"><span class="number">5</span>	-[<span class="built_in">NSXPCConnection</span> _sendInvocation:orArguments:count:methodSignature:selector:withProxy:]	Foundation		</span><br><span class="line"><span class="number">6</span>	___forwarding___	CoreFoundation		</span><br><span class="line"><span class="number">7</span>	_CF_forwarding_prep_0	CoreFoundation		</span><br><span class="line"><span class="number">8</span>	<span class="number">0x1858b984c</span>			</span><br><span class="line"><span class="number">9</span>	<span class="number">0x1b535db90</span>			</span><br><span class="line"><span class="number">10</span>	<span class="number">0x100d39874</span>			</span><br><span class="line"><span class="number">11</span>	<span class="number">0x100d38ee8</span>			</span><br><span class="line"><span class="number">12</span>	-[XXXStatisticsCache cacheHeader]	XXX</span><br></pre></td></tr></table></figure>
+<p>除了Keychain的读写访问，还有比如通知中心、UserDefaults、PasteBoard等接口访问都可能触发XPC的调用<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span>	mach_msg_trap	libsystem_kernel.dylib		</span><br><span class="line"><span class="number">1</span>	_dispatch_mach_send_and_wait_for_reply	libdispatch.dylib		</span><br><span class="line"><span class="number">2</span>	dispatch_mach_send_with_result_and_wait_for_reply$VARIANT$armv81	libdispatch.dylib		</span><br><span class="line"><span class="number">3</span>	xpc_connection_send_message_with_reply_sync	libxpc.dylib		</span><br><span class="line"><span class="number">4</span>	__NSXPCCONNECTION_IS_WAITING_FOR_A_SYNCHRONOUS_REPLY__	Foundation		</span><br><span class="line"><span class="number">5</span>	-[<span class="built_in">NSXPCConnection</span> _sendInvocation:orArguments:count:methodSignature:selector:withProxy:]	Foundation		</span><br><span class="line"><span class="number">6</span>	-[<span class="built_in">NSXPCConnection</span> _sendSelector:withProxy:arg1:arg2:]	Foundation		</span><br><span class="line"><span class="number">7</span>	_NSXPCDistantObjectSimpleMessageSend2	Foundation		</span><br><span class="line"><span class="number">8</span>	<span class="number">0x1940a4be0</span>	UserNotifications		</span><br><span class="line"><span class="number">9</span>	<span class="number">0x18521c298</span>	libdispatch.dylib		</span><br><span class="line"><span class="number">10</span>	_dispatch_lane_barrier_sync_invoke_and_complete	libdispatch.dylib		</span><br><span class="line"><span class="number">11</span>	-[UNUserNotificationServiceConnection notificationSettingsForBundleIdentifier:]	UserNotifications		</span><br><span class="line"><span class="number">12</span>	-[UNUserNotificationCenter notificationSettings]	UserNotifications		</span><br><span class="line"><span class="number">13</span>	-[<span class="built_in">UIApplication</span> currentUserNotificationSettings]	<span class="built_in">UIKitCore</span>		</span><br><span class="line"><span class="number">14</span>	<span class="keyword">static</span> XXXNotifyPermissionManager.check()	XXX</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span>	mach_msg_trap	libsystem_kernel.dylib		</span><br><span class="line"><span class="number">1</span>	_dispatch_mach_send_and_wait_for_reply	libdispatch.dylib		</span><br><span class="line"><span class="number">2</span>	dispatch_mach_send_with_result_and_wait_for_reply$VARIANT$armv81	libdispatch.dylib		</span><br><span class="line"><span class="number">3</span>	xpc_connection_send_message_with_reply_sync	libxpc.dylib		</span><br><span class="line"><span class="number">4</span>	__104-[<span class="built_in">CFPrefsSearchListSource</span> synchronouslySendDaemonMessage:andAgentMessage:andDirectMessage:replyHandler:]_block_invoke_2	CoreFoundation		</span><br><span class="line"><span class="number">5</span>	-[_CFXPreferences withConnectionForRole:performBlock:]	CoreFoundation		</span><br><span class="line"><span class="number">6</span>	__104-[<span class="built_in">CFPrefsSearchListSource</span> synchronouslySendDaemonMessage:andAgentMessage:andDirectMessage:replyHandler:]_block_invoke	CoreFoundation		</span><br><span class="line"><span class="number">7</span>	<span class="built_in">CFPREFERENCES_IS_WAITING_FOR_SYSTEM_CFPREFSD</span>	CoreFoundation		</span><br><span class="line"><span class="number">8</span>	-[<span class="built_in">CFPrefsSearchListSource</span> synchronouslySendDaemonMessage:andAgentMessage:andDirectMessage:replyHandler:]	CoreFoundation		</span><br><span class="line"><span class="number">9</span>	-[<span class="built_in">CFPrefsSearchListSource</span> alreadylocked_generationCountFromListOfSources:count:]	CoreFoundation		</span><br><span class="line"><span class="number">10</span>	-[<span class="built_in">CFPrefsSearchListSource</span> alreadylocked_getDictionary:]	CoreFoundation		</span><br><span class="line"><span class="number">11</span>	<span class="number">0x1855fe3d4</span>			</span><br><span class="line"><span class="number">12</span>	-[<span class="built_in">CFPrefsSource</span> setValues:forKeys:count:copyValues:removeValuesForKeys:count:from:]	CoreFoundation		</span><br><span class="line"><span class="number">13</span>	-[<span class="built_in">CFPrefsSource</span> setValues:forKeys:count:copyValues:from:]	CoreFoundation		</span><br><span class="line"><span class="number">14</span>	-[<span class="built_in">CFPrefsSource</span> setValue:forKey:from:]	CoreFoundation		</span><br><span class="line"><span class="number">15</span>	__76-[_CFXPreferences setValue:forKey:appIdentifier:container:configurationURL:]_block_invoke	CoreFoundation		</span><br><span class="line"><span class="number">16</span>	__108-[_CFXPreferences(SearchListAdditions) withSearchListForIdentifier:container:cloudConfigurationURL:perform:]_block_invoke	CoreFoundation		</span><br><span class="line"><span class="number">17</span>	normalizeQuintuplet	CoreFoundation		</span><br><span class="line"><span class="number">18</span>	-[_CFXPreferences withSearchListForIdentifier:container:cloudConfigurationURL:perform:]	CoreFoundation		</span><br><span class="line"><span class="number">19</span>	-[_CFXPreferences setValue:forKey:appIdentifier:container:configurationURL:]	CoreFoundation		</span><br><span class="line"><span class="number">20</span>	_CFPreferencesSetAppValueWithContainerAndConfiguration	CoreFoundation		</span><br><span class="line"><span class="number">21</span>	-[<span class="built_in">NSUserDefaults</span>(<span class="built_in">NSUserDefaults</span>) setObject:forKey:]	Foundation		</span><br><span class="line"><span class="number">22</span>	<span class="number">0x100d560a8</span>			</span><br><span class="line"><span class="number">23</span>	<span class="number">0x100d53744</span>			</span><br><span class="line"><span class="number">24</span>	-[<span class="built_in">UIApplication</span> _stopDeactivatingForReason:]	<span class="built_in">UIKitCore</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>Webview</li>
+</ol>
+<p>很多应用喜欢在应用启动时初始化一个<code>WKWebview</code>（或已废弃的<code>UIWebview</code>），可能是用来同步UA信息。<code>WKWebview</code>的初始化及JS脚本执行是很耗时的操作。</p>
+<ol start="3">
+<li>并发锁等待</li>
+</ol>
+<p>对于有多线程读写需求的数据，为了数据的一致性，我们一般会对临界代码的访问进行加锁处理。这体现在很多场景，比如观察者模式<code>Observer</code>的读写一般需要加锁；比如共享资源的读写需要加锁，很常见的就是SQLite数据库的读写就有文件锁；比如很多日志库的实现也会加锁。</p>
+<p>并发处理需求的处理，在目前都是有加锁需要的。但排查甄别这类问题却是相对麻烦的事情，一是因为并发场景不一定好复现，二是锁等待时间比较随机。</p>
+<p>在本次的案例中，我们发现有几个场景导致锁等待的。</p>
+<ul>
+<li>凌乱的递归锁<br>这个项目的历史遗留原因，在一个Service中介者的实现上，有比较多问题。列一下伪代码：</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">ServiceCenter</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">NSMutableDictionary</span> *serviceMap;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">NSMutableDictionary</span> *clientMap;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)getService:(Class)cls;</span><br><span class="line">- (<span class="keyword">void</span>)registerClient:(<span class="keyword">id</span>)client forClientProtocol:(Protocol *)proto;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>因为要支持多线程访问，读写<code>serviceMap</code>需要加锁。而在<code>Service</code>的初始化过程中，会向<code>ServiceCenter</code>注册遵循不同<code>proto</code>的<code>Client</code>，而<code>ServiceCenter</code>对<code>clientMap</code>的读写也是需要加锁的。<br>所以<code>ServiceCenter</code>是需要递归锁的，项目里面使用的是<code>@synchronized</code>。暂且不论锁的性能问题，并发情况下这段逻辑上是可能会引起锁等待的。</p>
+<ul>
+<li>Mars日志库异步写入<br>Mars是一个基于mmap方案的日志库。Mars的总体的流程分为3个步骤：<br>a. 日志格式化<br>b. 写入缓存<br>c. 达到阈值后通知后台线程写入文件</li>
+</ul>
+<p><code>XloggerAppender::Write</code>方法在异步写入的情况下是如下代码：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> XloggerAppender::__WriteAsync(<span class="keyword">const</span> XLoggerInfo* _info, <span class="keyword">const</span> <span class="keyword">char</span>* _log) &#123;</span><br><span class="line">    <span class="keyword">char</span> temp[<span class="number">16</span>*<span class="number">1024</span>] = &#123;<span class="number">0</span>&#125;;       <span class="comment">//tell perry,ray if you want modify size.</span></span><br><span class="line">    <span class="function">PtrBuffer <span class="title">log_buff</span><span class="params">(temp, <span class="number">0</span>, <span class="keyword">sizeof</span>(temp))</span></span>;</span><br><span class="line">    log_formater(_info, _log, log_buff);</span><br><span class="line"></span><br><span class="line">    <span class="function">ScopedLock <span class="title">lock</span><span class="params">(mutex_buffer_async_)</span></span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">nullptr</span> == log_buff_) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (log_buff_-&gt;GetData().Length() &gt;= kBufferBlockLength*<span class="number">4</span>/<span class="number">5</span>) &#123;</span><br><span class="line">       <span class="keyword">int</span> ret = <span class="built_in">snprintf</span>(temp, <span class="keyword">sizeof</span>(temp), <span class="string">"[F][ sg_buffer_async.Length() &gt;= BUFFER_BLOCK_LENTH*4/5, len: %d\n"</span>, (<span class="keyword">int</span>)log_buff_-&gt;GetData().Length());</span><br><span class="line">       log_buff.Length(ret, ret);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!log_buff_-&gt;Write(log_buff.Ptr(), (<span class="keyword">unsigned</span> <span class="keyword">int</span>)log_buff.Length())) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (log_buff_-&gt;GetData().Length() &gt;= kBufferBlockLength*<span class="number">1</span>/<span class="number">3</span> || (<span class="literal">nullptr</span>!=_info &amp;&amp; kLevelFatal == _info-&gt;level)) &#123;</span><br><span class="line">       cond_buffer_async_.notifyAll();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到也加了互斥锁，并且是在发起线程上进行压缩、加密后写入缓存的，算是一个耗时操作。日志的多线程使用也是避免不了，项目中可能在网络回调、数据库读写回调、各种业务代码中都可能有，有一定的几率引发锁等待。</p>
+<ol start="4">
+<li>主线程大量I/O</li>
+</ol>
+<p>列举一些：<br>a. 图片资源读取<br>b. 配置读取<br>c. KV存储同步读写</p>
+<p>这些场景都非常常见，很可能也是你们项目中的性能杀手。</p>
+<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>根据行业过往的经验及苹果的建议，我们有一些常见的优化方法和策略。</p>
+<ol>
+<li>加载阶段优化</li>
+</ol>
+<p>苹果给出的建议是，减少对外部框架和动态库的依赖。</p>
+<p>我们可以实际操作的一些优化：</p>
+<ul>
+<li>减少不必要的系统库依赖；</li>
+<li>集成二、三方库时尽量使用静态库进行集成；</li>
+<li>删除冗余代码；</li>
+</ul>
+<p>系统框架在不同App间大部分是共享的，对于__TEXT段等都不需要从文件重新加载，因此系统库的加载的开销是比较少的。我们从示例中Networking的加载可以了解。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dyld[<span class="number">22103</span>]: Mapping /Users/jason/Library/Developer/CoreSimulator/Devices/CBF3EE82<span class="number">-71E5</span><span class="number">-4E03</span><span class="number">-9224</span>-ED58E7439141/data/Containers/Bundle/Application/<span class="number">27</span>EF4D4C<span class="number">-1E45</span><span class="number">-460</span>A<span class="number">-8E01</span><span class="number">-3B</span>43BA4DD038/Merge.app/Frameworks/Networking.framework/Networking</span><br><span class="line">dyld[<span class="number">22103</span>]:         __TEXT (r.x) <span class="number">0x0001034F4000</span>-&gt;<span class="number">0x000103594000</span></span><br><span class="line">dyld[<span class="number">22103</span>]:   __DATA_CONST (rw.) <span class="number">0x000103594000</span>-&gt;<span class="number">0x00010359C000</span></span><br><span class="line">dyld[<span class="number">22103</span>]:         __DATA (rw.) <span class="number">0x00010359C000</span>-&gt;<span class="number">0x0001035B8000</span></span><br><span class="line">dyld[<span class="number">22103</span>]:     __LINKEDIT (r..) <span class="number">0x0001035B8000</span>-&gt;<span class="number">0x000103668000</span></span><br><span class="line">dyld[<span class="number">22103</span>]: &lt;<span class="number">6</span>A29357D<span class="number">-1979</span><span class="number">-37</span>A4-A46C<span class="number">-6</span>AC0FB1141C5&gt; /Users/jason/Library/Developer/CoreSimulator/Devices/CBF3EE82<span class="number">-71E5</span><span class="number">-4E03</span><span class="number">-9224</span>-ED58E7439141/data/Containers/Bundle/Application/<span class="number">27</span>EF4D4C<span class="number">-1E45</span><span class="number">-460</span>A<span class="number">-8E01</span><span class="number">-3B</span>43BA4DD038/Merge.app/Frameworks/Networking.framework/Networking</span><br></pre></td></tr></table></figure></p>
+<p>第二点借助CocoaPods很容易实现，可以组件静态库化，也可以指定:linkage为static。对于极致的优化，可以对一些只能动态库集成、但非启动过程中必需的三方库，可以进行包装进行动态载入。<br>第三点删除冗余代码，一些比较简便的方式就是通过比对Mach-O文件中clslist与classref的差集来分析。</p>
+<p>因为iOS13之后dyld3的启动闭包优化，以及设备性能提升，存在较大比例的热启动的情况。从我们后来的检测数据来看，加载阶段的优化在线上平均表现是比较一般的。</p>
+<ol start="2">
+<li>静态初始化阶段优化</li>
+</ol>
+<p>静态初始化部分的耗时，通常来源于三部分：</p>
+<ul>
+<li>C++静态构造函数</li>
+<li>Objective-C +load 方法</li>
+<li>标记为clang属性<strong>_attribute</strong>((constructor))函数</li>
+</ul>
+<p>对于一般的项目我们着手处理的更多的是<code>+load</code>方法的优化。因为<code>+load</code>方法的执行时机比main函数更早，实际上是可以用来做一些预处理工作的。但因为iOS开发的早期一些错误的范例，以及开发的一些惰性，导致了<code>+load</code>方法的滥用甚至是错误使用。</p>
+<p>一些错误的使用范例：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">XXXConfessionView</span></span></span><br><span class="line">+ (<span class="keyword">void</span>)load &#123;</span><br><span class="line">	[<span class="built_in">UIUtil</span> registErrorHandle:(<span class="keyword">id</span>&lt;<span class="built_in">UIUtilErrorHandle</span>&gt;)<span class="keyword">self</span> withCode:ERR_CODE_AAA];</span><br><span class="line">	[<span class="built_in">UIUtil</span> registErrorHandle:(<span class="keyword">id</span>&lt;<span class="built_in">UIUtilErrorHandle</span>&gt;)<span class="keyword">self</span> withCode:ERR_CODE_BBB];</span><br><span class="line">	[<span class="built_in">UIUtil</span> registErrorHandle:(<span class="keyword">id</span>&lt;<span class="built_in">UIUtilErrorHandle</span>&gt;)<span class="keyword">self</span> withCode:ERR_CODE_CCC];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>+load</code>方法内部实际调用了<code>UIKit</code>相关的接口，又触发了<code>UIKit</code>的一些加载及初始化方法。</p>
+<p>通常来说，在没有其他优化手段时，我们可以考虑将部分<code>+load</code>方法中逻辑迁移到<code>+initialized</code>中，附一下两个方法的接口说明：<br><code>+load</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">load()</span><br><span class="line">Invoked whenever a class or category is added to the Objective-C runtime; implement this method to perform class-specific behavior upon loading.</span><br><span class="line"></span><br><span class="line">The load() message is sent to classes and categories that are both dynamically loaded and statically linked, but only if the newly loaded class or category implements a method that can respond.</span><br><span class="line">The order of initialization is as follows:</span><br><span class="line">All initializers in any framework you link to.</span><br><span class="line">All +load methods in your image.</span><br><span class="line">All C++ static initializers and C/C++ __attribute__(constructor) functions in your image.</span><br><span class="line">All initializers in frameworks that link to you.</span><br><span class="line">In addition:</span><br><span class="line">A class’s +load method is called after all of its superclasses’ +load methods.</span><br><span class="line">A category +load method is called after the class’s own +load method.</span><br><span class="line">In a custom implementation of load() you can therefore safely message other unrelated classes from the same image, but any load() methods implemented by those classes may not have run yet.</span><br><span class="line">Important</span><br><span class="line">Custom implementations of the load method for Swift classes bridged to Objective-C are not called automatically.</span><br></pre></td></tr></table></figure></p>
+<p><code>+initialized</code><br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">The runtime sends initialize to each <span class="class"><span class="keyword">class</span> <span class="title">in</span> <span class="title">a</span> <span class="title">program</span> <span class="title">just</span> <span class="title">before</span> <span class="title">the</span> <span class="title">class</span>, <span class="title">or</span> <span class="title">any</span> <span class="title">class</span> <span class="title">that</span> <span class="title">inherits</span> <span class="title">from</span> <span class="title">it</span>, <span class="title">is</span> <span class="title">sent</span> <span class="title">its</span> <span class="title">first</span> <span class="title">message</span> <span class="title">from</span> <span class="title">within</span> <span class="title">the</span> <span class="title">program</span>. <span class="title">Superclasses</span> <span class="title">receive</span> <span class="title">this</span> <span class="title">message</span> <span class="title">before</span> <span class="title">their</span> <span class="title">subclasses</span>.</span></span><br><span class="line"><span class="class"><span class="title">The</span> <span class="title">runtime</span> <span class="title">sends</span> <span class="title">the</span> <span class="title">initialize</span> <span class="title">message</span> <span class="title">to</span> <span class="title">classes</span> <span class="title">in</span> <span class="title">a</span> <span class="title">thread</span>-<span class="title">safe</span> <span class="title">manner</span>. <span class="title">That</span> <span class="title">is</span>, <span class="title">initialize</span> <span class="title">is</span> <span class="title">run</span> <span class="title">by</span> <span class="title">the</span> <span class="title">first</span> <span class="title">thread</span> <span class="title">to</span> <span class="title">send</span> <span class="title">a</span> <span class="title">message</span> <span class="title">to</span> <span class="title">a</span> <span class="title">class</span>, <span class="title">and</span> <span class="title">any</span> <span class="title">other</span> <span class="title">thread</span> <span class="title">that</span> <span class="title">tries</span> <span class="title">to</span> <span class="title">send</span> <span class="title">a</span> <span class="title">message</span> <span class="title">to</span> <span class="title">that</span> <span class="title">class</span> <span class="title">will</span> <span class="title">block</span> <span class="title">until</span> <span class="title">initialize</span> <span class="title">completes</span>.</span></span><br><span class="line"><span class="class"><span class="title">The</span> <span class="title">superclass</span> <span class="title">implementation</span> <span class="title">may</span> <span class="title">be</span> <span class="title">called</span> <span class="title">multiple</span> <span class="title">times</span> <span class="title">if</span> <span class="title">subclasses</span> <span class="title">do</span> <span class="title">not</span> <span class="title">implement</span> <span class="title">initialize</span>—<span class="title">the</span> <span class="title">runtime</span> <span class="title">will</span> <span class="title">call</span> <span class="title">the</span> <span class="title">inherited</span> <span class="title">implementation</span>—<span class="title">or</span> <span class="title">if</span> <span class="title">subclasses</span> <span class="title">explicitly</span> <span class="title">call</span> [<span class="title">super</span> <span class="title">initialize</span>]. <span class="title">If</span> <span class="title">you</span> <span class="title">want</span> <span class="title">to</span> <span class="title">protect</span> <span class="title">yourself</span> <span class="title">from</span> <span class="title">being</span> <span class="title">run</span> <span class="title">multiple</span> <span class="title">times</span>, <span class="title">you</span> <span class="title">can</span> <span class="title">structure</span> <span class="title">your</span> <span class="title">implementation</span> <span class="title">along</span> <span class="title">these</span> <span class="title">lines</span>:</span></span><br><span class="line">+ (<span class="keyword">void</span>)initialize &#123;</span><br><span class="line">	<span class="keyword">if</span> (self == [ClassName self]) &#123;</span><br><span class="line">		<span class="comment">// ... do the initialization ...</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">Because initialize is called in a blocking manner, it’s important to limit method implementations to the minimum amount of work necessary possible. Specifically, any code that takes locks that might be required by other classes in their initialize methods is liable to lead to deadlocks. Therefore, you should <span class="keyword">not</span> rely on initialize <span class="keyword">for</span> <span class="built_in">complex</span> initialization, <span class="keyword">and</span> should instead limit it to straightforward, <span class="class"><span class="keyword">class</span> <span class="title">local</span> <span class="title">initialization</span>.</span></span><br></pre></td></tr></table></figure></p>
+<p>实际上很多这些预处理的任务，比如组件化后的一些服务或业务模块的加载、初始化工作，可以调整到首帧甚至更晚的实际进行。对于这些<code>LaunchTask</code>任务我们可以管理起来，既避免在静态初始化阶段通过<code>+load</code>方法这些方式引入耗时，又能指定优先级及依赖关系，让启动过程或者说App的模块/服务化都更加清晰。实践上，我们会将模块/服务任务的注册/映射信息，写入到Mach-O的自定义Section中，具体会在后面文章进行介绍。</p>
+<ol start="3">
+<li>启动任务分级优化</li>
+</ol>
+<p>启动过程，我们可以划分为<code>didFinishLaunch</code>、<code>afterFirstFrame</code>等几个阶段。在<code>UIApplicationDelegate</code>回调时，我们可以建立应用任务时序、优先级的管理，同上面提到的<code>LaunchTask</code>，不赘述。</p>
+<ol start="4">
+<li>耗时函数优化</li>
+</ol>
+<p>在分析到项目的耗时方法后，我们需要具体的进行优化，比如缓存是一种常见的优化策略，又比如减少内存操作等。可以举一些案例。</p>
+<p>比如前面提到的通过<code>WKWebView</code>查询<code>UA</code>的功能，考虑到<code>UA</code>生成逻辑的变更频率，完全可以增加多级缓存，可以大幅减少这个方法的耗时。</p>
+<p>又比如项目中有个ListViewModel的类有这么一个属性：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span>(<span class="keyword">set</span>) <span class="keyword">var</span> blueRoomList:[<span class="type">BlueRoomListModel</span>] &#123;</span><br><span class="line">        <span class="keyword">set</span> &#123;</span><br><span class="line">            _blueRoomList = newValue</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">get</span> &#123;</span><br><span class="line">            <span class="keyword">let</span> copy = _blueRoomList</span><br><span class="line">            <span class="keyword">return</span> copy</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>这个<code>blueRoomList</code>在<code>tableView</code>的回调被频繁调用，用来查询count或某个element。针对这个情况，我们的优化可以对<code>ListViewModel</code>增加提供外部接口，避免这个copy操作。</p>
+<ol start="5">
+<li>主线程阻塞优化</li>
+</ol>
+<p>主线程阻塞一般是锁、I/O或XPC引起的。</p>
+<p>对于锁的问题，一方面如果是高频的并发情况，可以选择锁的替换方案，比如使用读写锁、使用dispatch队列等。对于递归锁，根据benchmark，<code>NSRecursiveLock</code>性能是比较低的，一个可选的方案是支持递归的<code>pthread_mutext_t</code>。另一方面，则需要避免死锁的逻辑，我们最好是限制临界区代码的范围，比如上述提到的<code>ServiceCenter</code>的案例中，如果我们只对<code>serviceMap</code>读写部分加锁，将<code>Service</code>的初始化过程中的无关逻辑移出加锁范围，可以大幅减少我们死锁的问题。</p>
+<p>I/O的优化，对于启动过程必须的图片资源，我们可以进行预加载。<code>UIImage</code>的加载是支持并发的。还有启动图缓存的使用，既避免资源加载的阻塞，又在视觉效果上可以较好地过渡，在异步加载资源方面是可以有效改善用户体验的。</p>
+<p>主线程阻塞的问题一般隐藏性比较深，尤其是不稳定重现的问题，需要我们根据实际情况处理，这里不再赘述。</p>
+<ol start="6">
+<li>首帧渲染优化</li>
+</ol>
+<p>用苹果的建议，一句话是“降低初始视图的复杂性”。总的来说，首帧渲染涉及到我们对应用页面栈的管理、服务的加载逻辑、业务架构、UI渲染优化等，总体上是涉及到项目架构的。这些都需要专题解决，所以这里也只能一笔带过。</p>
+<p>在不大改动架构的前提下，我们也可以注意一些小技巧，比如，I/O的管理及缓存的使用。图片作为我们很常见的视觉元素，图片加载和图片缓存有合理的管理策略，是能有效改善应用性能的。</p>
+<ol start="7">
+<li>二进制重排</li>
+</ol>
+<p>二进制重排主要是考虑程序运行过程中对指令读取过程中Page Fault引起的性能问题。主要的方法是通过clang插桩记录启动过程中的访问的符号信息，生成一个orderfile，以便编译器在链接时调整顺序。Page Fault之前已有博客讨论了，orderfile的生成目前也是成熟方法了（可以直接使用<code>YCSymbolTracker</code>），只是需要注意<code>+load</code>方法以及效率问题。我对<code>YCSymbolTracker</code>有个小小的patch，后续会提pr过去。此处不再赘述。</p>
+<h3 id="优化结果"><a href="#优化结果" class="headerlink" title="优化结果"></a>优化结果</h3><p>这一次的优化，我们分了两期上线，x.0.1是优化前版本，x.0.2主要上线除启动任务分级、主线程卡顿之外的其他优化处理，x.0.3补充提交了这两个优化。<br>最终的效果如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>版本</td>
+<td>均值</td>
+<td>P50</td>
+<td>P90</td>
+<td>P95</td>
+<td>std</td>
+</tr>
+<tr>
+<td>X.0.1</td>
+<td>3179.2</td>
+<td>2406.0</td>
+<td>6165.0</td>
+<td>7894.0</td>
+<td>2664.6</td>
+</tr>
+<tr>
+<td>x.0.2</td>
+<td>3130.0（0.98）</td>
+<td>2096.0（0.87）</td>
+<td>6470.0</td>
+<td>8850.0</td>
+<td>3126.3</td>
+</tr>
+<tr>
+<td>X.0.3</td>
+<td>1737.9（0.55）</td>
+<td>1306.0（0.54）</td>
+<td>3301.0</td>
+<td>4539.0</td>
+<td>1665.7</td>
+</tr>
+</tbody>
+</table>
+<p><img src="profile_x.0.3.png" alt><br>（蓝色是优化前版本x.0.1，橙色是x.0.2，红色是x.0.3）</p>
+<p>可以看到，x.0.3版本优化后，启动的的中位时间从2.41s下降为1.31s，平均时间从3.18s下降为1.74s，P90下降为3.30s。这说明就该项目而言，主线程阻塞问题对某些设备有很大影响。但如上文提到的，二进制重排，出乎意料的是，在平均效果表现上一般。可能是启动闭包以及的优化。</p>
+<p>1.31s的效果也不算理想，对于尚包含大量不规范的数据库操作、KV存储等逻辑的项目，这已经在预期中了。而更深度的优化，只能在应用页面栈管理、服务加载逻辑、业务架构、UI渲染优化等方面继续深耕。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>任何时候，问题比答案更重要，提出问题需要勇气，找到问题需要努力。对技术路上开放、分享、开源、营造社区氛围的技术er们，Respect。</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新於 2022-09-16</p></div> 
+    <div class="post-entry__tags"><a href="/tags/性能/" class="post-tags__link button"># 性能</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/ios/ios-launch-task/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            iOS启动任务管理
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/iOS/YCSymbolTracker-patch/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            YCSymbolTracker打个小补丁
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>評論</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到頂部" title="回到頂部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-K2Q2J84"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-K2Q2J84');
+    </script>
+ 
+
+ 
+
+ 
+
+
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "1d741b4fcb7f4062933be3f4b0eb6571"}'></script>
+    </script>
+    
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

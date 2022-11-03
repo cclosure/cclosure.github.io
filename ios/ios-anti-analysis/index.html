@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>反静态分析/动态调试的基本方案 | { }</title>
+
+
+    <meta name="keywords" content="逆向, 技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="不同项目的安全性要求不同，对于保密性要求高的代码，需要提高程序的逆向成本。">
+<meta name="keywords" content="逆向">
+<meta property="og:type" content="article">
+<meta property="og:title" content="反静态分析&#x2F;动态调试的基本方案">
+<meta property="og:url" content="http://blog.knpc21.com/ios/ios-anti-analysis/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="不同项目的安全性要求不同，对于保密性要求高的代码，需要提高程序的逆向成本。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-05-29T07:13:09.000Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="反静态分析&#x2F;动态调试的基本方案">
+<meta name="twitter:description" content="不同项目的安全性要求不同，对于保密性要求高的代码，需要提高程序的逆向成本。">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        反静态分析/动态调试的基本方案
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2021/05/" class="post-meta__date button">2021-05-29</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>不同项目的安全性要求不同，对于保密性要求高的代码，需要提高程序的逆向成本。</p>
+<a id="more"></a>
+<h4 id="防静态分析"><a href="#防静态分析" class="headerlink" title="防静态分析"></a>防静态分析</h4><p>静态分析工具很容易从Mach-O二进制文件中获取到其中的符号表，比如MachOView、Hopper等。默认情况下，我们程序中的函数名、全局变量等都是会被导出的，也就是从符号表中可以查阅得到。有意义的符号名显然对于后续的静态分析是有很大帮助的。</p>
+<h5 id="符号Strip"><a href="#符号Strip" class="headerlink" title="符号Strip"></a>符号Strip</h5><p>防止静态分析，首先可以做的是移除内部符号，包括数据段符号和代码段符号（全局变量及内部函数名）。</p>
+<p>因此对于项目中不需要导出的符号，我们尽量不导出。可以在链接后进行strip掉，移除符号可以使用strip命令。Xcode支持配置（Strip Style），并且可以使用编译声明<code>__attribute__ ((visibility(&quot;hidden&quot;)))</code>隐藏符号。</p>
+<p>另一方面可以进行符号混淆，或者更广范围的代码混淆。</p>
+<h5 id="代码混淆"><a href="#代码混淆" class="headerlink" title="代码混淆"></a>代码混淆</h5><p>符号混淆需要将有意义函数符号进行替代，比如C系列的可以通过宏在编译前进行替代。符号混淆需要注意的，一个是动态语言的代码中可能会使用反射，需要规避符号混淆引起Crash；另一方面则是需要处理符号解析的问题。</p>
+<p>除此之外，代码混淆还有两部分：①代码中的常量字符串加密，比如一些关键的key；②逻辑代码中增加垃圾代码/指令。都是为了增加逆向的难度。</p>
+<p>字符串加密，很常用的方式便是将常量字符串转换成字符数组，再进一步可以通过预处理附加加解密功能，即使很简单的加密也会让逆向难度陡增。</p>
+<p>逻辑代码混淆，一种简单的方式是在需要保护的逻辑中特意添加无意义代码；另外指令混淆上有些工具可以支持，比如有人通过修改LLVM在指令级别进行混淆。这些都是为了提高静态分析的成本。</p>
+<h4 id="防动态调试"><a href="#防动态调试" class="headerlink" title="防动态调试"></a>防动态调试</h4><p>防止动态调试，主要是防止应用程序被其他进程附加并在程序运行时检测应用程序逻辑。类似开发环境调试，实际上Xcode中的也是通过attach功能，来实现调试的，debugserver是调试进程。</p>
+<p><code>Unix</code>系统中，提供<code>ptrace</code>的系统调用来实现调试以及对进程进行跟踪。但同时苹果也提供了<code>PT_DENY_ATTACH</code>选项，用于阻止调试器依附到进程。</p>
+<p>防动态调试一个主要的实现方式，就是禁止外部进程使用<code>ptrace</code>调用附加到本进程。常见的方式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;dlfcn.h&gt;  </span><br><span class="line">#import &lt;sys/types.h&gt;</span><br><span class="line">#import &lt;sys/ptrace.h&gt;</span><br><span class="line"></span><br><span class="line">typedef int (*ptrace_ptr_t)(int _request, pid_t _pid, caddr_t _addr, int _data);  </span><br><span class="line"></span><br><span class="line">#if undefined(PT_DENY_ATTACH)</span><br><span class="line">#define PT_DENY_ATTACH 31  </span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">void AntiAppAttach() &#123;  </span><br><span class="line">    void *handle = dlopen(0, RTLD_GLOBAL | RTLD_NOW);</span><br><span class="line">    ptrace_ptr_t ptrace_ptr = dlsym(handle, &quot;ptrace&quot;);</span><br><span class="line">    ptrace_ptr(PT_DENY_ATTACH, 0, 0, 0);      //关闭动态库，并且卸载  </span><br><span class="line">    dlclose(handle);  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>调试、反调试、反反调试就像猫鼠游戏。逆向开发也知道部分App会进行反调试，所以也可能会hook了<code>ptrace</code>、<code>sysctl</code>和<code>syscall</code>这样的函数来避免被反调试。要hook系统函数，通常就是通过动态库注入。</p>
+<h4 id="防注入"><a href="#防注入" class="headerlink" title="防注入"></a>防注入</h4><p>动态库注入是另一种常见的动态调试以及入侵源程序的方式。比如Xcode提供的一些工具<code>libMainthreadChecker</code>也正是Xcode注入的动态库。</p>
+<p>越狱环境下，可以通过<code>DYLD_INSERT_LIBRARIES</code>来插入动态库并执行。非越狱环境下，则可以可以通过修改Mach-O文件并重签名。</p>
+<p>在iOS10之前，防注入可以在编译时，在 Other Linker Flags 配置上添加下面内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Wl,-sectcreate,__RESTRICT,__restrict,/dev/null</span><br></pre></td></tr></table></figure></p>
+<p>更高版本，则需要在App中检测是否被<code>DYLD_INSERT_LIBRARIES</code>的方式注入了动态库了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">char *env = getenv(&quot;DYLD_INSERT_LIBRARIES&quot;);</span><br></pre></td></tr></table></figure></p>
+<p>未被注入的情况下，<code>env</code>是<code>null</code>的。</p>
+<p>其他的手段比如检测越狱、校验App签名（需要避免被hook的情况），结合帐号设备封禁等。</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新於 2021-05-29</p></div> 
+    <div class="post-entry__tags"><a href="/tags/逆向/" class="post-tags__link button"># 逆向</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/research/community-group-buying/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            社区电商调研
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/undefined/dns-dnspod/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            DNSPod要实名了
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>評論</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到頂部" title="回到頂部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-K2Q2J84"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-K2Q2J84');
+    </script>
+ 
+
+ 
+
+ 
+
+
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "1d741b4fcb7f4062933be3f4b0eb6571"}'></script>
+    </script>
+    
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

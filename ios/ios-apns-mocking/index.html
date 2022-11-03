@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>APNS远程推送模拟 | { }</title>
+
+
+    <meta name="keywords" content="iOS, APNS, 技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="如果想测试应用的消息推送的逻辑，在此之前我们只有一个选择，就是使用真实设备以及苹果推送服务进行测试。在真正的测试发送通知之前，我们需要将设备id添加到开发者后台，需要更新授权文件，需要配置推送证书，重新编译App安装到设备上以及获取设备的推送令牌。">
+<meta name="keywords" content="iOS,APNS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="APNS远程推送模拟">
+<meta property="og:url" content="http://blog.knpc21.com/ios/ios-apns-mocking/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="如果想测试应用的消息推送的逻辑，在此之前我们只有一个选择，就是使用真实设备以及苹果推送服务进行测试。在真正的测试发送通知之前，我们需要将设备id添加到开发者后台，需要更新授权文件，需要配置推送证书，重新编译App安装到设备上以及获取设备的推送令牌。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-11-27T02:43:56.700Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="APNS远程推送模拟">
+<meta name="twitter:description" content="如果想测试应用的消息推送的逻辑，在此之前我们只有一个选择，就是使用真实设备以及苹果推送服务进行测试。在真正的测试发送通知之前，我们需要将设备id添加到开发者后台，需要更新授权文件，需要配置推送证书，重新编译App安装到设备上以及获取设备的推送令牌。">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        APNS远程推送模拟
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2020/04/" class="post-meta__date button">2020-04-10</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>如果想测试应用的消息推送的逻辑，在此之前我们只有一个选择，就是使用真实设备以及苹果推送服务进行测试。在真正的测试发送通知之前，我们需要将设备id添加到开发者后台，需要更新授权文件，需要配置推送证书，重新编译App安装到设备上以及获取设备的推送令牌。</p>
+<a id="more"></a>
+<p>这是让人难受的过程，尤其是对于一些共享开发帐号的情况——100个开发设备的名额很快就受限了。如果你是个新手，对推送不太了解，可能开发证书跟推送证书还不太明了，或者如果后端也是懵逼的，那难度系数还要+1。没有真机调试，相信这会是你难忘的调试经历。这不是我的经历，但现实确实是很多人会有困扰。</p>
+<p>我通常使用<code>Knuff</code>或者一些Python库来测试推送，我现在也还会用，但现在我们有更好的选择了。</p>
+<p>从Xcode 11.4开始，可以直接在模拟器中模拟远程推送通知。免去了繁杂的配置过程，也无需漫长的等待。</p>
+<p>最好的方法是使用simctl命令行工具，该工具提供了以编程方式使用模拟器的界面。</p>
+<p>推送的<code>Payload</code>数据是这样的：（官方<a href="https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html" target="_blank" rel="noopener">文档</a>）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;aps&quot; : &#123;</span><br><span class="line">        &quot;alert&quot; : &#123;</span><br><span class="line">            &quot;title&quot;: &quot;My title&quot;,</span><br><span class="line">            &quot;body&quot; : &quot;This is a test&quot;,</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;Simulator Target Bundle&quot;: &quot;com.company.abc&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>对于App的指定，可以在<code>Payload</code>中指定为<code>APP_PRODUCT_BUNDLE_IDENTIFIER</code>，或者在命令行中指定也是可以的。</p>
+<p>推送的命令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcrun simctl push &lt;device&gt; [&lt;bundle identifier&gt;] (&lt;payload json file&gt; | -)</span><br></pre></td></tr></table></figure></p>
+<p>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xcrun simctl push booted com.company.abc payload.json</span><br><span class="line">xcrun simctl push booted payload.json // 如果在Payload中指定了target</span><br></pre></td></tr></table></figure></p>
+<p>也可以使用下面的命令，获取到已启动的<device>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcrun simctl list | egrep &apos;Booted&apos;</span><br></pre></td></tr></table></figure></device></p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新於 2021-11-27</p></div> 
+    <div class="post-entry__tags"><a href="/tags/iOS/" class="post-tags__link button"># iOS</a><a href="/tags/APNS/" class="post-tags__link button"># APNS</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/tech/pagefault/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            虚拟内存与Page Fault
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/ios/json-web-token/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            JSON Web Token
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>評論</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到頂部" title="回到頂部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-K2Q2J84"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-K2Q2J84');
+    </script>
+ 
+
+ 
+
+ 
+
+
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "1d741b4fcb7f4062933be3f4b0eb6571"}'></script>
+    </script>
+    
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

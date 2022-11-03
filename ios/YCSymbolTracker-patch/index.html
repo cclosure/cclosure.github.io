@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>YCSymbolTracker打个小补丁 | { }</title>
+
+
+    <meta name="keywords" content="优化, 技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="YCSymbolTracker是一个通过clang插桩记录应用启动过程中发起的方法。 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283">
+<meta name="keywords" content="优化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="YCSymbolTracker打个小补丁">
+<meta property="og:url" content="http://blog.knpc21.com/iOS/YCSymbolTracker-patch/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="YCSymbolTracker是一个通过clang插桩记录应用启动过程中发起的方法。 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-11-03T18:02:03.851Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="YCSymbolTracker打个小补丁">
+<meta name="twitter:description" content="YCSymbolTracker是一个通过clang插桩记录应用启动过程中发起的方法。 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        YCSymbolTracker打个小补丁
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2022/09/" class="post-meta__date button">2022-09-15</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>YCSymbolTracker是一个通过clang插桩记录应用启动过程中发起的方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br></pre></td><td class="code"><pre><span class="line">//</span><br><span class="line">//  YCSymbolTracker.m</span><br><span class="line">//  YCSymbolTracker</span><br><span class="line">//</span><br><span class="line">//  Created by ycpeng on 2020/6/10.</span><br><span class="line">//</span><br><span class="line"></span><br><span class="line">#import &quot;YCSymbolTracker.h&quot;</span><br><span class="line"></span><br><span class="line">#import &lt;stdint.h&gt;</span><br><span class="line">#import &lt;stdio.h&gt;</span><br><span class="line">#import &lt;sanitizer/coverage_interface.h&gt;</span><br><span class="line">#import &lt;libkern/OSAtomic.h&gt;</span><br><span class="line">#import &lt;dlfcn.h&gt;</span><br><span class="line">#import &lt;os/lock.h&gt;</span><br><span class="line"></span><br><span class="line">void __sanitizer_cov_trace_pc_guard_init(uint32_t *start, uint32_t *stop) &#123;</span><br><span class="line">  static uint64_t N;  // Counter for the guards.</span><br><span class="line">  if (start == stop || *start) return;  // Initialize only once.</span><br><span class="line">//  printf(&quot;INIT: %p %p\n&quot;, start, stop);</span><br><span class="line">  for (uint32_t *x = start; x &lt; stop; x++)</span><br><span class="line">    *x = (uint32_t)++N;  // Guards should start from 1.</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void printInfo(void *PC) &#123;</span><br><span class="line">    Dl_info info;</span><br><span class="line">    dladdr(PC, &amp;info);</span><br><span class="line">    printf(&quot;fnam:%s \n fbase:%p \n sname:%s \n saddr:%p \n&quot;,</span><br><span class="line">           info.dli_fname,</span><br><span class="line">           info.dli_fbase,</span><br><span class="line">           info.dli_sname,</span><br><span class="line">           info.dli_saddr);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static OSQueueHead symbolList = OS_ATOMIC_QUEUE_INIT;</span><br><span class="line">static BOOL finished;</span><br><span class="line">static NSMutableDictionary *mappings;</span><br><span class="line">static os_unfair_lock lock;</span><br><span class="line"></span><br><span class="line">typedef struct &#123;</span><br><span class="line">    void *pc;</span><br><span class="line">    void *next;</span><br><span class="line">&#125; SymbolNode;</span><br><span class="line"></span><br><span class="line">void __sanitizer_cov_trace_pc_guard(uint32_t *guard) &#123;</span><br><span class="line">//    if (!*guard) return;  // Duplicate the guard check.</span><br><span class="line">    if (finished) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    static dispatch_once_t onceToken;</span><br><span class="line">    dispatch_once(&amp;onceToken, ^&#123;</span><br><span class="line">        mappings = [NSMutableDictionary dictionaryWithCapacity:1000];</span><br><span class="line">        lock = OS_UNFAIR_LOCK_INIT;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    void *PC = __builtin_return_address(0);</span><br><span class="line">    int64_t pcw = (int64_t)PC;</span><br><span class="line">    int32_t pch = (pcw &amp; 0xFFFFFFFF00000000) &gt;&gt; 32;</span><br><span class="line">    </span><br><span class="line">    os_unfair_lock_lock(&amp;lock);</span><br><span class="line">    NSMutableDictionary *sub = [mappings objectForKey:@(pch)];</span><br><span class="line">    if (sub &amp;&amp; sub[@(pcw)]) &#123;</span><br><span class="line">        os_unfair_lock_unlock(&amp;lock);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    if (!sub) &#123;</span><br><span class="line">        sub = [NSMutableDictionary dictionaryWithCapacity:10000];</span><br><span class="line">        mappings[@(pch)] = sub;</span><br><span class="line">    &#125;</span><br><span class="line">    sub[@(pcw)] = @1;</span><br><span class="line">    os_unfair_lock_unlock(&amp;lock);</span><br><span class="line">    </span><br><span class="line">    SymbolNode * node = malloc(sizeof(SymbolNode));</span><br><span class="line">    *node = (SymbolNode)&#123;PC, NULL&#125;;</span><br><span class="line">    </span><br><span class="line">    OSAtomicEnqueue(&amp;symbolList, node, offsetof(SymbolNode, next));</span><br><span class="line"></span><br><span class="line">//    printInfo(PC);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@implementation YCSymbolTracker</span><br><span class="line"></span><br><span class="line">+ (BOOL)exportSymbolsWithFilePath:(nonnull NSString *)filePath</span><br><span class="line">&#123;</span><br><span class="line">    finished = YES;</span><br><span class="line">    </span><br><span class="line">    NSMutableArray &lt;NSString *&gt;* symbolNames = [NSMutableArray array];</span><br><span class="line">    while (YES) &#123;</span><br><span class="line">        SymbolNode *node = OSAtomicDequeue(&amp;symbolList, offsetof(SymbolNode, next));</span><br><span class="line">        if (node == NULL) &#123;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">        Dl_info info;</span><br><span class="line">        dladdr(node-&gt;pc, &amp;info);</span><br><span class="line">        </span><br><span class="line">        NSString * name = @(info.dli_sname);</span><br><span class="line">        BOOL isObjc = [name hasPrefix:@&quot;+[&quot;] || [name hasPrefix:@&quot;-[&quot;]; // Objective-C method do nothing</span><br><span class="line">        NSString * symbolName = isObjc? name : [@&quot;_&quot; stringByAppendingString:name]; // c function with &quot;_&quot;</span><br><span class="line">        [symbolNames addObject:symbolName];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    NSEnumerator * emt = [symbolNames reverseObjectEnumerator];</span><br><span class="line">    NSMutableArray&lt;NSString*&gt;* funcs = [NSMutableArray arrayWithCapacity:symbolNames.count];</span><br><span class="line">    NSString * name;</span><br><span class="line">    while (name = [emt nextObject]) &#123;</span><br><span class="line">        if (![funcs containsObject:name]) &#123;</span><br><span class="line">            [funcs addObject:name];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    // remove current method symbol (not necessary when launch)</span><br><span class="line">    [funcs removeObject:[NSString stringWithFormat:@&quot;%s&quot;, __FUNCTION__]];</span><br><span class="line">    </span><br><span class="line">    NSString *funcStr = [funcs componentsJoinedByString:@&quot;\n&quot;];</span><br><span class="line">    NSData * fileContents = [funcStr dataUsingEncoding:NSUTF8StringEncoding];</span><br><span class="line">    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) &#123;</span><br><span class="line">        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];</span><br><span class="line">    &#125;</span><br><span class="line">    return [[NSFileManager defaultManager] createFileAtPath:filePath contents:fileContents attributes:nil];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>添加了加锁逻辑以及重复项目过滤。</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新於 2022-11-04</p></div> 
+    <div class="post-entry__tags"><a href="/tags/优化/" class="post-tags__link button"># 优化</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/ios/ios-launch-optimzation-a-case/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            一次iOS启动优化实践与启示
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/ios/apple-news/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            苹果新闻及更新公告（updated）
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>評論</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到頂部" title="回到頂部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-K2Q2J84"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-K2Q2J84');
+    </script>
+ 
+
+ 
+
+ 
+
+
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "1d741b4fcb7f4062933be3f4b0eb6571"}'></script>
+    </script>
+    
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

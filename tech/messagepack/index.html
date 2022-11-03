@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>MessagePack简介 | { }</title>
+
+
+    <meta name="keywords" content="JSON, 序列化, 技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="It’s like JSON. but fast and small.">
+<meta name="keywords" content="JSON,序列化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MessagePack简介">
+<meta property="og:url" content="http://blog.knpc21.com/tech/messagepack/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="It’s like JSON. but fast and small.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://blog.knpc21.com/tech/messagepack/json-msgpack.jpg">
+<meta property="og:updated_time" content="2020-04-19T09:03:00.000Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MessagePack简介">
+<meta name="twitter:description" content="It’s like JSON. but fast and small.">
+<meta name="twitter:image" content="http://blog.knpc21.com/tech/messagepack/json-msgpack.jpg">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        MessagePack简介
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2020/04/" class="post-meta__date button">2020-04-19</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>It’s like JSON. but fast and small.</p>
+<a id="more"></a>
+<h4 id="MessagePack是什么"><a href="#MessagePack是什么" class="headerlink" title="MessagePack是什么"></a>MessagePack是什么</h4><p><a href="https://msgpack.org" target="_blank" rel="noopener">MessagePack</a>是一个高效的二进制序列化格式，它像JSON一样支持不同语言间的数据交互，但是它的性能更快，序列化之后的码流也更小。</p>
+<p>比如小的整型会被编码为一个单字节，短字符串也仅仅需要额外的一个字节来编码。</p>
+<p>我们可以看下面的例子说明：</p>
+<p><img src="json-msgpack.jpg" alt></p>
+<p>实际上MessagePack确实就“像JSON”一样。</p>
+<h4 id="性能如何"><a href="#性能如何" class="headerlink" title="性能如何"></a>性能如何</h4><p>序列化的性能体现可以分为两方面，一个是编码效率，一个是编码速度。</p>
+<p>根据网友的<a href="https://github.com/nawarian/msgpack-bm" target="_blank" rel="noopener">测试</a>数据，编码效率上确实是比JSON要好的，很明显因为MessagePack本身就是在JSON基础上进行字典编码。但经过gzip压缩后，实际差别不大。所以对于能叠加gzip压缩的场景（比如HTTP协议），显然使用MessagePack的必要性也不高。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Format</th>
+<th style="text-align:left">Encoded (bytes)</th>
+<th style="text-align:left">Encoded + Gzipped (bytes)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">JSON</td>
+<td style="text-align:left">143025</td>
+<td style="text-align:left">26214</td>
+</tr>
+<tr>
+<td style="text-align:left">MessagePack</td>
+<td style="text-align:left">120799 (-22226)</td>
+<td style="text-align:left">26074 (-140)</td>
+</tr>
+</tbody>
+</table>
+<p>而编码速度上，编解码时间相差70%以上，在循环10k次以上时间感知上体现比较明显，但常见情境下比如100次循环的条件下，差异在50ms级别。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Loops</th>
+<th style="text-align:left">JSON Encoding (s)</th>
+<th style="text-align:left">MessagePack Encoding (s)</th>
+<th style="text-align:left">JSON Decoding (s)</th>
+<th style="text-align:left">MessagePack Decoding (s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">0.00064</td>
+<td style="text-align:left">0.00019 (-0,00045)</td>
+<td style="text-align:left">0.00164</td>
+<td style="text-align:left">0.00051 (-0,00113)</td>
+</tr>
+<tr>
+<td style="text-align:left">10</td>
+<td style="text-align:left">0.00340</td>
+<td style="text-align:left">0.00082 (-0,00258)</td>
+<td style="text-align:left">0.00866</td>
+<td style="text-align:left">0.00194 (-0,00672)</td>
+</tr>
+<tr>
+<td style="text-align:left">100</td>
+<td style="text-align:left">0.03135</td>
+<td style="text-align:left">0.00732 (-0,02403)</td>
+<td style="text-align:left">0.07905</td>
+<td style="text-align:left">0.01700 (-0,06205)</td>
+</tr>
+<tr>
+<td style="text-align:left">1000</td>
+<td style="text-align:left">0.30385</td>
+<td style="text-align:left">0.07250 (-0,23135)</td>
+<td style="text-align:left">0.77422</td>
+<td style="text-align:left">0.16785 (-0,60637)</td>
+</tr>
+<tr>
+<td style="text-align:left">10000</td>
+<td style="text-align:left">3.02723</td>
+<td style="text-align:left">0.72503 (-2,95472)</td>
+<td style="text-align:left">7.74523</td>
+<td style="text-align:left">1.65804 (-6,08719)</td>
+</tr>
+<tr>
+<td style="text-align:left">100000</td>
+<td style="text-align:left">30.29353</td>
+<td style="text-align:left">7.25324 (-23,04029)</td>
+<td style="text-align:left">77.48423</td>
+<td style="text-align:left">16.71792 (-60,76631)</td>
+</tr>
+</tbody>
+</table>
+<p>因此综上，在HTTP协议下传输的话，切换到MessagePack的必要性不大。但在自定义协议上还是可以尝试使用的，不经过压缩编码，在流量方面比JSON要优化一些，编码效率也高，尤其你是想使用一个相对不那么可读的序列化编码。</p>
+<h4 id="对比ProtoBuf"><a href="#对比ProtoBuf" class="headerlink" title="对比ProtoBuf"></a>对比ProtoBuf</h4><p>其实根据官网的时间MessagePack应该在2008年就问世了，但到如今应用的范围并不算广泛。而同年Google也正式对外发布ProtoBuf 2.0。在数据二进制编码序列化上，ProtoBuf的使用率更高。在gRPC继续推广的过程中，ProtoBuf可能有更多的应用。</p>
+<p>ProtoBuf二进制编码，通过T-(L)-V（TAG-LENGTH-VALUE）方式编码，因为对字段使用编号指代，所以编解码依赖proto文件，编码后数据没有可读性。公开发布时，ProtoBuf规范版本是proto2，目前ProtoBuf规范的版本是proto3。官方文档可见<a href="https://developers.google.com/protocol-buffers" target="_blank" rel="noopener">此处</a>。编解码过程的示例也可以参考<a href="https://taoshu.in/pb-encoding.html" target="_blank" rel="noopener">此文</a>。</p>
+<p>ProtoBuf更容易拓展，尽管编解码端需要统一使用proto消息规范文件。同时因为Protobuf IDL统一了语言无关的服务定义，协议部分可以独立，对于多端接口的定义也是一种约束。Google在开发ProtoBuf时首先考虑的也并不只是编解码效率问题。并且消息协议变更时，可以平滑升级，这对于二进制编码的协议而言是非常重要的。</p>
+<p>相比而言MessagePack就是比较简单独立的了，既然理解为经过优化的JSON，就没有消息规范文件的约束。</p>
+<h4 id="编码规范介绍"><a href="#编码规范介绍" class="headerlink" title="编码规范介绍"></a>编码规范介绍</h4><p>MessagePack目前已经支持了常见的的编程语言。如果你要开发新的编解码器，是需要了解序列化编码规范的。</p>
+<p>编码规范可以参见MessagePack在github的<a href="https://github.com/msgpack/msgpack/blob/master/spec.md" target="_blank" rel="noopener">文档</a>。</p>
+<p>序列化过程中会根据首字节（及后续字节）来确定编码格式，比如常见的一些首字节：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">格式</th>
+<th style="text-align:left">首字节 (in binary)</th>
+<th style="text-align:left">首字节 (in hex)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">正整数（特定）</td>
+<td style="text-align:left">0xxxxxxx</td>
+<td style="text-align:left">0x00 - 0x7f</td>
+</tr>
+<tr>
+<td style="text-align:left">fixmap</td>
+<td style="text-align:left">1000xxxx</td>
+<td style="text-align:left">0x80 - 0x8f</td>
+</tr>
+<tr>
+<td style="text-align:left">fixarray</td>
+<td style="text-align:left">1001xxxx</td>
+<td style="text-align:left">0x90 - 0x9f</td>
+</tr>
+<tr>
+<td style="text-align:left">fixstr</td>
+<td style="text-align:left">101xxxxx</td>
+<td style="text-align:left">0xa0 - 0xbf</td>
+</tr>
+<tr>
+<td style="text-align:left">nil</td>
+<td style="text-align:left">11000000</td>
+<td style="text-align:left">0xc0</td>
+</tr>
+<tr>
+<td style="text-align:left">(never used)</td>
+<td style="text-align:left">11000001</td>
+<td style="text-align:left">0xc1</td>
+</tr>
+<tr>
+<td style="text-align:left">false</td>
+<td style="text-align:left">11000010</td>
+<td style="text-align:left">0xc2</td>
+</tr>
+<tr>
+<td style="text-align:left">true</td>
+<td style="text-align:left">11000011</td>
+<td style="text-align:left">0xc3</td>
+</tr>
+</tbody>
+</table>
+<p>浮点数编码格式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">float 32 stores a floating point number in IEEE 754 single precision floating point number format:</span><br><span class="line">+--------+--------+--------+--------+--------+</span><br><span class="line">|  0xca  |XXXXXXXX|XXXXXXXX|XXXXXXXX|XXXXXXXX|</span><br><span class="line">+--------+--------+--------+--------+--------+</span><br><span class="line"></span><br><span class="line">float 64 stores a floating point number in IEEE 754 double precision floating point number format:</span><br><span class="line">+--------+--------+--------+--------+--------+--------+--------+--------+--------+</span><br><span class="line">|  0xcb  |YYYYYYYY|YYYYYYYY|YYYYYYYY|YYYYYYYY|YYYYYYYY|YYYYYYYY|YYYYYYYY|YYYYYYYY|</span><br><span class="line">+--------+--------+--------+--------+--------+--------+--------+--------+--------+</span><br></pre></td></tr></table></figure></p>
+<p>IEEE 754单/双精度格式。</p>
+<p>字符串编码格式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">fixstr stores a byte array whose length is upto 31 bytes:</span><br><span class="line">+--------+========+</span><br><span class="line">|101XXXXX|  data  |</span><br><span class="line">+--------+========+</span><br><span class="line"></span><br><span class="line">str 8 stores a byte array whose length is upto (2^8)-1 bytes:</span><br><span class="line">+--------+--------+========+</span><br><span class="line">|  0xd9  |YYYYYYYY|  data  |</span><br><span class="line">+--------+--------+========+</span><br><span class="line"></span><br><span class="line">str 16 stores a byte array whose length is upto (2^16)-1 bytes:</span><br><span class="line">+--------+--------+--------+========+</span><br><span class="line">|  0xda  |ZZZZZZZZ|ZZZZZZZZ|  data  |</span><br><span class="line">+--------+--------+--------+========+</span><br><span class="line"></span><br><span class="line">str 32 stores a byte array whose length is upto (2^32)-1 bytes:</span><br><span class="line">+--------+--------+--------+--------+--------+========+</span><br><span class="line">|  0xdb  |AAAAAAAA|AAAAAAAA|AAAAAAAA|AAAAAAAA|  data  |</span><br><span class="line">+--------+--------+--------+--------+--------+========+</span><br></pre></td></tr></table></figure></p>
+<p>其中XXXX或YYYY、ZZZZ都是表征字符串数据data大小N的预留位，大端序。</p>
+<p>数组的编码格式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">fixarray stores an array whose length is upto 15 elements:</span><br><span class="line">+--------+~~~~~~~~~~~~~~~~~+</span><br><span class="line">|1001XXXX|    N objects    |</span><br><span class="line">+--------+~~~~~~~~~~~~~~~~~+</span><br><span class="line"></span><br><span class="line">array 16 stores an array whose length is upto (2^16)-1 elements:</span><br><span class="line">+--------+--------+--------+~~~~~~~~~~~~~~~~~+</span><br><span class="line">|  0xdc  |YYYYYYYY|YYYYYYYY|    N objects    |</span><br><span class="line">+--------+--------+--------+~~~~~~~~~~~~~~~~~+</span><br><span class="line"></span><br><span class="line">array 32 stores an array whose length is upto (2^32)-1 elements:</span><br><span class="line">+--------+--------+--------+--------+--------+~~~~~~~~~~~~~~~~~+</span><br><span class="line">|  0xdd  |ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|    N objects    |</span><br><span class="line">+--------+--------+--------+--------+--------+~~~~~~~~~~~~~~~~~+</span><br></pre></td></tr></table></figure></p>
+<p>其中的XXXX或YYYY、ZZZZ都是表征数组大小N的预留位。</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新於 2020-04-19</p></div> 
+    <div class="post-entry__tags"><a href="/tags/JSON/" class="post-tags__link button"># JSON</a><a href="/tags/序列化/" class="post-tags__link button"># 序列化</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/ios/storekit-testing/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            iOS开发：苹果支付测试
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/tech/pagefault/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            虚拟内存与Page Fault
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>評論</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到頂部" title="回到頂部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-K2Q2J84"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-K2Q2J84');
+    </script>
+ 
+
+ 
+
+ 
+
+
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "1d741b4fcb7f4062933be3f4b0eb6571"}'></script>
+    </script>
+    
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>iOS性能优化：MetricKit | { }</title>
+
+
+    <meta name="keywords" content="技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="MetricKit是苹果提供的App内应用性能检测框架，覆盖了CPU、GPU、磁盘以及运行数据等。">
+<meta name="keywords" content="技术&#x2F;iOS&#x2F;大前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS性能优化：MetricKit">
+<meta property="og:url" content="http://blog.knpc21.com/null/ios-apm-metrickit/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="MetricKit是苹果提供的App内应用性能检测框架，覆盖了CPU、GPU、磁盘以及运行数据等。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://s4.ax1x.com/2022/01/21/7RWfr4.png">
+<meta property="og:updated_time" content="2020-11-13T08:39:50.000Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="iOS性能优化：MetricKit">
+<meta name="twitter:description" content="MetricKit是苹果提供的App内应用性能检测框架，覆盖了CPU、GPU、磁盘以及运行数据等。">
+<meta name="twitter:image" content="https://s4.ax1x.com/2022/01/21/7RWfr4.png">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        iOS性能优化：MetricKit
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2020/11/" class="post-meta__date button">2020-11-13</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header">
+	
+        <div class="post-thumbnail" style="background-image: url('https://s4.ax1x.com/2022/01/21/7RWfr4.png');"></div>
+    
+</div>
+    <div class="post__content">
+        <p>MetricKit是苹果提供的App内应用性能检测框架，覆盖了CPU、GPU、磁盘以及运行数据等。</p>
+<a id="more"></a>
+<p>MetricKit适用于iOS 13.0+的设备。它会在一天结束后，将过去24小时搜集的性能指标和问题诊断报告归集在一起，然后在下一次启动 App 后，在 delegate 的回调中提供给我们。<br>实际使用时除了获取到过去24小时的数据，24小时之前未被收集过的数据也会一并返回。</p>
+<h4 id="MXMetricPayload"><a href="#MXMetricPayload" class="headerlink" title="MXMetricPayload"></a>MXMetricPayload</h4><table>
+<thead>
+<tr>
+<th>属性<div style="width:30px"></div></th>
+<th>类型</th>
+<th>含义</th>
+<th>补充说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>latestApplicationVersion</td>
+<td>NSString</td>
+<td>收集此数据时的最高版本信息</td>
+<td>考虑到APP会有不同的版本，MXMetricPayload会携带一个latestApplicationVersion的字符串，此字段会和数据统计时项目配置中的Version版本保持一致。 语义上latest并不是表示APP的最新版本，而是说，在此24小时数据采集的区间内，如果你从1.0版本升级到了1.1版本，也就是当前payload的数据是两个版本的混合数据，latestApplicationVersion应该是显示的1.1而不是1.0</td>
+</tr>
+<tr>
+<td>includesMultipleApplicationVersions</td>
+<td>BOOL</td>
+<td>当前24小时数据包是否包含多个版本</td>
+<td></td>
+</tr>
+<tr>
+<td>timeStampBegin</td>
+<td>NSDate</td>
+<td>数据采集的开始时间</td>
+<td></td>
+</tr>
+<tr>
+<td>timeStampEnd</td>
+<td>NSDate</td>
+<td>数据采集的结束时间</td>
+<td></td>
+</tr>
+<tr>
+<td>cpuMetrics</td>
+<td>MXCPUMetric</td>
+<td>CPU指标</td>
+<td>累计CPU运行耗时  累计CPU指令数</td>
+</tr>
+<tr>
+<td>gpuMetrics</td>
+<td>MXGPUMetric</td>
+<td>GPU指标</td>
+<td>累计GPU运行耗时</td>
+</tr>
+<tr>
+<td>cellularConditionMetrics</td>
+<td>MXCellularConditionMetric</td>
+<td>蜂窝网络指标</td>
+<td>信号格数直方图</td>
+</tr>
+<tr>
+<td>applicationTimeMetrics</td>
+<td>MXAppRunTimeMetric</td>
+<td>运行时间指标</td>
+<td>累计前台运行时长  累计后台运行时长  累计后台播放音乐时长  累计后台使用定位时长</td>
+</tr>
+<tr>
+<td>locationActivityMetrics</td>
+<td>MXLocationActivityMetric</td>
+<td>定位指标</td>
+<td>累计最佳精度定位时长  累计最佳精度导航时长  累计10米精度定位时长  累计100米精度定位时长  累计1000米精度定位时长  累计3000米精度定位时长</td>
+</tr>
+<tr>
+<td>networkTransferMetrics</td>
+<td>MXNetworkTransferMetric</td>
+<td>网络指标</td>
+<td>累计wifi上传数据量  累计wifi下载数据量  累计流量上传数据量  累计流量下载数据量</td>
+</tr>
+<tr>
+<td>applicationLaunchMetrics</td>
+<td>MXAppLaunchMetric</td>
+<td>APP启动指标</td>
+<td>冷启直方图  热起直方图</td>
+</tr>
+<tr>
+<td>applicationResponsivenessMetrics</td>
+<td>MXAppResponsivenessMetric</td>
+<td>APP挂起指标</td>
+<td>不响应用户交互时间直方图</td>
+</tr>
+<tr>
+<td>diskIOMetrics</td>
+<td>MXDiskIOMetric</td>
+<td>磁盘IO指标</td>
+<td>累计写入磁盘或其他长期存储的数据量</td>
+</tr>
+<tr>
+<td>memoryMetrics</td>
+<td>MXMemoryMetric</td>
+<td>内存指标</td>
+<td>最高内存使用量  suspended状态下平均内存使用量</td>
+</tr>
+<tr>
+<td>displayMetrics</td>
+<td>MXDisplayMetric</td>
+<td>显示指标</td>
+<td>平均像素亮度</td>
+</tr>
+<tr>
+<td>animationMetrics</td>
+<td>MXAnimationMetric</td>
+<td>UIScrollView掉帧指标</td>
+<td><strong>iOS 14 新增</strong>  scrollView滑动掉帧时间比例</td>
+</tr>
+<tr>
+<td>applicationExitMetrics</td>
+<td>MXAppExitMetric</td>
+<td>App退出指标</td>
+<td><strong>iOS 14 新增</strong>  累计前台正常退出次数 累计前台内存资源受限退出次数 （应该就是OOM,未验证） 累计前台BadAccess退出次数 累计前台不正常退出次数（包含未捕获异常、调用Abort函数、发出abort信号） 累计前台非法指令退出次数 累计前台WatchDog杀死退出次数  累计后台正常退出次数 累计后台内存资源受限退出次数 （应该就是OOM,未验证） 累计后台CPU使用受限退出次数 累计后台为了其他应用腾内存而杀死本应用退出次数 累计后台BadAccess退出次数 累计后台不正常退出次数（包含未捕获异常、调用Abort函数、发出abort信号） 累计后台非法指令退出次数 累计后台WatchDog杀死退出次数 累计后台suspend状态下访问锁定资源文件杀死退出次数 累计后台任务超时杀死退出次数</td>
+</tr>
+<tr>
+<td>signpostMetrics</td>
+<td>NSArray<mxsignpostmetric *></mxsignpostmetric></td>
+<td>自选代码段运行指标</td>
+<td>自选段名  自选段分类  运行总次数  运行耗时直方图  累计CPU时长  平均内存  累计磁盘写入</td>
+</tr>
+<tr>
+<td>metaData</td>
+<td>MXMetaData</td>
+<td>基本信息</td>
+<td>区域  操作系统版本  设备类型  App版本  指令集</td>
+</tr>
+</tbody>
+</table>
+<h4 id="MXDiagnosticPayload-iOS-14-新增"><a href="#MXDiagnosticPayload-iOS-14-新增" class="headerlink" title="MXDiagnosticPayload (iOS 14 新增)"></a>MXDiagnosticPayload (iOS 14 新增)</h4><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>类型</th>
+<th>含义</th>
+<th>补充说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cpuExceptionDiagnostics</td>
+<td>NSArray<mxcpuexceptiondiagnostic *></mxcpuexceptiondiagnostic></td>
+<td>CPU异常诊断</td>
+<td>调用栈  异常时CPU使用时长  采样次数</td>
+</tr>
+<tr>
+<td>diskWriteExceptionDiagnostics</td>
+<td>NSArray<mxdiskwriteexceptiondiagnostic *></mxdiskwriteexceptiondiagnostic></td>
+<td>磁盘写入异常诊断</td>
+<td>调用栈  异常时总磁盘写入量</td>
+</tr>
+<tr>
+<td>hangDiagnostics</td>
+<td>NSArray<mxhangdiagnostic *></mxhangdiagnostic></td>
+<td>挂起诊断</td>
+<td>调用栈  挂起时长</td>
+</tr>
+<tr>
+<td>crashDiagnostics</td>
+<td>NSArray<mxcrashdiagnostic *></mxcrashdiagnostic></td>
+<td>崩溃诊断</td>
+<td>调用栈  崩溃原因  虚拟内存区域信息  exceptionType  exceptionCode  signal</td>
+</tr>
+<tr>
+<td>timeStampBegin</td>
+<td>NSDate</td>
+<td>诊断开始时间</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>收集到终端的Metric后可以针对性分析各项指标。</p>
+<p>（未完待续）</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新於 2020-11-13</p></div> 
+    <div class="post-entry__tags"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/ios/ios-digital-audio-basic/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            iOS音频：数字音频基础
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/tech/clean-your-mac/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            快速清理Mac的缓存
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>評論</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到頂部" title="回到頂部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-K2Q2J84"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-K2Q2J84');
+    </script>
+ 
+
+ 
+
+ 
+
+
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "1d741b4fcb7f4062933be3f4b0eb6571"}'></script>
+    </script>
+    
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

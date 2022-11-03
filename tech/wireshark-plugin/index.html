@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>Wireshark插件编写 | { }</title>
+
+
+    <meta name="keywords" content="技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="网络协议开发、调试的过程，因为bug的难以避免的存在，可能会变成痛苦的过程。编程出现bug是需要被容许的事情，毕竟大师高德纳的Tex的版本也到了3.141592653不是么~">
+<meta name="keywords" content="技术&#x2F;iOS&#x2F;大前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wireshark插件编写">
+<meta property="og:url" content="http://blog.knpc21.com/tech/wireshark-plugin/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="网络协议开发、调试的过程，因为bug的难以避免的存在，可能会变成痛苦的过程。编程出现bug是需要被容许的事情，毕竟大师高德纳的Tex的版本也到了3.141592653不是么~">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://s4.ax1x.com/2022/01/17/7d2oZ9.jpg">
+<meta property="og:updated_time" content="2021-11-29T02:53:52.000Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Wireshark插件编写">
+<meta name="twitter:description" content="网络协议开发、调试的过程，因为bug的难以避免的存在，可能会变成痛苦的过程。编程出现bug是需要被容许的事情，毕竟大师高德纳的Tex的版本也到了3.141592653不是么~">
+<meta name="twitter:image" content="https://s4.ax1x.com/2022/01/17/7d2oZ9.jpg">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        Wireshark插件编写
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2021/11/" class="post-meta__date button">2021-11-29</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header">
+	
+        <div class="post-thumbnail" style="background-image: url('https://s4.ax1x.com/2022/01/17/7d2oZ9.jpg');"></div>
+    
+</div>
+    <div class="post__content">
+        <p>网络协议开发、调试的过程，因为bug的难以避免的存在，可能会变成痛苦的过程。编程出现bug是需要被容许的事情，毕竟大师高德纳的<code>Tex</code>的版本也到了<code>3.141592653</code>不是么~ </p>
+<a id="more"></a>
+<p>前段时间项目需要变更Socket长连接库的底层实现，底层库替换后需要验证应用层数据传输。直观地检查应用协议层数据的传输过程，显然比业务层做黑盒测试更直接有效。</p>
+<p>本文简要介绍Wireshark的插件编写，这可以帮助我们更好地进行网络协议开发调试、隔离错误。并且工具的作用在于，后续的边际成本几乎为0。</p>
+<h3 id="WireShark"><a href="#WireShark" class="headerlink" title="WireShark"></a>WireShark</h3><p>WireShark是一款很著名并且很常用的网络协议分析软件，基于<code>pcap</code>来进行数据包捕获，其非GUI版本是<code>TShark</code>，GUI版本则是使用<code>QT</code>来编写图形界面。WireShark最早版本发布于1998年，2006更名Wireshark。跨平台、开源，支持各种常见网络协议，并且可以支持自定义协议的解析拓展。</p>
+<p>通常来说，我们可以使用WireShark进行网络故障诊断，检查网络安全问题，验证网络应用程序，调试协议以及学习网络协议。相信大部分接触了WireShark的人都是这样的。</p>
+<p>WireShark的基本使用比较简单，官方/非官方资料都有介绍，有需要可以官方<a href="https://www.wireshark.org/docs/" target="_blank" rel="noopener">文档</a>找一找。</p>
+<p>安装WireShark可以直接使用brew：<code>brew install --cask wireshark</code>。</p>
+<h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h3><p>需要注意的是，WireShark支持的Lua版本不是最新的，我们需要搭配匹配的环境。</p>
+<p>我这边使用Lua的版本是v5.2.4。如果你需要安装其他Lua的工具或者库，比如LuaRocks也需要注意版本兼容问题。</p>
+<p>Lua可以直接用sublime进行编辑，可以配置下Build System，指定lua解析器的路径就可以。</p>
+<p>Tools –&gt; Build System –&gt; New Build System…<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;  </span><br><span class="line"> &quot;cmd&quot;: [&quot;/usr/local/bin/lua&quot;, &quot;$file&quot;],  </span><br><span class="line"> &quot;file_regex&quot;: &quot;^(...*?):([0-9]*):?([0-9]*)&quot;,  </span><br><span class="line"> &quot;selector&quot;: &quot;source.lua&quot;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>xxx.sublime-build</p>
+<h3 id="编写插件"><a href="#编写插件" class="headerlink" title="编写插件"></a>编写插件</h3><p>首先需要修改WireShark，注入插件代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dofile(&quot;/Users/hhh/Kernel/Dev/Wireshark.Lua/ht.lua&quot;)</span><br></pre></td></tr></table></figure></p>
+<p>以下是ht.lua自定义协议的插件代码，简单做一个示例：</p>
+<p>注册自定义协议<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HT_proto = Proto(&quot;ht&quot;, &quot;HT Network Protocol&quot;)</span><br></pre></td></tr></table></figure></p>
+<p>协议的基本包结构<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">local field_header = ProtoField.uint32(&quot;ht.header&quot;, &quot;ht header&quot;, base.None)</span><br><span class="line">local field_payload = ProtoField.bytes(&quot;ht.payload&quot;, &quot;ht payload&quot;, base.None)</span><br><span class="line"></span><br><span class="line">HT_proto.fields = &#123;field_header, field_payload&#125;</span><br></pre></td></tr></table></figure></p>
+<p>数据包解析<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">function HT_proto.dissector(tvb, pinfo, tree)</span><br><span class="line"></span><br><span class="line">  local tvb_len = tvb:len() -- bufffer length</span><br><span class="line"></span><br><span class="line">  pinfo.cols.protocol:set(&quot;HT&quot;)</span><br><span class="line"></span><br><span class="line">  pinfo.cols.info:set(&quot;HT Protocol&quot;)</span><br><span class="line"></span><br><span class="line">  local offset = 0</span><br><span class="line">  local headerLength = 4</span><br><span class="line"></span><br><span class="line">  --[[ dissection tree in packet details, 根节点及子节点 ]]</span><br><span class="line"></span><br><span class="line">  local root = tree:add(HT_proto, tvb:range(offset))</span><br><span class="line"></span><br><span class="line">  -- range第1个参数表示此时的偏移量，第2个参数表示字段占用数据的长度</span><br><span class="line"></span><br><span class="line">  root:add(field_header, tvb:range(offset, headerLength))</span><br><span class="line"></span><br><span class="line">  offset = offset + headerLength</span><br><span class="line"></span><br><span class="line">  local payloadLength = tvb_len - offset -- 待处理加解密及序列化</span><br><span class="line"></span><br><span class="line">  root:add(field_payload, tvb:range(offset, payloadLength))</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure></p>
+<p>注册监听<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tcp_table = DissectorTable.get(&quot;tcp.port&quot;)</span><br><span class="line">tcp_table:add(9081 ,HT_proto)</span><br></pre></td></tr></table></figure></p>
+<p>这是示例的效果图：<br><img src="snapshort-heartbeat.png" alt></p>
+<h4 id="粘包处理"><a href="#粘包处理" class="headerlink" title="粘包处理"></a>粘包处理</h4><p>需要注意的是上面的示例，并未涉及粘包处理以及数据包的加解密。因为基于TCP的自定义协议各自封包格式不一样，基本都需要自行处理。</p>
+<p>TCP的粘包一般两种情况：<br>1、单Segment（TCP包）包含多PDU（应用协议包）<br>2、单PDU跨多个Segment</p>
+<p>处理方法要么循环解包，要么需要WireShark为我们重新拼接TCP的Payload了。</p>
+<p>假如应用协议上我们解析到了数据包的大小，可以这样说明协议包的大小<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">offset = pinfo.desegment_offset <span class="keyword">or</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">  <span class="keyword">local</span> nextFrame = offset + frameLength</span><br><span class="line">  <span class="keyword">if</span>  tvbuf:<span class="built_in">len</span>() &lt;  nextFrame <span class="keyword">then</span></span><br><span class="line">    pinfo.desegment_len = nextFrame - tvbuf:<span class="built_in">len</span>()</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">   <span class="keyword">end</span></span><br><span class="line">   </span><br><span class="line">  <span class="comment">-- 处理报文...</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> tvbuf:<span class="built_in">len</span>() == nextFrame <span class="keyword">then</span></span><br><span class="line">  	<span class="keyword">break</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></p>
+<p>以上是一些基本流程。</p>
+<h4 id="加解密"><a href="#加解密" class="headerlink" title="加解密"></a>加解密</h4><p>WireShark的插件是比较简单的，一般比较麻烦的是数据包加解密部分。</p>
+<p>尽管Lua社区也有挺多基础库的了，比如常见的加解密、序列化等。但棘手的一般是自定义协议，可能会使用自定的加解密库，或者使用公开算法可能进行算法强化修改。</p>
+<p>Lua既支持使用Lua来编写加解密库，也支持嵌入C的动态库。C的效率当然更高，但Lua库的优势在于在脚本层可以数据共享。如果加解密的过程是非幂等的（比如包之间的加解密有次序或依赖），那么恭喜你，可能要继续用Lua折腾一下了。</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新於 2021-11-29</p></div> 
+    <div class="post-entry__tags"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/null/typora-1-0/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            Typora 1.0 发布了(updated)
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/ios/storekit-ii/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            iOS开发：苹果支付2.0简介
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>評論</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到頂部" title="回到頂部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-K2Q2J84"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-K2Q2J84');
+    </script>
+ 
+
+ 
+
+ 
+
+
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "1d741b4fcb7f4062933be3f4b0eb6571"}'></script>
+    </script>
+    
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

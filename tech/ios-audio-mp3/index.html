@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>iOS音频：MP3文件结构 | { }</title>
+
+
+    <meta name="keywords" content="iOS, 音频, MP3, 技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="MP3 (MPEG-1, 2, 2.5 Audio Layer III)是常见的音频编码方案，可以支持8-48kHz采样率、8-320kbps的比特率。MP3有大量的软硬件支持，兼容性好，压缩比也比较高，尤其适合于128kbps以上的音乐音频编码。">
+<meta name="keywords" content="iOS,音频,MP3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS音频：MP3文件结构">
+<meta property="og:url" content="http://blog.knpc21.com/tech/ios-audio-mp3/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="MP3 (MPEG-1, 2, 2.5 Audio Layer III)是常见的音频编码方案，可以支持8-48kHz采样率、8-320kbps的比特率。MP3有大量的软硬件支持，兼容性好，压缩比也比较高，尤其适合于128kbps以上的音乐音频编码。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://s1.ax1x.com/2022/03/06/bDLxeO.png">
+<meta property="og:updated_time" content="2020-11-29T03:03:43.000Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="iOS音频：MP3文件结构">
+<meta name="twitter:description" content="MP3 (MPEG-1, 2, 2.5 Audio Layer III)是常见的音频编码方案，可以支持8-48kHz采样率、8-320kbps的比特率。MP3有大量的软硬件支持，兼容性好，压缩比也比较高，尤其适合于128kbps以上的音乐音频编码。">
+<meta name="twitter:image" content="https://s1.ax1x.com/2022/03/06/bDLxeO.png">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        iOS音频：MP3文件结构
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2020/11/" class="post-meta__date button">2020-11-29</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header">
+	
+        <div class="post-thumbnail" style="background-image: url('https://s1.ax1x.com/2022/03/06/bDLxeO.png');"></div>
+    
+</div>
+    <div class="post__content">
+        <p>MP3 (MPEG-1, 2, 2.5 Audio Layer III)是常见的音频编码方案，可以支持8-48kHz采样率、8-320kbps的比特率。MP3有大量的软硬件支持，兼容性好，压缩比也比较高，尤其适合于128kbps以上的音乐音频编码。</p>
+<a id="more"></a>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>MP3文件可以分为两部分：元数据+音频数据。</p>
+<p>元数据，主要是音频专辑、创作者等信息，目前一般是两种格式：一种是ID3V2格式，一种是ID3V1格式。其中ID3V2在文件头，长度不固定，而ID3V1在文件结尾位置，长度固定为128字节。</p>
+<p>音频数据，具体来说，是一系列音频数据帧（Frame），每一帧是独立可播放的。每一个音频帧，又分为帧头跟数据载体，也就是Header与Payload。帧头又记录了该帧的采样率、比特率等信息。实际上Frame Header是我们主要研究的对象，因为这就是格式规范所在。</p>
+<p>因此可以理解为，MP3文件=[ID3V2]+音频数据（Frame）+[ID3V1]。</p>
+<p>我们可以先看下面这张结构示例图（来自wiki）：</p>
+<p><img src="mp3-filestructure-2.jpg" alt></p>
+<h3 id="元数据：ID3V2与ID3V1"><a href="#元数据：ID3V2与ID3V1" class="headerlink" title="元数据：ID3V2与ID3V1"></a>元数据：ID3V2与ID3V1</h3><p>ID3是一个音频文件标签的标准，详细可以参见<a href="https://id3.org" target="_blank" rel="noopener">官方文档</a>。</p>
+<p>ID3V1标准其字节分布：</p>
+<table>
+<thead>
+<tr>
+<th>位置（字节）</th>
+<th>长度（字节）</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>3</td>
+<td>“TAG”</td>
+</tr>
+<tr>
+<td>3</td>
+<td>30</td>
+<td>歌名</td>
+</tr>
+<tr>
+<td>33</td>
+<td>30</td>
+<td>作者</td>
+</tr>
+<tr>
+<td>63</td>
+<td>30</td>
+<td>专辑名</td>
+</tr>
+<tr>
+<td>93</td>
+<td>4</td>
+<td>年份</td>
+</tr>
+<tr>
+<td>97</td>
+<td>28</td>
+<td>附注（Comment）</td>
+</tr>
+<tr>
+<td>125</td>
+<td>1</td>
+<td>保留</td>
+</tr>
+<tr>
+<td>126</td>
+<td>1</td>
+<td>音轨号</td>
+</tr>
+<tr>
+<td>127</td>
+<td>1</td>
+<td>MP3音乐类别（Genre Identifier）</td>
+</tr>
+</tbody>
+</table>
+<p>ID3V1的前3个字节为”TAG”。可以看到，ID3V1固定128字节无法拓展，存放信息较少（比如封面图等）。但ID3V1.1仍有不少支持。</p>
+<p>ID3V2则是一个容器格式，允许拓展新的数据片段。ID3V2标签支持Unicode编码，并且ID3V2存放在音频文件文件头，使得实现音频流（streaming）更方便。另外，ID3V2对包含音乐同步的歌词也是支持的。目前主流的是ID3V2.3标准。</p>
+<p>ID3V2.3的标签，每个标签都有一个<strong>标签头</strong>与若干<strong>标签帧</strong>或一个<strong>拓展标签头</strong>组成。</p>
+<h5 id="标签头"><a href="#标签头" class="headerlink" title="标签头"></a>标签头</h5><p>ID3V2.3的标签头为10个字节，具体如下定义：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> Header[<span class="number">3</span>]; <span class="comment">/*必须为"ID3"否则认为标签不存在*/</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> Ver; <span class="comment">/*版本号ID3V2.3 就记录3*/</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> Revision; <span class="comment">/*副版本号此版本记录为0*/</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> Flag; <span class="comment">/*存放标志的字节，这个版本只定义了三位，稍后详细解说*/</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> Size[<span class="number">4</span>]; <span class="comment">/*标签大小，包括标签头的10 个字节和所有的标签帧的大小*/</span></span><br></pre></td></tr></table></figure></p>
+<p>一个典型的ID3v2.3的文件头：49 44 33 03 00 00 00 00 72 54 52 43 4B 00 00</p>
+<p>其文件头开始是”ID3”，其版本0x3，副版本0。</p>
+<p>Flag也是一个字节，也就是0bABCxxxxx，只定义了前3位，A是否非同步，B是否有拓展头部，C是否测试。</p>
+<p>标签大小4个字节，但每个字节首位不用（&amp;0x7F），也就是：0xxxxxxx 0xxxxxxx 0xxxxxxx 0xxxxxxx。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Total Size = (Size[0]&amp;0x7F)*0x200000+ (Size[1]&amp;0x7F)*0x400 + (Size[2]&amp;0x7F)*0x80 +(Size[3]&amp;0x7F)</span><br></pre></td></tr></table></figure></p>
+<h5 id="标签帧"><a href="#标签帧" class="headerlink" title="标签帧"></a>标签帧</h5><p>每个标签帧都有10个字节的帧头与至少一个字节的不固定长度内容。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">char ID[4]; /*用四个字符标识一个帧，说明其内容，稍后有常用的标识对照表*/ </span><br><span class="line">char Size[4]; /*帧内容的大小，不包括帧头，不得小于1*/ </span><br><span class="line">char Flags[2]; /*存放标志，只定义了6 位，稍后详细解说*/</span><br></pre></td></tr></table></figure>
+<p><em>帧标识</em>用4个字符表示，说明一个帧的内容含义。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">TIT2=标题表示内容为这首歌的标题，下同 </span><br><span class="line">TPE1=作者</span><br><span class="line">TALB=专集</span><br><span class="line">TRCK=音轨格式：N/M 其中N为专集中的第N首，M为专集中共M首，N和M为ASCII码表示的数字 </span><br><span class="line">TYER=年代是用ASCII码表示的数字</span><br><span class="line">TCON=类型直接用字符串表示 </span><br><span class="line">COMM=备注格式：&quot;eng\0备注内容&quot;，其中eng表示备注所使用的自然语言</span><br></pre></td></tr></table></figure>
+<p>帧大小Size固定4个字节，8位都有效。</p>
+<p>标识Flags为ABC00000IJK00000<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">A -- 标签保护标志，设置时认为此帧作废</span><br><span class="line">B -- 文件保护标志，设置时认为此帧作废</span><br><span class="line">C -- 只读标志，设置时认为此帧不能修改(但我没有找到一个软件理会这个标志) </span><br><span class="line">I -- 压缩标志，设置时一个字节存放两个BCD 码表示数字 </span><br><span class="line">J -- 加密标志(没有见过哪个MP3 文件的标签用了加密) </span><br><span class="line">K -- 组标志，设置时说明此帧和其他的某帧是一组</span><br></pre></td></tr></table></figure></p>
+<h3 id="音频数据帧"><a href="#音频数据帧" class="headerlink" title="音频数据帧"></a>音频数据帧</h3><p>音频数据由一系列数据帧组成。每个帧的长度可能固定（CBR），也可能是不固定的（VBR）。每个帧都包括帧头与载荷数据。</p>
+<p>Frame Header为4个字节，也就是32Bit。这32Bit中可以定义音频帧的版本格式、比特率/采样率、声道模式等。</p>
+<p>具体含义参见下表：</p>
+<p><img src="mp3-frame-bits-1.jpg" alt><br><img src="mp3-frame-bits-2.jpg" alt></p>
+<p>帧头11位标志位，以<code>FF</code>开头。第<code>16</code>位是<code>CRC</code>标志位，为0时表示有<code>CRC</code>校验。如果有<code>CRC</code>校验，则帧头最后还有16bit的校验位。</p>
+<p>其中的比特率、采样率索引表如下（需要结合版本，比如常见的MPEG V1,L3）：</p>
+<p><img src="mp3-frame-bitrates.jpg" alt><br><img src="mp3-frame-samplerate.jpg" alt></p>
+<p>常见的比特率如128kbps、192kbps以及320kbps，常见采样率就是44.1kHz。    </p>
+<p>在MPEG-1 Layer III中，有些特定的比特率需要与特定的声道模式组合才可使用：</p>
+<table>
+<thead>
+<tr>
+<th>比特率</th>
+<th>允许的模式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>free</td>
+<td>all</td>
+</tr>
+<tr>
+<td>32</td>
+<td>single channel</td>
+</tr>
+<tr>
+<td>48</td>
+<td>single channel</td>
+</tr>
+<tr>
+<td>56</td>
+<td>single channel</td>
+</tr>
+<tr>
+<td>64</td>
+<td>all</td>
+</tr>
+<tr>
+<td>80</td>
+<td>single channel</td>
+</tr>
+<tr>
+<td>96</td>
+<td>all</td>
+</tr>
+<tr>
+<td>112</td>
+<td>all</td>
+</tr>
+<tr>
+<td>128</td>
+<td>all</td>
+</tr>
+<tr>
+<td>160</td>
+<td>all</td>
+</tr>
+<tr>
+<td>192</td>
+<td>all</td>
+</tr>
+<tr>
+<td>224</td>
+<td>stereo, intensity stereo, dual channel</td>
+</tr>
+<tr>
+<td>256</td>
+<td>stereo, intensity stereo, dual channel</td>
+</tr>
+<tr>
+<td>320</td>
+<td>stereo, intensity stereo, dual channel</td>
+</tr>
+<tr>
+<td>384</td>
+<td>stereo, intensity stereo, dual channel</td>
+</tr>
+</tbody>
+</table>
+<h5 id="音频帧长度"><a href="#音频帧长度" class="headerlink" title="音频帧长度"></a>音频帧长度</h5><p>每个音频帧都是压缩后的音频数据，MPEG音频帧的每一帧的采样数都是固定的。具体数值参见下面图表：<br><img src="mp3-frame-sample-index.jpg" alt></p>
+<p>每一帧的长度（byte）为：<code>FrameLengthInBytes = SamplesPerFrame * BitsPerSample / 8 * Channels</code></p>
+<p>对于比特率，我们知道：<code>BitRate = SampleRate * BitsPerSample * Channels</code>，于是：</p>
+<p><code>FrameLengthInBytes = SamplesPerFrame / 8 * BitRate / SampleRate</code></p>
+<p>这些参数都是每一帧帧头都有的字段。</p>
+<p>需要注意的是，比特率是不固定的，因此数据帧的长度也不是固定的。并且为了适配比特率（使其精确满足比特率），有时还需要进行数据填充。比如对于128kbps比特率、44.1kHz的Layer III的数据帧，我们可以计算到帧长为417.96这样的奇怪帧长，但实际上编码时大部分的帧会使用418字节的帧长，而少部分帧是417字节。而音频帧头固定为4字节，所以整个MPEG帧大小为422字节。</p>
+<p>所以帧长的计算修正为：<code>数据帧长 = 每帧采样数 / 8 * 比特率 / 采样率 + 填充大小</code></p>
+<p>对于Layer I的帧填充为4字节（slot大小），而Layer II和III的填充位则是1字节。于是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Layer I：</span><br><span class="line">FrameLengthInBytes = 48 * BitRate / SampleRate + Padding * 4</span><br><span class="line"></span><br><span class="line">Layer II &amp; III：</span><br><span class="line">FrameLengthInBytes = 144 * BitRate / SampleRate + Padding</span><br></pre></td></tr></table></figure></p>
+<p>一个数据帧是否有填充位是由帧头的第22位来标识的，参见上面的图。</p>
+<p>对于单个MP3文件而言，其音频采样率是固定的，可变的是各个帧所使用的比特率。而<code>CBR</code>与<code>VBR</code>的区别也正是在于此。</p>
+<h5 id="音频帧时间"><a href="#音频帧时间" class="headerlink" title="音频帧时间"></a>音频帧时间</h5><p>每帧固定采样数，因此每帧的时间为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DurationPerFrame = SamplesPerFrame / SampleRate</span><br></pre></td></tr></table></figure></p>
+<p>比如对于常见的44.1kHz采样率的MP3文件，其每帧持续时间为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1152/44100*1000 = 26ms</span><br></pre></td></tr></table></figure></p>
+<h3 id="MP3的播放时间"><a href="#MP3的播放时间" class="headerlink" title="MP3的播放时间"></a>MP3的播放时间</h3><h5 id="CBR的时间计算"><a href="#CBR的时间计算" class="headerlink" title="CBR的时间计算"></a>CBR的时间计算</h5><p>对于CBR的计算时间是很直观的，知道音频的比特率及文件大小即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Duration = FileSize(Bytes) * 8 bits/Byte / BitRate</span><br></pre></td></tr></table></figure></p>
+<p>FileSize严格来说应考虑除元数据外的音频数据大小，但通常标签数据相对于整个文件大小而言可以忽略不计。</p>
+<h5 id="VBR的时间计算"><a href="#VBR的时间计算" class="headerlink" title="VBR的时间计算"></a>VBR的时间计算</h5><p>VBR计算播放时间，一种方式可以通过计算MP3文件的平均比特率，然后套用CBR的方式即可。但准确的平均比特率需要遍历整个MP3文件的，如果只是在文件头部采样（常有音乐沉默），可能会失真。</p>
+<p>VBR变的只是帧的比特率，采样率是固定的，每一帧的时间也是固定的。所以另一种计算方式是根据总帧数来计算时长。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Duration = Frames * SamplesPerFrame / SampleRate</span><br></pre></td></tr></table></figure></p>
+<p>要获知总帧数，最基本的方式仍然是可以进行遍历。但更高效的方式，显然也已经有人想过了——通过拓展头部记录总帧数。在第一个音频帧的音频数据区附加一个<code>VBR</code>头部，在其中记录总的帧数，已经是业界的事实标准。并且为了快速seek time，<code>VBR</code>头部中通常还附加了一个TOC的目录。</p>
+<h3 id="VBR头部"><a href="#VBR头部" class="headerlink" title="VBR头部"></a>VBR头部</h3><p><code>VBR</code>头有常见的几种：XING、VBRI及LAME头部。单独说一下</p>
+<h5 id="XING头"><a href="#XING头" class="headerlink" title="XING头"></a>XING头</h5><p>XING头是XING公司推出的规范，大多数<code>VBR</code>的音频文件都添加了XING头。</p>
+<p>XING头位于第一个音频帧的帧头之后（某个位置，通常是0x24的偏移）。包含XING头的整个第一个数据帧没有音频数据，因此即使解码器不处理XING头也可以解码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">XING头起始位置 = MPEG第一帧帧头起始位置 + 帧头大小(4B) + 边信息大小。</span><br></pre></td></tr></table></figure>
+<p>首先需要定位MPEG第一帧，从文件头开始读取元数据（ID3V2.3标签头及各标签帧），然后通过MPEG数据帧头11个1的bit去定位第一帧的帧头位置。XING头在CBR中也可能存在，此时头部标识就不是<code>XING</code>而是<code>Info</code>了。</p>
+<p>在MPEG音频的帧头的后面，有一些解码器会用到的一些信息，用于解码器控制音频流的播放，叫做边信息。边信息大小可参考：<br><img src="mp3-frame-sideinfo.jpg" alt><br>对于MPEG-1 Layer III而言，边信息大小就是32Bytes，因此就是MPEG数据帧头的36Bytes（也就是0x24）的偏移处。</p>
+<p>XING头的字段如下：</p>
+<table>
+<thead>
+<tr>
+<th>位置（字节）</th>
+<th>长度（字节）</th>
+<th>含义</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>4</td>
+<td>4个ASCII字符的VBR头 ID，要么是Xing，要么是Info，无NULL结尾（普通字符串都以NULL,即\0结尾）</td>
+<td>‘Xing’</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4</td>
+<td>存放一个标志，用于表示接下来存在哪些域/字段,各字段逻辑或的结果：0x0001存在总帧数（Frames）字段0x0002存在文件大小（Bytes）字段0x0004存在TOC字段0x0008存在音频质量指示字段</td>
+<td>0x0007 就表示下面存在：总帧数文件大小总字节数TOC表</td>
+</tr>
+<tr>
+<td>8</td>
+<td>4</td>
+<td><strong>总帧数(Frames)</strong>，大端[可选]</td>
+<td>7344</td>
+</tr>
+<tr>
+<td>8或12</td>
+<td>4</td>
+<td>文件总大小，单位字节，大端[可选]</td>
+<td>45000</td>
+</tr>
+<tr>
+<td>8，12，16</td>
+<td>100</td>
+<td>TOC表，大端[可选]</td>
+<td></td>
+</tr>
+<tr>
+<td>8或12, 16, 108, 112, 116</td>
+<td>4</td>
+<td>音频质量指示，最差0，最好100，大端[可选]</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<h5 id="VBRI头"><a href="#VBRI头" class="headerlink" title="VBRI头"></a>VBRI头</h5><p>VBRI头通常只存在于用Fraunhofer编码的MPEG音频文件中。并且位置是固定的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">VBRI头起始位置 = MPEG第一帧帧头起始位置 + 帧头大小(4B) + 32。</span><br></pre></td></tr></table></figure></p>
+<p>VBRI头的字段如下：</p>
+<table>
+<thead>
+<tr>
+<th>位置（字节）</th>
+<th>长度（字节）</th>
+<th>含义</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>4</td>
+<td>4个ASCII字符的VBR头ID：“VBRI”无NULL结尾</td>
+<td>“VBRI”</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2</td>
+<td>版本ID，大端，类型：DWORD</td>
+<td>1</td>
+</tr>
+<tr>
+<td>6</td>
+<td>2</td>
+<td>延迟，类型：float</td>
+<td>7344</td>
+</tr>
+<tr>
+<td>8</td>
+<td>2</td>
+<td>音频质量指示</td>
+<td>75</td>
+</tr>
+<tr>
+<td>10</td>
+<td>4</td>
+<td>文件总大小，大端，类型：DWORD</td>
+<td>45000</td>
+</tr>
+<tr>
+<td>14</td>
+<td>4</td>
+<td><strong>总的帧数</strong>，大端，类型：DWORD</td>
+<td>7344</td>
+</tr>
+<tr>
+<td>18</td>
+<td>2</td>
+<td>TOC表的表项数目，大端，类型：WORD</td>
+<td>100</td>
+</tr>
+<tr>
+<td>20</td>
+<td>2</td>
+<td>TOC表项的缩放因子，大端，类型：DWORD</td>
+<td>1</td>
+</tr>
+<tr>
+<td>22</td>
+<td>2</td>
+<td>单个TOC表项的大小，单位字节，最大为4，大端，类型：DWORD</td>
+<td>2</td>
+</tr>
+<tr>
+<td>24</td>
+<td>2</td>
+<td>帧数/表项，大端，类型：WORD</td>
+<td>845</td>
+</tr>
+<tr>
+<td>26</td>
+<td></td>
+<td>用于检索的TOC表，整型值，可以通过每个表项大小乘于表项个数得到此TOC表的总大小，大端</td>
+</tr>
+</tbody>
+</table>
+<h5 id="LAME头"><a href="#LAME头" class="headerlink" title="LAME头"></a>LAME头</h5><p>参考<a href="https://linux.m2osw.com/mp3-info-tag-specifications-rev0-lame-3100" target="_blank" rel="noopener">此处</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">struct __attribute__((__packed__)) XingTag</span><br><span class="line">&#123;</span><br><span class="line">  char      m_tag[4];                // &quot;Xing&quot; or &quot;Info&quot;</span><br><span class="line">  uint32_t  m_flags;</span><br><span class="line">  uint32_t  m_frame_size;            // if (flags &amp; 0x1)</span><br><span class="line">  uint32_t  m_stream_size;           // if (flags &amp; 0x2)</span><br><span class="line">  char      m_num_toc_entries[100];  // if (flags &amp; 0x4)</span><br><span class="line">  uint32_t  m_vbr_scale;             // if (flags &amp; 0x8)</span><br><span class="line">  char      m_lame_version[9];       // &quot;LAME&lt;major&gt;.&lt;minor&gt;&lt;release&gt;</span><br><span class="line">  uint8_t   m_revision : 4;</span><br><span class="line">  uint8_t   m_vbr_type : 4;</span><br><span class="line">  uint8_t   m_lowpass_frequency;</span><br><span class="line">  uint32_t  m_peak_signal;           // 9.23 fixed point</span><br><span class="line">  uint16_t  m_radio_replay_pad : 2;</span><br><span class="line">  uint16_t  m_radio_replay_set_name : 2;</span><br><span class="line">  uint16_t  m_radio_replay_originator_code : 2;</span><br><span class="line">  uint16_t  m_radio_replay_gain : 10;</span><br><span class="line">  uint16_t  m_audiophile_replay_gain;</span><br><span class="line">  uint8_t   m_flag_ath_type : 4;</span><br><span class="line">  uint8_t   m_flag_expn_psy_tune : 1;</span><br><span class="line">  uint8_t   m_flag_safe_joint : 1;</span><br><span class="line">  uint8_t   m_flag_no_gap_more : 1;</span><br><span class="line">  uint8_t   m_flag_no_gap_previous : 1;</span><br><span class="line">  uint8_t   m_average_bit_rate;</span><br><span class="line">  uint8_t   m_delay_padding_delay_high;</span><br><span class="line">  uint8_t   m_delay_padding_delay_low : 4;</span><br><span class="line">  uint8_t   m_delay_padding_padding_high : 4;</span><br><span class="line">  uint8_t   m_delay_padding_padding_low;</span><br><span class="line">  uint8_t   m_noise_shaping : 2;</span><br><span class="line">  uint8_t   m_stereo_mode : 3;</span><br><span class="line">  uint8_t   m_non_optimal : 1;</span><br><span class="line">  uint8_t   m_source_frequency : 2;</span><br><span class="line">  uint8_t   m_unused;                // set to 0</span><br><span class="line">  uint16_t  m_preset;</span><br><span class="line">  uint32_t  m_music_length;</span><br><span class="line">  uint16_t  m_music_crc16;</span><br><span class="line">  uint16_t  m_crc16;                 // if (protection bit)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<!-- http://gabriel.mp3-tech.org/mp3infotag.html -->
+<h3 id="MP3的压缩比"><a href="#MP3的压缩比" class="headerlink" title="MP3的压缩比"></a>MP3的压缩比</h3><p>以采样率为44.1kHz为例。</p>
+<p>原始PCM编码的音频数据，每秒的数据量为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DataSize = Channels * SampleRate * BitsPerSample</span><br></pre></td></tr></table></figure></p>
+<p>对于双声道、16位量化深度来算，<code>DataSize=2 * 44100 * 16=1411200</code>的bits。</p>
+<p>而该原始音频数据使用MP3编码后，以128kbps比特率CBR的为例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CompressedSize = BitRate * 1 seconds</span><br></pre></td></tr></table></figure></p>
+<p>也就是<code>DataSize=128000</code>的bits。</p>
+<p>因此压缩比：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ratio = DataSize / CompressedSize = Channels * SampleRate * BitsPerSample / BitRate</span><br></pre></td></tr></table></figure></p>
+<p>比特率越高，压缩比越低。</p>
+<p>对于上述128kbps的MP3的压缩率，压缩比是 <code>1411200 / 128000</code>，大约是11左右。</p>
+<p>对于MP3文件解析的示例，可以参考<a href="https://blog.csdn.net/u010650845/article/details/53520426" target="_blank" rel="noopener">此文</a>有完整的MP3文件解析的示例</p>
+<p>参考：<br>MP3’s Tech: <a href="http://www.mp3-tech.org" target="_blank" rel="noopener">http://www.mp3-tech.org</a></p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新於 2020-11-29</p></div> 
+    <div class="post-entry__tags"><a href="/tags/iOS/" class="post-tags__link button"># iOS</a><a href="/tags/音频/" class="post-tags__link button"># 音频</a><a href="/tags/MP3/" class="post-tags__link button"># MP3</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/ios/ios-audio-aac/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            iOS音频：AAC文件结构
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/ios/ios-digital-audio-basic/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            iOS音频：数字音频基础
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>評論</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到頂部" title="回到頂部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-K2Q2J84"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-K2Q2J84');
+    </script>
+ 
+
+ 
+
+ 
+
+
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "1d741b4fcb7f4062933be3f4b0eb6571"}'></script>
+    </script>
+    
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

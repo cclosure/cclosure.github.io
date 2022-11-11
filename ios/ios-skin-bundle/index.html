@@ -35,19 +35,19 @@
 
     <!-- OpenGraph -->
  
-    <meta name="description" content="应用换肤是常见的需求了，项目工程需要将设计资源的颜色、字体、图片等设计元素使用皮肤文件进行配置管理。本方案主要以项目支持马甲包资源管理、样式配置为主。 核心需求点：   马甲包开发支持，方便马甲包进行样式配置（区分）及资源包集成；   皮肤包功能，支持动态下载皮肤包（比如节日包），并应用到App上；   皮肤热更新，支持后台推送、App实时更新样式；">
+    <meta name="description" content="应用换肤是常见的需求了，项目工程需要将设计资源的颜色、字体、图片等设计元素使用皮肤文件进行配置管理。本方案主要以项目支持马甲包资源管理、样式配置为主。 核心需求点：  马甲包开发支持，方便马甲包进行样式配置（区分）及资源包集成；  皮肤包功能，支持动态下载皮肤包（比如节日包），并应用到App上；  皮肤热更新，支持后台推送、App实时更新样式；">
 <meta name="keywords" content="换肤">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS多组件App皮肤配置方案及实践">
 <meta property="og:url" content="http://blog.knpc21.com/ios/ios-skin-bundle/index.html">
 <meta property="og:site_name" content="{ }">
-<meta property="og:description" content="应用换肤是常见的需求了，项目工程需要将设计资源的颜色、字体、图片等设计元素使用皮肤文件进行配置管理。本方案主要以项目支持马甲包资源管理、样式配置为主。 核心需求点：   马甲包开发支持，方便马甲包进行样式配置（区分）及资源包集成；   皮肤包功能，支持动态下载皮肤包（比如节日包），并应用到App上；   皮肤热更新，支持后台推送、App实时更新样式；">
+<meta property="og:description" content="应用换肤是常见的需求了，项目工程需要将设计资源的颜色、字体、图片等设计元素使用皮肤文件进行配置管理。本方案主要以项目支持马甲包资源管理、样式配置为主。 核心需求点：  马甲包开发支持，方便马甲包进行样式配置（区分）及资源包集成；  皮肤包功能，支持动态下载皮肤包（比如节日包），并应用到App上；  皮肤热更新，支持后台推送、App实时更新样式；">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://www.pngkey.com/png/full/13-131855_finish-your-degree-at-uma-personal-development-art.png">
 <meta property="og:updated_time" content="2022-10-16T14:30:28.000Z">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="iOS多组件App皮肤配置方案及实践">
-<meta name="twitter:description" content="应用换肤是常见的需求了，项目工程需要将设计资源的颜色、字体、图片等设计元素使用皮肤文件进行配置管理。本方案主要以项目支持马甲包资源管理、样式配置为主。 核心需求点：   马甲包开发支持，方便马甲包进行样式配置（区分）及资源包集成；   皮肤包功能，支持动态下载皮肤包（比如节日包），并应用到App上；   皮肤热更新，支持后台推送、App实时更新样式；">
+<meta name="twitter:description" content="应用换肤是常见的需求了，项目工程需要将设计资源的颜色、字体、图片等设计元素使用皮肤文件进行配置管理。本方案主要以项目支持马甲包资源管理、样式配置为主。 核心需求点：  马甲包开发支持，方便马甲包进行样式配置（区分）及资源包集成；  皮肤包功能，支持动态下载皮肤包（比如节日包），并应用到App上；  皮肤热更新，支持后台推送、App实时更新样式；">
 <meta name="twitter:image" content="https://www.pngkey.com/png/full/13-131855_finish-your-degree-at-uma-personal-development-art.png">
 
 
@@ -152,86 +152,86 @@
 </div>
     <div class="post__content">
         <p>应用换肤是常见的需求了，项目工程需要将设计资源的颜色、字体、图片等设计元素使用皮肤文件进行配置管理。本方案主要以项目支持马甲包资源管理、样式配置为主。</p>
-<p>核心需求点： </p>
+<p>核心需求点：</p>
 <ol>
-<li><p>马甲包开发支持，方便马甲包进行样式配置（区分）及资源包集成； </p>
+<li><p>马甲包开发支持，方便马甲包进行样式配置（区分）及资源包集成；</p>
 </li>
-<li><p>皮肤包功能，支持动态下载皮肤包（比如节日包），并应用到App上； </p>
+<li><p>皮肤包功能，支持动态下载皮肤包（比如节日包），并应用到App上；</p>
 </li>
 <li><p>皮肤热更新，支持后台推送、App实时更新样式；</p>
 </li>
 </ol>
 <a id="more"></a>
-<p>优先支持需求点1、2，需求点2、需求点3需后台配合支持。 </p>
-<p>代码开发快速上手请见「[配置格式说明]」及「[快速上手]」。 </p>
-<h3 id="样式配置"><a href="#样式配置" class="headerlink" title="样式配置"></a>样式配置</h3><h4 id="配置格式说明"><a href="#配置格式说明" class="headerlink" title="配置格式说明"></a>配置格式说明</h4><p>目前使用json作为配置文件格式。 </p>
-<p>目前暂定，应用全局配置使用主皮肤包中的appstyle.json，业务配置可自定somemodule.json。应用全局配置具有较为固定的key、默认会在App启动后读取配置应用到全局UI上，业务配置按需自定。 </p>
-<p>分割为多个配置文件，一则减少单次IO访问阻塞时间，二则隔离各业务配置、减少冲突。 </p>
-<p>以下为示例配置文件。每个key是业务id，也就是带义务意义的key。单个配置文件内应保证key的唯一性。 </p>
+<p>优先支持需求点1、2，需求点2、需求点3需后台配合支持。</p>
+<p>代码开发快速上手请见「[配置格式说明]」及「[快速上手]」。代码仓库在<a href="https://github.com/nscribble/HTSkinBundle" target="_blank" rel="noopener">HTSkinBundle</a>。</p>
+<h3 id="样式配置"><a href="#样式配置" class="headerlink" title="样式配置"></a>样式配置</h3><h4 id="配置格式说明"><a href="#配置格式说明" class="headerlink" title="配置格式说明"></a>配置格式说明</h4><p>目前使用json作为配置文件格式。</p>
+<p>目前暂定，应用全局配置使用主皮肤包中的appstyle.json，业务配置可自定somemodule.json。应用全局配置具有较为固定的key、默认会在App启动后读取配置应用到全局UI上，业务配置按需自定。</p>
+<p>分割为多个配置文件，一则减少单次IO访问阻塞时间，二则隔离各业务配置、减少冲突。</p>
+<p>以下为示例配置文件。每个key是业务id，也就是带义务意义的key。单个配置文件内应保证key的唯一性。</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"primaryGradientColor"</span>:&#123;</span><br><span class="line">        <span class="attr">"colors"</span>:[</span><br><span class="line">            <span class="string">"#160226"</span>,</span><br><span class="line">            <span class="string">"#280842"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"locations"</span>:[<span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">        <span class="attr">"style"</span>:<span class="number">0</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"next_button_title_color"</span>:[<span class="string">"#8A76FC"</span>, <span class="string">"#FF52D3"</span>, <span class="string">"#F2B273"</span>],</span><br><span class="line">    <span class="attr">"next_button_title_font"</span>:&#123;</span><br><span class="line">        <span class="attr">"fontName"</span>:<span class="string">"PingFangSC-SemiBold"</span>,</span><br><span class="line">        <span class="attr">"fontSize"</span>:<span class="number">18</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"some_other_font"</span>: <span class="string">"PingFangSC-Medium,16"</span>,</span><br><span class="line">    <span class="attr">"some_bg_image_in_assets"</span>: <span class="string">"bg_home"</span>,</span><br><span class="line">    <span class="attr">"some_bg_image_single"</span>: <span class="string">"bg_im_head_superplayer"</span>,</span><br><span class="line"></span><br><span class="line">    <span class="attr">"test_title_color_plain"</span>:<span class="string">"#333333"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="颜色配置格式"><a href="#颜色配置格式" class="headerlink" title="颜色配置格式"></a>颜色配置格式</h5><p>颜色的配置格式包括三种： </p>
+<h5 id="颜色配置格式"><a href="#颜色配置格式" class="headerlink" title="颜色配置格式"></a>颜色配置格式</h5><p>颜色的配置格式包括三种：</p>
 <ol>
 <li><code>String</code></li>
 </ol>
-<p>纯色配置。支持#RGB、0xRGBA、#RRGGBB、RRGGBBAA等格式的颜色配置，与UIColor+YYAdd.h保持一致。通常情况默认使用#RRGGBB即可。 </p>
+<p>纯色配置。支持#RGB、0xRGBA、#RRGGBB、RRGGBBAA等格式的颜色配置，与UIColor+YYAdd.h保持一致。通常情况默认使用#RRGGBB即可。</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"test_title_color_plain"</span>:<span class="string">"#333333"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>因UI规范未定，后续可能有变动。 </p>
+<p>因UI规范未定，后续可能有变动。</p>
 <ol start="2">
 <li><code>Object</code></li>
 </ol>
-<p>渐变色配置。主要包括3个key的配置： </p>
+<p>渐变色配置。主要包括3个key的配置：</p>
 <ul>
-<li><p><code>colors</code>: <code>Array</code>，元素同上述1的<code>String</code>格式 </p>
+<li><p><code>colors</code>: <code>Array</code>，元素同上述1的<code>String</code>格式</p>
 </li>
 <li><p><code>locations</code>: <code>Array</code>，元素为Float格式，取值范围[0, 1]</p>
 </li>
-<li><p><code>style</code>：<code>Int</code>，可选0/1/2/3，请参考GradientStyle的取值，可拓展。 </p>
+<li><p><code>style</code>：<code>Int</code>，可选0/1/2/3，请参考GradientStyle的取值，可拓展。</p>
 </li>
 </ul>
-<p>属性意义可参考CAGradientLayer。 </p>
+<p>属性意义可参考CAGradientLayer。</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"next_button_title_color"</span>:&#123;</span><br><span class="line">        <span class="attr">"colors"</span>:[</span><br><span class="line">            <span class="string">"#8A76FC"</span>,</span><br><span class="line">            <span class="string">"#FF52D3"</span>,</span><br><span class="line">            <span class="string">"#F2B273"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"locations"</span>:[</span><br><span class="line">            <span class="number">0</span>,</span><br><span class="line">            <span class="number">0.51</span>,</span><br><span class="line">            <span class="number">1</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"style"</span>:<span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ol start="3">
 <li><code>Array</code></li>
 </ol>
-<p>渐变色配置，即第2种格式的简化版，只使用colors进行配置。默认locations为均分，即均匀渐变，style为GradientStyleLeftToRight。 </p>
-<h5 id="字体配置格式"><a href="#字体配置格式" class="headerlink" title="字体配置格式"></a>字体配置格式</h5><p>字体的配置格式包括三种： </p>
+<p>渐变色配置，即第2种格式的简化版，只使用colors进行配置。默认locations为均分，即均匀渐变，style为GradientStyleLeftToRight。</p>
+<h5 id="字体配置格式"><a href="#字体配置格式" class="headerlink" title="字体配置格式"></a>字体配置格式</h5><p>字体的配置格式包括三种：</p>
 <ol>
 <li><code>Float</code></li>
 </ol>
-<p>通过字号配置，将使用皮肤包「全局配置」中的字体（或系统字体）。 </p>
-<p>⚠️请注意是Float格式，若配置为String格式，运行期Debug模式会断言失败、提示修改。 </p>
+<p>通过字号配置，将使用皮肤包「全局配置」中的字体（或系统字体）。</p>
+<p>⚠️请注意是Float格式，若配置为String格式，运行期Debug模式会断言失败、提示修改。</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"navigationTitleFont"</span>:<span class="number">17</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ol start="2">
 <li><code>Object</code></li>
 </ol>
-<p>可指定三个key进行配置： </p>
+<p>可指定三个key进行配置：</p>
 <ul>
-<li><p><code>fontName</code>: <code>String</code> 字体名称 </p>
+<li><p><code>fontName</code>: <code>String</code> 字体名称</p>
 </li>
-<li><p><code>fontSize</code>: <code>Float</code> 字号大小，必选 </p>
+<li><p><code>fontSize</code>: <code>Float</code> 字号大小，必选</p>
 </li>
 <li><p><code>fontWeight</code>: <code>String</code> 字重，可选：light/regular/medium/semibold/bold</p>
 </li>
 </ul>
-<p>请注意<code>fontSize</code>为必要的配置。若不提供<code>fontName</code>则同上述1处理。 </p>
+<p>请注意<code>fontSize</code>为必要的配置。若不提供<code>fontName</code>则同上述1处理。</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"next_button_title_font"</span>:&#123;</span><br><span class="line">        <span class="attr">"fontName"</span>:<span class="string">"PingFangSC-SemiBold"</span>,</span><br><span class="line">        <span class="attr">"fontSize"</span>:<span class="number">18</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>⚠️请注意<code>fontWeight</code> 字重仅为系统字体提供，约等同于<code>[UIFont boldSystemFontOfSize:$size]</code>此类用途。 </p>
+<p>⚠️请注意<code>fontWeight</code> 字重仅为系统字体提供，约等同于<code>[UIFont boldSystemFontOfSize:$size]</code>此类用途。</p>
 <ol start="3">
 <li><code>String</code></li>
 </ol>
-<p>提供便捷的配置格式，字体名称及字号大小，以逗号,分割，示例如”PingFangSC-Medium,16”。 </p>
-<p>⚠️请注意需要名称、字号同时配置，如仅配置”16”字号会断言失败。 </p>
-<p>默认情况下，App使用皮肤包配置的全局字体，因此业务如无特别需求，使用第一种方式指定字号即可。 </p>
-<h5 id="图片配置格式"><a href="#图片配置格式" class="headerlink" title="图片配置格式"></a>图片配置格式</h5><p>图片的配置目前仅一种，key: <code>imageName</code>。 </p>
-<h5 id="其他配置"><a href="#其他配置" class="headerlink" title="其他配置"></a>其他配置</h5><p>其他不属于资源配置，但可能增加接口支持的，比如某些常见的UI控件的配置属性，主要是统一、方便使用。 </p>
-<p>待定。 </p>
-<h4 id="全局样式配置"><a href="#全局样式配置" class="headerlink" title="全局样式配置"></a>全局样式配置</h4><p>全局样式主要包括App主色、默认字体、导航栏等全局性页面容器等外观配置。 </p>
-<h5 id="App主色"><a href="#App主色" class="headerlink" title="App主色"></a>App主色</h5><p>对应视觉UI规范的主色配置，配置文件中由primaryColor指定，纯色。 </p>
-<h5 id="App默认字体"><a href="#App默认字体" class="headerlink" title="App默认字体"></a>App默认字体</h5><p>配置文件中的primaryFont进行指定。支持加载皮肤包携带字体，指定字体名称以在App中全局配置使用（代码需配置），比如可以从PingFang字体切换为自定义字体等。 </p>
-<p>请确保字体为系统字体，或App内置字体，或皮肤包内置字体。皮肤包内置字体可通过”appstyle.json”配置fonts指定需加载的字体文件。 </p>
-<p>皮肤包加载时，默认会搜索皮肤包中ttf后缀的字体进行加载。 </p>
-<p>若不指定primaryFont，则使用系统默认字体。 </p>
-<h5 id="导航栏"><a href="#导航栏" class="headerlink" title="导航栏"></a>导航栏</h5><p>导航栏的视觉配置，主要包括：（待定） </p>
+<p>提供便捷的配置格式，字体名称及字号大小，以逗号,分割，示例如”PingFangSC-Medium,16”。</p>
+<p>⚠️请注意需要名称、字号同时配置，如仅配置”16”字号会断言失败。</p>
+<p>默认情况下，App使用皮肤包配置的全局字体，因此业务如无特别需求，使用第一种方式指定字号即可。</p>
+<h5 id="图片配置格式"><a href="#图片配置格式" class="headerlink" title="图片配置格式"></a>图片配置格式</h5><p>图片的配置目前仅一种，key: <code>imageName</code>。</p>
+<h5 id="其他配置"><a href="#其他配置" class="headerlink" title="其他配置"></a>其他配置</h5><p>其他不属于资源配置，但可能增加接口支持的，比如某些常见的UI控件的配置属性，主要是统一、方便使用。</p>
+<p>待定。</p>
+<h4 id="全局样式配置"><a href="#全局样式配置" class="headerlink" title="全局样式配置"></a>全局样式配置</h4><p>全局样式主要包括App主色、默认字体、导航栏等全局性页面容器等外观配置。</p>
+<h5 id="App主色"><a href="#App主色" class="headerlink" title="App主色"></a>App主色</h5><p>对应视觉UI规范的主色配置，配置文件中由primaryColor指定，纯色。</p>
+<h5 id="App默认字体"><a href="#App默认字体" class="headerlink" title="App默认字体"></a>App默认字体</h5><p>配置文件中的primaryFont进行指定。支持加载皮肤包携带字体，指定字体名称以在App中全局配置使用（代码需配置），比如可以从PingFang字体切换为自定义字体等。</p>
+<p>请确保字体为系统字体，或App内置字体，或皮肤包内置字体。皮肤包内置字体可通过”appstyle.json”配置fonts指定需加载的字体文件。</p>
+<p>皮肤包加载时，默认会搜索皮肤包中ttf后缀的字体进行加载。</p>
+<p>若不指定primaryFont，则使用系统默认字体。</p>
+<h5 id="导航栏"><a href="#导航栏" class="headerlink" title="导航栏"></a>导航栏</h5><p>导航栏的视觉配置，主要包括：（待定）</p>
 <ol>
 <li><p>导航栏背景色/图片：<code>navigationColor</code>、<code>navigationBgImage</code></p>
 </li>
@@ -242,95 +242,95 @@
 <li><p>导航栏返回按钮图片：<code>navigationBackImage</code></p>
 </li>
 </ol>
-<p>见下方json配置文件定义。 </p>
-<h5 id="tabBar"><a href="#tabBar" class="headerlink" title="tabBar"></a>tabBar</h5><p>tabBar的视觉配置，主要包括：（待定） </p>
+<p>见下方json配置文件定义。</p>
+<h5 id="tabBar"><a href="#tabBar" class="headerlink" title="tabBar"></a>tabBar</h5><p>tabBar的视觉配置，主要包括：（待定）</p>
 <ol>
-<li><p>tabBar背景色/图片 </p>
+<li><p>tabBar背景色/图片</p>
 </li>
-<li><p>tabBar文案字体 </p>
+<li><p>tabBar文案字体</p>
 </li>
-<li><p>tabBar文案颜色 </p>
+<li><p>tabBar文案颜色</p>
 </li>
 </ol>
-<p>建议修改或开发TabBarController，以支持由内容页面提供响应tab的tabBarIcon图片及文案。 </p>
+<p>建议修改或开发TabBarController，以支持由内容页面提供响应tab的tabBarIcon图片及文案。</p>
 <h5 id="皮肤包中全局配置文件（appstyle-json）"><a href="#皮肤包中全局配置文件（appstyle-json）" class="headerlink" title="皮肤包中全局配置文件（appstyle.json）"></a>皮肤包中全局配置文件（appstyle.json）</h5><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"primaryFont"</span>:<span class="string">"HYLiLiangHeiJ"</span>,</span><br><span class="line">    <span class="attr">"primaryColor"</span>:<span class="string">"#4594FF"</span>,</span><br><span class="line">    <span class="attr">"primaryGradientColor"</span>:[</span><br><span class="line">        <span class="string">"#8A76FC"</span>,</span><br><span class="line">        <span class="string">"#FF52D3"</span>,</span><br><span class="line">        <span class="string">"#F2B273"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">"registerFonts"</span>:[</span><br><span class="line">        <span class="string">"HYLiLiangHeiJ"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">"navigationColor"</span>:<span class="string">"#4594FF"</span>,</span><br><span class="line">    <span class="attr">"navigationTitleFont"</span>:<span class="number">17</span>,</span><br><span class="line">    <span class="attr">"navigationTitleColor"</span>:<span class="string">"#FFFFFF"</span>,</span><br><span class="line">    <span class="attr">"navigationBgImage"</span>:<span class="string">"img_nav_bg"</span>,</span><br><span class="line">    <span class="attr">"navigationBackImage"</span>:<span class="string">"img_nav_back"</span>,</span><br><span class="line">    <span class="attr">"badgeColor"</span>:<span class="string">"#FF6365"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>registerFonts</code>是配置需要动态注册的字体。也可不配置，程序可配置自动搜索皮肤包中的ttf字体文件进行加载。 </p>
-<p>全局配置文件支持拓展，但通常情况会进行字段限定（比如与设计出的规范文档对齐），并保持稳定。 </p>
-<h4 id="业务定制样式配置"><a href="#业务定制样式配置" class="headerlink" title="业务定制样式配置"></a>业务定制样式配置</h4><p>默认支持（或可支持）UIView及常见控件的样式属性可配置。特殊需支持的配置需求，需要控件支持配置，如未支持需安排开发。 </p>
-<p>目前<code>GradientButton</code>、<code>GradientLabel</code>已提供渐变背景、渐变文字支持。 </p>
-<h3 id="皮肤包资源构成"><a href="#皮肤包资源构成" class="headerlink" title="皮肤包资源构成"></a>皮肤包资源构成</h3><p>皮肤包的配置及资源，在<code>SkinBundle</code>组件中可以配置在<code>Assets</code>目录下。 </p>
-<p>如下图示是以项目区分的资源构成： </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">├── Assets</span><br><span class="line">│   ├── Common</span><br><span class="line">│   ├── App1</span><br><span class="line">│   │   ├── LottieResource</span><br><span class="line">│   │   │   └── bingoLottie</span><br><span class="line">│   │   │       ├── data.json</span><br><span class="line">│   │   │       └── images</span><br><span class="line">│   │   │           ├── img_0.png</span><br><span class="line">│   │   │           ├── img_1.png</span><br><span class="line">│   │   │           ├── img_2.png</span><br><span class="line">│   │   │           ├── img_3.png</span><br><span class="line">│   │   │           ├── img_4.png</span><br><span class="line">│   │   │           ├── img_5.png</span><br><span class="line">│   │   │           ├── img_6.png</span><br><span class="line">│   │   │           ├── img_7.png</span><br><span class="line">│   │   │           ├── img_8.png</span><br><span class="line">│   │   │           └── img_9.png</span><br><span class="line">│   │   ├── Skin.xcassets</span><br><span class="line">│   │   │   ├── Contents.json</span><br><span class="line">│   │   │   ├── bg_home.imageset</span><br><span class="line">│   │   │   │   ├── Contents.json</span><br><span class="line">│   │   │   │   ├── bg_home@2x.png</span><br><span class="line">│   │   │   │   └── bg_home@3x.png</span><br><span class="line">│   │   │   └── bg_home_filter.imageset</span><br><span class="line">│   │   │       ├── Contents.json</span><br><span class="line">│   │   │       ├── bg_home_filter@2x.png</span><br><span class="line">│   │   │       └── bg_home_filter@3x.png</span><br><span class="line">│   │   ├── appstyle.json</span><br><span class="line">│   │   ├── images</span><br><span class="line">│   │   │   ├── bg_im_head_superplayer.png</span><br><span class="line">│   │   │   └── warning.png</span><br><span class="line">│   │   └── login.json</span><br><span class="line">│   ├── App2</span><br><span class="line">│   └── App3</span><br></pre></td></tr></table></figure>
-<h4 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h4><p>皮肤资源包括字体文件（ttf）、图片（png/jpg）、图片集xcassets、Lottie资源、音频mp3，以及皮肤包的配置文件，都属于皮肤包资源。 </p>
-<p>目前支持集成的文件后缀包括：xib,png,xcassets,svg,ttf,json,xml,plist,mp3。如果新增需要更新皮肤包组件描述。 </p>
+<p><code>registerFonts</code>是配置需要动态注册的字体。也可不配置，程序可配置自动搜索皮肤包中的ttf字体文件进行加载。</p>
+<p>全局配置文件支持拓展，但通常情况会进行字段限定（比如与设计出的规范文档对齐），并保持稳定。</p>
+<h4 id="业务定制样式配置"><a href="#业务定制样式配置" class="headerlink" title="业务定制样式配置"></a>业务定制样式配置</h4><p>默认支持（或可支持）UIView及常见控件的样式属性可配置。特殊需支持的配置需求，需要控件支持配置，如未支持需安排开发。</p>
+<p>目前<code>GradientButton</code>、<code>GradientLabel</code>已提供渐变背景、渐变文字支持。</p>
+<h3 id="皮肤包资源构成"><a href="#皮肤包资源构成" class="headerlink" title="皮肤包资源构成"></a>皮肤包资源构成</h3><p>皮肤包的配置及资源，在<code>HTSkinBundle</code>组件中可以配置在<code>Assets</code>目录下。</p>
+<p>如下图示是以项目区分的资源构成：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">├── Assets</span><br><span class="line">│ ├── Common</span><br><span class="line">│ ├── App1</span><br><span class="line">│ │ ├── LottieResource</span><br><span class="line">│ │ │ └── bingoLottie</span><br><span class="line">│ │ │     ├── data.json</span><br><span class="line">│ │ │     └── images</span><br><span class="line">│ │ │         ├── img_0.png</span><br><span class="line">│ │ │         ├── img_1.png</span><br><span class="line">│ │ │         ├── img_2.png</span><br><span class="line">│ │ │         ├── img_3.png</span><br><span class="line">│ │ │         ├── img_4.png</span><br><span class="line">│ │ │         ├── img_5.png</span><br><span class="line">│ │ │         ├── img_6.png</span><br><span class="line">│ │ │         ├── img_7.png</span><br><span class="line">│ │ │         ├── img_8.png</span><br><span class="line">│ │ │         └── img_9.png</span><br><span class="line">│ │ ├── Skin.xcassets</span><br><span class="line">│ │ │ ├── Contents.json</span><br><span class="line">│ │ │ ├── bg_home.imageset</span><br><span class="line">│ │ │ │ ├── Contents.json</span><br><span class="line">│ │ │ │ ├── bg_home@2x.png</span><br><span class="line">│ │ │ │ └── bg_home@3x.png</span><br><span class="line">│ │ │ └── bg_home_filter.imageset</span><br><span class="line">│ │ │     ├── Contents.json</span><br><span class="line">│ │ │     ├── bg_home_filter@2x.png</span><br><span class="line">│ │ │     └── bg_home_filter@3x.png</span><br><span class="line">│ │ ├── appstyle.json</span><br><span class="line">│ │ ├── images</span><br><span class="line">│ │ │ ├── bg_im_head_superplayer.png</span><br><span class="line">│ │ │ └── warning.png</span><br><span class="line">│ │ └── login.json</span><br><span class="line">│ ├── App2</span><br><span class="line">│ └── App3</span><br></pre></td></tr></table></figure>
+<h4 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h4><p>皮肤资源包括字体文件（ttf）、图片（png/jpg）、图片集xcassets、Lottie资源、音频mp3，以及皮肤包的配置文件，都属于皮肤包资源。</p>
+<p>目前支持集成的文件后缀包括：xib,png,xcassets,svg,ttf,json,xml,plist,mp3。如果新增需要更新皮肤包组件描述。</p>
 <h4 id="共有资源"><a href="#共有资源" class="headerlink" title="共有资源"></a>共有资源</h4><p>考虑到目前项目间可能存在大量相同的资源，资源包支持在将其放置在Common目录下，目录结构及文件类型支持保持一致。非必要配置。</p>
-<h4 id="项目特有资源"><a href="#项目特有资源" class="headerlink" title="项目特有资源"></a>项目特有资源</h4><p>皮肤包工程可自定义项目资源目录，现有App1/App2/App3等（如上目录结构树所示）。 </p>
-<p>皮肤包最终会以<code>Skin.bundle</code>资源包的形式集成到主项目中，一般情况下在<code>.app</code>路径下。 </p>
-<p>图片可以添加在<code>xcassets</code>资源集或<code>images</code>目录下。<code>images</code>目录可以划分目录管理图片资源。 </p>
-<h3 id="皮肤包集成"><a href="#皮肤包集成" class="headerlink" title="皮肤包集成"></a>皮肤包集成</h3><p>基于pod组件进行集成。使用方式说明请见「快速上手」部分。 </p>
-<h4 id="主皮肤包"><a href="#主皮肤包" class="headerlink" title="主皮肤包"></a>主皮肤包</h4><p>跟随<code>SkinBundle</code>进行集成即可。 </p>
-<h4 id="组件资源包"><a href="#组件资源包" class="headerlink" title="组件资源包"></a>组件资源包</h4><p>此组件，特指项目的<code>Component</code>类组件，通常为业务组件。业务组件如需要区分马甲包进行样式配置，可以添加配置文件到组件资源包中，业务上使用方法除指定component外几乎一致。 </p>
-<p>若业务组件需要区分资源包，请业务组件自行安排集成，比如通过subspec方式来区分项目集成亦可。 </p>
-<h3 id="皮肤包更新"><a href="#皮肤包更新" class="headerlink" title="皮肤包更新"></a>皮肤包更新</h3><p>需要将主皮肤包映射到沙盒中。支持全量更新或增量更新，具体策略，涉及资源包版本管理、补丁包制作及更新包等细化逻辑。以下说明方案思路。 </p>
-<h4 id="资源包更新"><a href="#资源包更新" class="headerlink" title="资源包更新"></a>资源包更新</h4><h5 id="管理后台"><a href="#管理后台" class="headerlink" title="管理后台"></a>管理后台</h5><p>管理后台支持资源包上传（托管）、版本化及差分包生成等。主要为后端内容，差分/补丁制作工具与客户端保持统一即可，此处不赘述。 </p>
-<p>皮肤包版本约束包括主应用最低版本要求、主皮肤包版本、差分包版本及对应主皮肤包版本等版本信息。 </p>
-<h5 id="全量更新"><a href="#全量更新" class="headerlink" title="全量更新"></a>全量更新</h5><p>主要流程： </p>
+<h4 id="项目特有资源"><a href="#项目特有资源" class="headerlink" title="项目特有资源"></a>项目特有资源</h4><p>皮肤包工程可自定义项目资源目录，现有App1/App2/App3等（如上目录结构树所示）。</p>
+<p>皮肤包最终会以<code>Skin.bundle</code>资源包的形式集成到主项目中，一般情况下在<code>.app</code>路径下。</p>
+<p>图片可以添加在<code>xcassets</code>资源集或<code>images</code>目录下。<code>images</code>目录可以划分目录管理图片资源。</p>
+<h3 id="皮肤包集成"><a href="#皮肤包集成" class="headerlink" title="皮肤包集成"></a>皮肤包集成</h3><p>基于pod组件进行集成。使用方式说明请见「快速上手」部分。</p>
+<h4 id="主皮肤包"><a href="#主皮肤包" class="headerlink" title="主皮肤包"></a>主皮肤包</h4><p>跟随<code>HTSkinBundle</code>进行集成即可。</p>
+<h4 id="组件资源包"><a href="#组件资源包" class="headerlink" title="组件资源包"></a>组件资源包</h4><p>此组件，特指项目的<code>Component</code>类组件，通常为业务组件。业务组件如需要区分马甲包进行样式配置，可以添加配置文件到组件资源包中，业务上使用方法除指定component外几乎一致。</p>
+<p>若业务组件需要区分资源包，请业务组件自行安排集成，比如通过subspec方式来区分项目集成亦可。</p>
+<h3 id="皮肤包更新"><a href="#皮肤包更新" class="headerlink" title="皮肤包更新"></a>皮肤包更新</h3><p>需要将主皮肤包映射到沙盒中。支持全量更新或增量更新，具体策略，涉及资源包版本管理、补丁包制作及更新包等细化逻辑。以下说明方案思路。</p>
+<h4 id="资源包更新"><a href="#资源包更新" class="headerlink" title="资源包更新"></a>资源包更新</h4><h5 id="管理后台"><a href="#管理后台" class="headerlink" title="管理后台"></a>管理后台</h5><p>管理后台支持资源包上传（托管）、版本化及差分包生成等。主要为后端内容，差分/补丁制作工具与客户端保持统一即可，此处不赘述。</p>
+<p>皮肤包版本约束包括主应用最低版本要求、主皮肤包版本、差分包版本及对应主皮肤包版本等版本信息。</p>
+<h5 id="全量更新"><a href="#全量更新" class="headerlink" title="全量更新"></a>全量更新</h5><p>主要流程：</p>
 <ol>
-<li><p>皮肤包zip上传到文件托管服务； </p>
+<li><p>皮肤包zip上传到文件托管服务；</p>
 </li>
-<li><p>客户端与后台进行配置版本同步，同步策略两端协商即可。比如可以App定期启动后拉取配置版本，也可以服务端推送或其他手段进行同步； </p>
+<li><p>客户端与后台进行配置版本同步，同步策略两端协商即可。比如可以App定期启动后拉取配置版本，也可以服务端推送或其他手段进行同步；</p>
 </li>
-<li><p>客户端版本比对能力，客户端按需下载皮肤包文件； </p>
+<li><p>客户端版本比对能力，客户端按需下载皮肤包文件；</p>
 </li>
-<li><p>客户端更新皮肤包映射关系，触发皮肤热更新等； </p>
+<li><p>客户端更新皮肤包映射关系，触发皮肤热更新等；</p>
 </li>
 </ol>
-<h5 id="增量更新"><a href="#增量更新" class="headerlink" title="增量更新"></a>增量更新</h5><p>增量更新包括两部分：差分包（补丁包）制作、差分包应用（集成）。 </p>
+<h5 id="增量更新"><a href="#增量更新" class="headerlink" title="增量更新"></a>增量更新</h5><p>增量更新包括两部分：差分包（补丁包）制作、差分包应用（集成）。</p>
 <ol>
 <li>差分包制作</li>
 </ol>
-<p>差分包的制作需要使用diff工具，具体的选择看需要。目前bsdiff和bspatch是一套常用的工具，可以参考使用。考虑进一步性能优化情况下，可再考虑其他diff工具的组合使用。 </p>
+<p>差分包的制作需要使用diff工具，具体的选择看需要。目前bsdiff和bspatch是一套常用的工具，可以参考使用。考虑进一步性能优化情况下，可再考虑其他diff工具的组合使用。</p>
 <ol start="2">
 <li>差分包集成</li>
 </ol>
-<p>通常是阶梯式进行diff应用。 </p>
+<p>通常是阶梯式进行diff应用。</p>
 <ul>
-<li><p>客户端在拉取到皮肤包配置后，根据应用版本及资源版本自行判断是否适用全量更新或增量更新； </p>
+<li><p>客户端在拉取到皮肤包配置后，根据应用版本及资源版本自行判断是否适用全量更新或增量更新；</p>
 </li>
-<li><p>确定增量更新后，递归下载所需的增量包； </p>
+<li><p>确定增量更新后，递归下载所需的增量包；</p>
 </li>
-<li><p>递归、阶梯式应用增量包到全量包生成新的全量包，直到生成目标资源包结束； </p>
+<li><p>递归、阶梯式应用增量包到全量包生成新的全量包，直到生成目标资源包结束；</p>
 </li>
-<li><p>客户端更新皮肤包映射关系，并触发皮肤热更新。 </p>
+<li><p>客户端更新皮肤包映射关系，并触发皮肤热更新。</p>
 </li>
 </ul>
-<h4 id="皮肤热更新"><a href="#皮肤热更新" class="headerlink" title="皮肤热更新"></a>皮肤热更新</h4><p>包含两部分： </p>
+<h4 id="皮肤热更新"><a href="#皮肤热更新" class="headerlink" title="皮肤热更新"></a>皮肤热更新</h4><p>包含两部分：</p>
 <ol>
 <li>热切换</li>
 </ol>
-<p>主要是指客户端需要支持配置更新（全部或个别）后，在App侧能直接生效。具体实现方式，可通过观察者模式或闭包缓存的方式实现。 </p>
-<p>对业务开发使用无影响。 </p>
+<p>主要是指客户端需要支持配置更新（全部或个别）后，在App侧能直接生效。具体实现方式，可通过观察者模式或闭包缓存的方式实现。</p>
+<p>对业务开发使用无影响。</p>
 <ol start="2">
 <li>热更新</li>
 </ol>
-<p>主要是指客户端需要及时获知配置及资源包的更新，比如轮询，比如服务端推送等多种手段都可实现，此处亦不赘述。 </p>
+<p>主要是指客户端需要及时获知配置及资源包的更新，比如轮询，比如服务端推送等多种手段都可实现，此处亦不赘述。</p>
 <h3 id="快速上手"><a href="#快速上手" class="headerlink" title="快速上手"></a>快速上手</h3><ol>
-<li>Podfile添加依赖SkinBundle</li>
+<li>Podfile添加依赖HTSkinBundle</li>
 </ol>
-<p>默认集成项目的资源包，相关项目或希望调试其他资源包时，需指定对应的subspec </p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod <span class="string">'SkinBundle'</span></span><br><span class="line">pod <span class="string">'SkinBundleResource'</span></span><br></pre></td></tr></table></figure>
-<p>或有需要可以将资源包抽离为独立的pod组件，将资源托管到静态服务。 </p>
+<p>默认集成项目的资源包，相关项目或希望调试其他资源包时，需指定对应的subspec</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod <span class="string">'HTSkinBundle'</span></span><br><span class="line">pod <span class="string">'HTSkinBundleResource'</span></span><br></pre></td></tr></table></figure>
+<p>或有需要可以将资源包抽离为独立的pod组件，将资源托管到静态服务。</p>
 <ol start="2">
 <li>使用支持配置的控件</li>
 </ol>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> SkinBundle  </span><br><span class="line">fun test() &#123;     </span><br><span class="line">	<span class="keyword">let</span> button = <span class="type">GradientButton</span>()     </span><br><span class="line">	button.layer.cornerRadius = <span class="number">60</span>/<span class="number">2</span>     </span><br><span class="line">	button.layer.masksToBounds = <span class="literal">true</span>     </span><br><span class="line">	button.style.module(<span class="string">"login"</span>)</span><br><span class="line">		.backgroundColorKey(<span class="string">"next_button_bg_color"</span>)</span><br><span class="line">		.textColorKey(<span class="string">"next_button_title_color"</span>)</span><br><span class="line">		.fontKey(<span class="string">"next_button_title_font"</span>)</span><br><span class="line">	button.textLabel.text = <span class="string">"测试测试测试"</span> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Swift版的接口，控件的可配置属性约束在<code>style</code>的域下所支持的属性。 </p>
-<p>目前对<code>UIView</code>、<code>UILabel</code>等基础控件进行属性配置的支持（持续更新中）。 </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> HTSkinBundle</span><br><span class="line">fun test() &#123; </span><br><span class="line">	<span class="keyword">let</span> button = <span class="type">GradientButton</span>()</span><br><span class="line">	button.layer.cornerRadius = <span class="number">60</span>/<span class="number">2</span> </span><br><span class="line">	button.layer.masksToBounds = <span class="literal">true</span></span><br><span class="line">	button.style.module(<span class="string">"login"</span>)</span><br><span class="line">		.backgroundColorKey(<span class="string">"next_button_bg_color"</span>)</span><br><span class="line">		.textColorKey(<span class="string">"next_button_title_color"</span>)</span><br><span class="line">		.fontKey(<span class="string">"next_button_title_font"</span>)</span><br><span class="line">	button.textLabel.text = <span class="string">"测试测试测试"</span> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Swift版的接口，控件的可配置属性约束在<code>style</code>的域下所支持的属性。</p>
+<p>目前对<code>UIView</code>、<code>UILabel</code>等基础控件进行属性配置的支持（持续更新中）。</p>
 <p>定制配置目前主要包括<code>GradientButton</code>及<code>GradientLabel</code>主要提供渐变背景及渐变文字的支持。</p>
 
     </div>
      
-    <div class="post-footer__meta"><p>updated at 2022-10-16</p></div> 
+    <div class="post-footer__meta"><p>更新于 2022-10-16</p></div> 
     <div class="post-entry__tags"><a href="/tags/换肤/" class="post-tags__link button"># 换肤</a></div> 
 </article>
 
@@ -376,7 +376,7 @@
 
     <div class="post__comments content-card" id="comment">
         
-    <h4>Comments</h4>
+    <h4>评论</h4>
     
     
     
@@ -400,7 +400,7 @@
 
             <footer class="footer">
      
-    <a href="#" class="button" id="b2t" aria-label="Back to Top" title="Back to Top">
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
             <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
         </svg>

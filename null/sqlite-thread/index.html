@@ -39,18 +39,18 @@
 <meta name="keywords" content="技术&#x2F;iOS&#x2F;大前端">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SQLite的线程模型、事务与并发">
-<meta property="og:url" content="http://blog.knpc21.com/null/sqlite-thread/index.html">
+<meta property="og:url" content="http://blog.sigtraps.com/null/sqlite-thread/index.html">
 <meta property="og:site_name" content="{ }">
 <meta property="og:description" content="两个互斥锁：  fullmutex：连接锁，用于确保任何时候最多只能一个线程在同一个连接上执行事务 coremutex：文件锁，用于确保任何时候只有一个线程访问数据库  3种线程模型：（使用方式）  single-thread：两个互斥锁都禁用，使用方需要保证单线程访问 multi-thread：fullmutex禁用，coremutex开启，可以多个线程通过不同的数据库连接进行访问（单个连接只能">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://blog.knpc21.com/null/sqlite-thread/rollback-wal.png">
-<meta property="og:image" content="http://blog.knpc21.com/null/sqlite-thread/sqlite-busy.png">
-<meta property="og:image" content="http://blog.knpc21.com/null/sqlite-thread/checkpoint.png">
+<meta property="og:image" content="http://blog.sigtraps.com/null/sqlite-thread/rollback-wal.png">
+<meta property="og:image" content="http://blog.sigtraps.com/null/sqlite-thread/sqlite-busy.png">
+<meta property="og:image" content="http://blog.sigtraps.com/null/sqlite-thread/checkpoint.png">
 <meta property="og:updated_time" content="2019-08-15T13:49:00.000Z">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="SQLite的线程模型、事务与并发">
 <meta name="twitter:description" content="两个互斥锁：  fullmutex：连接锁，用于确保任何时候最多只能一个线程在同一个连接上执行事务 coremutex：文件锁，用于确保任何时候只有一个线程访问数据库  3种线程模型：（使用方式）  single-thread：两个互斥锁都禁用，使用方需要保证单线程访问 multi-thread：fullmutex禁用，coremutex开启，可以多个线程通过不同的数据库连接进行访问（单个连接只能">
-<meta name="twitter:image" content="http://blog.knpc21.com/null/sqlite-thread/rollback-wal.png">
+<meta name="twitter:image" content="http://blog.sigtraps.com/null/sqlite-thread/rollback-wal.png">
 
 
     <link rel="stylesheet" href="/css/style/main.css"> 

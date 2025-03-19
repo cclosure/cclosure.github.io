@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>案例解析：杂乱无章的卡死堆栈 | { }</title>
+
+
+    <meta name="keywords" content="性能优化, 技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="你可能没遇到过这样的case。">
+<meta name="keywords" content="性能优化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="案例解析：杂乱无章的卡死堆栈">
+<meta property="og:url" content="http://blog.sigtraps.com/ios/perf-case-study-watchdog-ii/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="你可能没遇到过这样的case。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.miji.bid/2025/03/18/6e4d314696bd3866bc7d166217dfa495.webp">
+<meta property="og:updated_time" content="2025-03-19T18:09:13.538Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="案例解析：杂乱无章的卡死堆栈">
+<meta name="twitter:description" content="你可能没遇到过这样的case。">
+<meta name="twitter:image" content="https://i.miji.bid/2025/03/18/6e4d314696bd3866bc7d166217dfa495.webp">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        案例解析：杂乱无章的卡死堆栈
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2024/09/" class="post-meta__date button">2024-09-19</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header">
+	
+        <div class="post-thumbnail" style="background-image: url('https://i.miji.bid/2025/03/18/6e4d314696bd3866bc7d166217dfa495.webp');"></div>
+    
+</div>
+    <div class="post__content">
+        <p>你可能没遇到过这样的case。</p>
+<a id="more"></a>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>卡慢问题错综复杂，比如我们之前解决的MIDI组件的CPU繁忙导致卡死问题。因此在排查问题时也特别关注CPU消耗指标。果不其然，我们又排查到一些场景，CPU消耗高非常影响性能，原因是Hippy页的一些动画在退出场景后并未释放资源，VAP动画一直播放。看上去是业务的问题，于是由业务来优化。</p>
+<p>卡顿卡死问题，在这样一轮优化后，也有了不错的优化效果，卡慢相关的反馈量开始减少。但也还有多个不同聚类堆栈的问题依然突出。</p>
+<p>来看下面一些聚类的堆栈信息，这里问题有聚类堆栈，同时有个别用户反馈频繁卡死，但问题非常难重现。</p>
+<p>二三方库libpag卡死堆栈：<br><img src="callstack1.jpg" alt></p>
+<p>打分器卡死堆栈：<br><img src="callstack2.jpg" alt></p>
+<p>你可以想象到这其实是一个问题导致的不同堆栈聚类吗？</p>
+<p>因为堆栈分别聚类到二三方库或特定功能组件代码中，我们第一时间怀疑是否某些相关的功能组件有性能问题，因此还联合了多个团队开发来协助排查。</p>
+<p>但组件的开发也表示头大。尽管问题堆栈明确，但原因却并未查明，单点问题开发只能尝试优化。</p>
+<h3 id="全线程堆栈"><a href="#全线程堆栈" class="headerlink" title="全线程堆栈"></a>全线程堆栈</h3><p>问题的解决得益于上报到性能平台的全线程堆栈能力。</p>
+<p>我们在梳理排查用户反馈问题时，留意到一个反馈案例。在排查该用户线程死锁问题时，发现该用户居然有超过500多个VAP线程，远超应用的平均线程数。同时超多数量相同的线程，让人怀疑VAP组件是否存在异常使用线程的问题。</p>
+<p>在场景内很快复现了VAP线程泄漏，正是文章开头我们遇到过的VAP动画问题：游戏大厅的Hippy页，每次进入都有2、3个VAP动画循环播放，并且退出场景并未主动调用<code>stopHWDMP4</code>退出方法。而当我们尝试修复<code>stopHWDMP4</code>问题时，又发现就算主动stop了该VAP还是线程依然未被释放。</p>
+<p>继续排查发现:<br>1、App内的VAP组件，是一个魔改版的，渲染循环里引用的是weakself，退出条件里当weakself为nil时就会触发线程泄露；而外网开源版引用的是self，反而没有这样的问题；<br>2、存在时序问题，stopHWDMP4 后(hwd_isFinish才会置为YES)，UIView实例还必须继续存活、直到renderQueue中渲染循环退出;<br><img src="callstack3.jpg" alt></p>
+<p>也就是说VAP组件问题并不只是业务漏掉stopHWDMP4的调用才有问题，因为时序问题全站使用VAP动画轮播的场景都可能有问题 (只要是没stop或者stop后视图立刻销毁)。考虑到VAP动画在App内广泛使用，因此还需要线上修复该问题。</p>
+<h3 id="修复方案"><a href="#修复方案" class="headerlink" title="修复方案"></a>修复方案</h3><p>如何修复呢？其实最终线上修复方案比较巧妙。</p>
+<p>正常而言，业务一般在退出场景或需要时主动停止动画。但我们不可能hook所有业务来处理该问题——改动风险大并且逻辑分散，万一修复代码异常问题将变得更加复杂。</p>
+<p>可以留意到VAP组件开启一个动画(以及渲染线程)是基于每一个UIView视图实例的（这也正是这里线程泄漏严重之处）。这让我们想到，统一hook视图UIView的生命周期方法（比如移除界面时），在合适的时机来解决stopHWDMP4的问题。<br><img src="codesnipets2.jpg" alt></p>
+<p>同时，时序问题主要是因为视图销毁的时机不可控。我们首先考虑了能否hook视图的dealoc方法，让其延迟释放？可以，但有一些风险，毕竟dealloc方法苹果是不给hook的（selector都没有）。尽管可以hook，但有没其他风险更小的方案呢？于是基于延迟释放的想法，我们进而得到了一个更简单的方案，stop之后通过闭包持有视图实例延迟了0.1s释放。<br><img src="codesnipets1.jpg" alt></p>
+<p>最终问题得到解决。全站的线程数P99大幅下降：<br><img src="threadscount.jpg" alt></p>
+<p>上文提到的多个聚类堆栈的卡死上报也随之消失。整站的卡死以及高CPU导致Watchdog问题大幅下降（20+%），整站性能得到有效改善。<br><img src="reporttrend.jpg" alt></p>
+<h3 id="其他探讨"><a href="#其他探讨" class="headerlink" title="其他探讨"></a>其他探讨</h3><p>问题解决了，但是VAP线程泄漏是怎么引起卡死的?VAP线程泄漏的线程上限是300、400还是多少?<br>首先VAP渲染循环因为缺陷无法退出，导致分配给dispatch_queue的线程一直繁忙。libdispatch底层维护线程池，在不断收到线程资源申请时，由于已分配的线程尚未完成任务，只能重新申请线程资源。回头看几个卡死的堆栈，看似都无相关，实际上是线程资源消耗导致线程调度出现异常，主线程的阻塞性API调用最终导致了卡死。</p>
+<p>libdispatch底层维护了主队列、全局并发队列以及自定义串行/并发队列。dispatch async将一个block派发到libdispatch之后，流程其实比较冗长。libdispatch对线程资源的申请最终还是经由pthread以及xnu系统调用。<br><img src="codesnipets3.jpg" alt></p>
+<p>最后我们通过查证及验证，目前发现dispatch能申请的线程数最大是512个，这个跟我们火眼上报问题的线程情况还是比较吻合的。</p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新於 2025-03-20</p></div> 
+    <div class="post-entry__tags"><a href="/tags/性能优化/" class="post-tags__link button"># 性能优化</a></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/ios/apple-news-2025/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            苹果新闻及更新公告（2025）
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/ios/perf-case-study-watchdog-i/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            案例解析：一个负数引起的卡死问题
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>評論</h4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="wildfire_thread"></div>
+
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到頂部" title="回到頂部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

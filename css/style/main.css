@@ -4,13 +4,13 @@
   --bg-content-color: #fff;
   --bg-menu: #eceef2;
   --bg-tag-color: #f4f4f4;
-  --bg-code: #eee;
-  --bg-codeblock: #f8f8f8;
+  --bg-code: #f8f9f8;
+  --bg-codeblock: #f8f9f8;
   --body-color: #4c4d4e;
   --title-color: #50596c;
   --border-color: rgba(0,0,0,0.1);
   --space: 3.5rem;
-  --content-width: 776px;
+  --content-width: 896px;
 }
 ::-webkit-scrollbar {
   width: 0.55rem !important;
@@ -393,13 +393,24 @@ figure table td.gutter {
   text-align: right;
   background-color: transparent;
 }
-.highlight {
+figure.highlight,
+figure.highlight.plain {
+  background-color: var(--bg-codeblock) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 3px;
+  padding: 0.4rem;
+}
+.highlight,
+figure.highlight {
   margin-bottom: 20px;
   padding: 0.4rem;
   width: auto;
   border-radius: 3px;
+  background-color: var(--bg-codeblock) !important;
+  border: 1px solid var(--border-color) !important;
 }
-.highlight pre {
+.highlight pre,
+figure.highlight pre {
   margin-bottom: 0;
 }
 .highlight table {
@@ -473,12 +484,15 @@ overflows table td {
   text-decoration: underline;
 }
 .post-entry__content>.highlight,
-.post__content>.highlight {
+.post__content>.highlight,
+.post-entry__content>figure.highlight,
+.post__content>figure.highlight {
   margin: 1rem calc(0rem - var(--space)) !important;
   padding: 0.4rem var(--space) !important;
-  border: none !important;
+  border: 0px solid var(--border-color) !important;
   border-radius: 0 !important;
   width: auto;
+  background-color: var(--bg-codeblock) !important;
 }
 .post-entry__content h1,
 .post__content h1,
@@ -1272,7 +1286,7 @@ overflows table td {
 }
 .post-side .post-side__toc .toc {
   display: none;
-  width: calc((100vw - 776px) / 2 - 12.6px);
+  width: calc((100vw - 896px) / 2 - 12.6px);
   height: calc(100vh - 60px * 2 - 20px);
   padding-left: 0.6rem;
 }
@@ -1402,6 +1416,208 @@ details .fold-content>:first-child {
 .sliding-fold .fold-content>:last-child,
 details .fold-content>:last-child {
   margin-bottom: 0;
+}
+.post__comments {
+  margin-top: 3.5rem;
+}
+.post__comments h4 {
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #50596c;
+}
+#gitalk-container {
+  padding: 0.5rem;
+}
+.gt-btn {
+  background-color: #3a3b3c !important;
+  border: none !important;
+  border-radius: 5px !important;
+  font-weight: 500 !important;
+  padding: 8px 16px !important;
+  transition: all 0.3s ease !important;
+}
+.gt-btn:hover {
+  opacity: 0.9 !important;
+  transform: translateY(-1px) !important;
+}
+.gt-btn:active {
+  transform: translateY(0) !important;
+}
+.gt-btn-primary {
+  background-color: #3a3b3c !important;
+}
+.gt-btn-preview {
+  background-color: #50596c !important;
+  color: #fff !important /* 确保预览按钮文字可见 */;
+}
+.gt-btn-login,
+.gt-header-login {
+  background-color: #3a3b3c !important;
+  border-color: #3a3b3c !important;
+  color: #fff !important;
+}
+.gt-btn-login:hover,
+.gt-header-login:hover {
+  background-color: #3a3b3c !important;
+  border-color: #3a3b3c !important;
+}
+.gt-avatar img {
+  border-radius: 50% !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
+.gt-dropdown .gt-btn:hover {
+  background-color: #3a3b3c !important;
+}
+.gt-header-controls .gt-btn,
+.gt-header-actions .gt-btn,
+.gt-comment-actions .gt-btn,
+.gt-btn-login,
+.gt-header-login,
+.gt-btn-primary {
+  color: #fff !important;
+}
+.gt-header-controls .gt-btn:hover,
+.gt-header-actions .gt-btn:hover,
+.gt-comment-actions .gt-btn:hover,
+.gt-btn-login:hover,
+.gt-header-login:hover,
+.gt-btn-primary:hover {
+  color: #fff !important;
+}
+.gt-header-comment-tip,
+.gt-header-tip,
+.gt-comment-text-tip,
+.gt-no-comments,
+.gt-comments-null,
+.gt-empty,
+.gt-null,
+.gt-comments-empty,
+.gt-comment-empty,
+.gt-no-data,
+.gt-header-meta .gt-header-tip,
+.gt-header .gt-header-tip,
+.gt-comments .gt-null {
+  display: none !important;
+}
+.gt-meta {
+  display: none !important;
+}
+.gt-error {
+  display: none !important;
+}
+.gt-header-issue-link,
+.gt-issue-link,
+.gt-header .gt-header-issue-link,
+.gt-comments-count,
+.gt-count,
+.gt-issue-count {
+  display: none !important;
+}
+.gt-header-controls-tip,
+.gt-controls-tip,
+.gt-markdown-tip,
+.gt-header-textarea-tip,
+.gt-header-controls .gt-header-controls-tip,
+.gt-header-controls > span:not(.gt-btn) {
+  display: none !important;
+}
+.gt-header-textarea:hover ~ .gt-header-controls-tip {
+  display: none !important;
+}
+.gt-popup .gt-action.gt-action-login {
+  color: #3a3b3c !important;
+}
+.gt-popup .gt-action.gt-action-login:hover {
+  color: #3a3b3c !important;
+  text-decoration: none !important;
+}
+.gt-copyright {
+  display: none !important;
+}
+.gt-version,
+.gt-copyright .gt-version {
+  display: none !important;
+}
+.gt-header-textarea {
+  background-color: #f4f4f4 !important;
+  border: 1px solid rgba(0,0,0,0.1) !important;
+  border-radius: 5px !important;
+  color: #4c4d4e !important;
+  font-size: 14px !important;
+}
+.gt-header-textarea:focus {
+  border-color: #3a3b3c !important;
+  outline: none !important;
+}
+.gt-comment-body {
+  color: #4c4d4e !important;
+  font-size: 14px !important;
+  line-height: 1.8 !important;
+}
+.gt-comment-username {
+  color: #3a3b3c !important;
+  font-weight: 600 !important;
+}
+.gt-comment-date {
+  color: #999 !important;
+  font-size: 12px !important;
+}
+.gt-comment-actions a {
+  color: #3a3b3c !important;
+  font-weight: 500 !important;
+}
+.gt-comment-actions a:hover {
+  text-decoration: underline !important;
+}
+.gt-comment-admin .gt-comment-content {
+  background-color: rgba(98,0,238,0.05) !important;
+  border-radius: 5px !important;
+}
+.gt-spinner svg {
+  stroke: #3a3b3c !important;
+}
+.gt-btn-loadmore {
+  background-color: transparent !important;
+  color: #3a3b3c !important;
+  border: 1px solid #3a3b3c !important;
+}
+.gt-btn-loadmore:hover {
+  background-color: #3a3b3c !important;
+  color: #fff !important;
+}
+.gt-copyright {
+  margin-top: 2rem !important;
+  padding-top: 1rem !important;
+  border-top: 1px solid rgba(0,0,0,0.1) !important;
+  font-size: 12px !important;
+  color: #999 !important;
+}
+.gt-comment-body.markdown-body {
+  font-family: inherit !important;
+}
+.gt-comment-body.markdown-body p {
+  margin-bottom: 1rem !important;
+}
+.gt-comment-body.markdown-body code {
+  background-color: #f8f9f8 !important;
+  padding: 2px 6px !important;
+  border-radius: 3px !important;
+  font-size: 13px !important;
+}
+.gt-comment-body.markdown-body pre {
+  background-color: #f8f9f8 !important;
+  padding: 1rem !important;
+  border-radius: 5px !important;
+  overflow-x: auto !important;
+}
+.gt-link {
+  color: #3a3b3c !important;
+  text-decoration: none !important;
+}
+.gt-link:hover {
+  text-decoration: underline !important;
 }
 .blockquote-note {
   margin: 1rem 0;

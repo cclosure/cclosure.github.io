@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>Typora 1.0 发布了(updated) | { }</title>
+
+
+    <meta name="keywords" content="技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="Typora正式版发布还真是个意外——不是因为“Free during beta”结束了，而是Typora其实已经Beta测试好几年时间。甚至Typora在0.9.9之后还发布了100+个小版本，才进入0.10.x。">
+<meta name="keywords" content="技术&#x2F;iOS&#x2F;大前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Typora 1.0 发布了(updated)">
+<meta property="og:url" content="http://blog.sigtraps.com/typora-1-0/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="Typora正式版发布还真是个意外——不是因为“Free during beta”结束了，而是Typora其实已经Beta测试好几年时间。甚至Typora在0.9.9之后还发布了100+个小版本，才进入0.10.x。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/11/39b4ba71a88adceb.png">
+<meta property="og:updated_time" content="2022-07-21T03:44:30.000Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Typora 1.0 发布了(updated)">
+<meta name="twitter:description" content="Typora正式版发布还真是个意外——不是因为“Free during beta”结束了，而是Typora其实已经Beta测试好几年时间。甚至Typora在0.9.9之后还发布了100+个小版本，才进入0.10.x。">
+<meta name="twitter:image" content="https://s3.bmp.ovh/imgs/2021/11/39b4ba71a88adceb.png">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        Typora 1.0 发布了(updated)
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2021/11/" class="post-meta__date button">2021-11-29</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header">
+	
+        <div class="post-thumbnail" style="background-image: url('https://s3.bmp.ovh/imgs/2021/11/39b4ba71a88adceb.png');"></div>
+    
+</div>
+    <div class="post__content">
+        <p><code>Typora</code>正式版发布还真是个意外——不是因为“Free during beta”结束了，而是<code>Typora</code>其实已经<code>Beta</code>测试好几年时间。甚至<code>Typora</code>在<code>0.9.9</code>之后还发布了100+个小版本，才进入<code>0.10.x</code>。</p>
+<a id="more"></a>
+<p><code>Typora</code>是一款体验挺好的<code>Markdown</code>文档编辑器，尤其是前几年<code>Markdown</code>还没如今普及的时候。<code>Typora</code>让你可以沉浸式地Writing，所谓所见即所思，而不会因为一些语法细节影响了思绪。我相信这是很多人选择<code>Typora</code>的一个重要原因。只是与几年前相比，如今市场的竞争对手太多了。文档编辑只是写作或者记录的一部分，在文档管理方面，<code>Typora</code>几年间也可以说是踟蹰不前，而<code>Obsidian</code>据说却也要发布Live Preview了。有时在细节上雕花，于大局处并无影响。</p>
+<p><code>Typora</code>没有做文档同步，不支持自定义插件拓展，设计也很干净，大概就是“一次做好一件事”的一个典型案例了。目前1.0.0正式版本需要$14.99的付费，可以支持3台设备。目测暂定是一次付费模式、而不是走订阅制，虽然之前官方在大版本更新是否会收费上也是摇摆的。</p>
+<p><code>Typora</code>最后一版Beta是<a href="https://download.typora.io/mac/Typora-0.11.18.dmg" target="_blank" rel="noopener">0.11.18</a>，官方其实还支持下载的。作为一个<code>Markdown</code>编辑器，还是良心推荐👍。</p>
+<p>————-更新————–</p>
+<p><code>Typora</code>官方已推强更，测试版不再可用。目前我的可选替代品包括VS Code及<a href="https://github.com/marktext/marktext#download-and-installation" target="_blank" rel="noopener">MarkText</a>。</p>
+<!-- 版本历史：https://typora.io/dev_release.html -->
+    </div>
+     
+    <div class="post-footer__meta"><p>更新于 2022-07-21</p></div> 
+    <div class="post-entry__tags"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+                <a href="/YCSymbolTracker-patch/" class="nav__link">
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M589.088 790.624L310.464 512l278.624-278.624 45.248 45.248L400.96 512l233.376 233.376z" fill="#808080"></path></svg>
+                    </div>
+                    <div>
+                        <div class="nav__label">
+                            Previous Post
+                        </div>
+                        <div class="nav__title">
+                            YCSymbolTracker打个小补丁
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/wireshark-plugin/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            Wireshark插件编写
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>评论</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: 'Ov23liI237QRAh3QEQ7t',
+                    clientSecret: '7aae7eddec07299442e6b5640b053d71fd0a39c2',
+                    repo: 'https://github.com/nscribble/comments.git',
+                    owner: 'nscribble',
+                    admin: 'nscribble',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>

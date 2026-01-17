@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    <!-- 渲染优化 -->
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!--icon-->
+
+    
+    
+    
+    
+    
+
+
+    <!-- meta -->
+
+
+<title>案例解析：一个符号引起的Crash | { }</title>
+
+
+    <meta name="keywords" content="技术/iOS/大前端">
+
+
+
+
+    <!-- OpenGraph -->
+ 
+    <meta name="description" content="分享一个跟符号链接相关的Crash，一个小问题，但是开发没有相关意识，甚至也没自测就上线了。虽然听着是有点离谱，但确实发生了也挺合(li)理(pu)的。 某次应用灰度期间出现了一个Crash，编译链接正常，运行时Crash：">
+<meta name="keywords" content="技术&#x2F;iOS&#x2F;大前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="案例解析：一个符号引起的Crash">
+<meta property="og:url" content="http://blog.sigtraps.com/mangling-symbol-crash/index.html">
+<meta property="og:site_name" content="{ }">
+<meta property="og:description" content="分享一个跟符号链接相关的Crash，一个小问题，但是开发没有相关意识，甚至也没自测就上线了。虽然听着是有点离谱，但确实发生了也挺合(li)理(pu)的。 某次应用灰度期间出现了一个Crash，编译链接正常，运行时Crash：">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2025-03-10T16:23:06.000Z">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="案例解析：一个符号引起的Crash">
+<meta name="twitter:description" content="分享一个跟符号链接相关的Crash，一个小问题，但是开发没有相关意识，甚至也没自测就上线了。虽然听着是有点离谱，但确实发生了也挺合(li)理(pu)的。 某次应用灰度期间出现了一个Crash，编译链接正常，运行时Crash：">
+
+
+    <link rel="stylesheet" href="/css/style/main.css"> 
+
+    
+    
+        <link rel="stylesheet" id="hl-default-theme" href="/css/highlight/default.css" media="none" onload="this.media='all'">
+        
+    
+
+    
+    
+
+    
+
+     
+
+    <!-- custom head -->
+
+</head>
+
+    <body>
+        <div id="app">
+            <header class="header">
+    <div class="header__left">
+        <a href="/" class="button">
+            <span class="logo__text">余的技术博客</span>
+        </a>
+    </div>
+    <div class="header__right">
+        
+            <div class="navbar__menus">
+                
+                    <a href="/" class="navbar-menu button">首页</a>
+                
+                    <a href="/archives/" class="navbar-menu button">归档</a>
+                
+                    <a href="/tags/" class="navbar-menu button">标签</a>
+                
+                    <a href="/about" class="navbar-menu button">关于</a>
+                
+            </div>
+        
+        
+        
+    <a href="/search/" id="btn-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="32"><path d="M192 448c0-141.152 114.848-256 256-256s256 114.848 256 256-114.848 256-256 256-256-114.848-256-256z m710.624 409.376l-206.88-206.88A318.784 318.784 0 0 0 768 448c0-176.736-143.264-320-320-320S128 271.264 128 448s143.264 320 320 320a318.784 318.784 0 0 0 202.496-72.256l206.88 206.88 45.248-45.248z"></path></svg>
+    </a>
+
+
+        
+        
+
+        
+            <a class="dropdown-icon button" id="btn-dropdown" tabindex="0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width='24' height='24' fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"><path fill="currentColor" d="M3.314,4.8h13.372c0.41,0,0.743-0.333,0.743-0.743c0-0.41-0.333-0.743-0.743-0.743H3.314c-0.41,0-0.743,0.333-0.743,0.743C2.571,4.467,2.904,4.8,3.314,4.8z M16.686,15.2H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,15.2,16.686,15.2z M16.686,9.257H3.314c-0.41,0-0.743,0.333-0.743,0.743s0.333,0.743,0.743,0.743h13.372c0.41,0,0.743-0.333,0.743-0.743S17.096,9.257,16.686,9.257z"></path></svg></a>
+            <div class="dropdown-menus" id="dropdown-menus">
+                
+                    <a href="/" class="dropdown-menu button">首页</a>
+                
+                    <a href="/archives/" class="dropdown-menu button">归档</a>
+                
+                    <a href="/tags/" class="dropdown-menu button">标签</a>
+                
+                    <a href="/about" class="dropdown-menu button">关于</a>
+                
+            </div>
+        
+    </div>
+</header>
+
+
+            <main class="main">
+    
+
+<div class="post-title">
+    <h1 class="post-title__text">
+        案例解析：一个符号引起的Crash
+    </h1>
+    <div class="post-title__meta">
+        <a href="/archives/2025/03/" class="post-meta__date button">2025-03-11</a>
+        
+ 
+        
+    
+    
+
+
+ 
+
+ 
+    </div>
+</div>
+
+
+
+<article class="post content-card">
+    <div class="post__header"></div>
+    <div class="post__content">
+        <p>分享一个跟符号链接相关的Crash，一个小问题，但是开发没有相关意识，甚至也没自测就上线了。虽然听着是有点离谱，但确实发生了也挺合(li)理(pu)的。</p>
+<p>某次应用灰度期间出现了一个Crash，编译链接正常，运行时Crash：</p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">SIGABRT:</span><br><span class="line">0 dyld  ___abort_with_payload + 8</span><br><span class="line">1 dyld  _abort_with_payload_wrapper_internal + 104</span><br><span class="line">2 dyld  _dyldVersionString + 0</span><br><span class="line">3 dyld  dyld4::halt(char const*, dyld4::StructuredError const*) + 300</span><br><span class="line">4 dyld  dyld4::APIs::_dyld_dlsym_blocked() + 0</span><br><span class="line">5 App -[KKMagicalManager handleResult:] (KKMagicalManager.mm:407)</span><br><span class="line">6 App __41-[KKMagicalManager seek:completion:]_block_invoke (KKMagicalManager.mm:626)</span><br><span class="line">7 libdispatch.dylib __dispatch_call_block_and_release + 32</span><br><span class="line">8 libdispatch.dylib __dispatch_client_callout + 20</span><br><span class="line">9 libdispatch.dylib __dispatch_lane_serial_drain + 744</span><br><span class="line">10 libdispatch.dylib __dispatch_lane_invoke + 380</span><br><span class="line">11 libdispatch.dylib         __dispatch_root_queue_drain_deferred_wlh + 288</span><br><span class="line">12 libdispatch.dylib         __dispatch_workloop_worker_thread + 540</span><br><span class="line">13 libsystem_pthread.dylib   __pthread_wqthread + 288</span><br></pre></td></tr></table></figure>
+<p>Crash原因比较明确，就是运行时符号缺失，dyld接管后直接abort了。</p>
+<p>Crash行的源码很简单，伪代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (NSError *)handleResult:(NSInterger)code &#123;</span><br><span class="line">    // ..</span><br><span class="line">    // KKMagicalManager.mm:626</span><br><span class="line">    NSError *error = KKMagicalMakeError(code, @&quot;&quot;);</span><br><span class="line"></span><br><span class="line">    return error;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>搜相关函数，其实是有实现的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// KKType.h</span><br><span class="line">NSError *KKMagicalMakeError(NSInteger code, NSString *fmt, ...) NS_FORMAT_FUNCTION(2, 3);</span><br><span class="line"></span><br><span class="line">// KKType.m</span><br><span class="line">NSError *_KKMagicalMakeError(NSInteger code, NSString *fmt, ...) &#123;</span><br><span class="line">    va_list args;</span><br><span class="line">    va_start(args, fmt);</span><br><span class="line">    NSString *message = [[NSString alloc] initWithFormat:fmt arguments:args];</span><br><span class="line">    va_end(args);</span><br><span class="line"></span><br><span class="line">    return [NSError errorWithDomain:@&quot;abc&quot; code:code userInfo:@&#123;&#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>灰度版本该函数确实有改动，原实现伪代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// KKType.h</span><br><span class="line">static NSError *_KKMagicalMakeError(NSInteger code, NSString *fmt, ...) &#123;</span><br><span class="line">    va_list args;</span><br><span class="line">    va_start(args, fmt);</span><br><span class="line">    NSString *message = [[NSString alloc] initWithFormat:fmt arguments:args];</span><br><span class="line">    va_end(args);</span><br><span class="line"></span><br><span class="line">    return [NSError errorWithDomain:@&quot;abc&quot; code:code userInfo:@&#123;&#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>看出是什么问题没，运行期怎么就找不到符号了呢？</p>
+<p>查看MachO的符号，如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">% nm App | grep KKMagicalVoiceMakeError</span><br><span class="line">0000000000f18fd8 T _KKMagicalVoiceMakeError</span><br><span class="line">0000000007c0a068 t _KKMagicalVoiceMakeError.island</span><br><span class="line">                 U __Z23KKMagicalVoiceMakeErrorlP8NSStringz</span><br><span class="line">0000000007c6c9bc t __Z23KKMagicalVoiceMakeErrorlP8NSStringz.island</span><br><span class="line">jason@JASONZXCHEN-MB2 QQKSong.app % echo __Z23KKMagicalVoiceMakeErrorlP8NSStringz | c++filt</span><br><span class="line">KKMagicalVoiceMakeError(long, NSString*, ...)</span><br><span class="line">jason@JASONZXCHEN-MB2 QQKSong.app %</span><br></pre></td></tr></table></figure></p>
+<p>明显_KSMagicalVoiceMakeError符号是存在的！那导致Crash的找不到的符号是什么呢？<br>很容易发现，上面nm输出中，确实有一个未定义的符号：<br>U __Z23KKMagicalVoiceMakeErrorlP8NSStringz<br>这个是经过name mangling的符号，demangle后是<code>KKMagicalVoiceMakeError(long, NSString*, ...)</code>。这个跟函数声明都是一致的，看着好像也都没什么毛病。</p>
+<p>等等，你肯定会想到了：<br>1、这里一个函数，为什么会生成了两个符号？<br>2、为什么发生了name mangling？<br>3、历史版本为什么没问题？</p>
+<p>我们回头看灰度版本修改的实现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// KKType.h</span><br><span class="line">NSError *KKMagicalMakeError(NSInteger code, NSString *fmt, ...) NS_FORMAT_FUNCTION(2, 3);</span><br><span class="line"></span><br><span class="line">// KKType.m</span><br><span class="line">NSError *_KKMagicalMakeError(NSInteger code, NSString *fmt, ...) &#123;</span><br><span class="line">    va_list args;</span><br><span class="line">    va_start(args, fmt);</span><br><span class="line">    NSString *message = [[NSString alloc] initWithFormat:fmt arguments:args];</span><br><span class="line">    va_end(args);</span><br><span class="line"></span><br><span class="line">    return [NSError errorWithDomain:@&quot;abc&quot; code:code userInfo:@&#123;&#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>name mangling是C++的典型的特性，主要是为了支持函数重载、命名空间等特性。而C通常不会发生name mangling。因此可以推测那就是这个函数是以C++的规则进行了编译。</p>
+<p>经过简单确认，可以发现，_KKMagicalMakeError这个函数有多处调用，有部分调用入口是.mm的文件中。这样很容易实锤了。回答上面的问题。<br>首先，因为.mm文件中通过引入KKType.h文件引用了该函数，因此编译时，.h声明的函数以C++的规则进行了编译，也就发生了name mangling；而KKType.m中函数_KKMagicalMakeError却是以C的规则进行编译，因此最终生成了两个符号。.h声明的符号实际上并没有对应的实现，因此对应符号在链接后成了一个Undefined的符号。<br>而历史实现，直接在.h文件中将该函数声明为static并实现，因此符号是统一的。</p>
+<p>修改方案就很简单，使用 extern “C”，这也是C/C++混编经常使用的、用来指定相关函数要以C的方式进行编译。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#if __cplusplus</span><br><span class="line">extern &quot;C&quot; &#123;</span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">NSError *_KSMagicalVoiceError(NSInteger code, NSString *fmt, ...) NS_FORMAT_FUNCTION(2, 3);</span><br><span class="line"></span><br><span class="line">#if __cplusplus</span><br><span class="line">&#125; //Extern C</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure></p>
+
+    </div>
+     
+    <div class="post-footer__meta"><p>更新于 2025-03-11</p></div> 
+    <div class="post-entry__tags"></div> 
+</article>
+
+
+    <div class="nav">
+        <div class="nav__prev">
+            
+        </div>
+        <div class="nav__next">
+            
+                <a href="/apple-news-2025/" class="nav__link">
+                    <div>
+                        <div class="nav__label">
+                            Next Post
+                        </div>
+                        <div class="nav__title">
+                            苹果新闻及更新公告（2025）
+                        </div>
+                    </div>
+                    <div>
+                        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M434.944 790.624l-45.248-45.248L623.04 512l-233.376-233.376 45.248-45.248L713.568 512z" fill="#808080"></path></svg>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+
+
+
+    <div class="post__comments content-card" id="comment">
+        
+    <h4>评论</h4>
+    
+    
+    
+    
+    
+    <div id="gitalk-container"></div>
+
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+
+
+
+</main>
+
+            <footer class="footer">
+     
+    <a href="#" class="button" id="b2t" aria-label="回到顶部" title="回到顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="32" height="32">
+            <path d="M233.376 722.752L278.624 768 512 534.624 745.376 768l45.248-45.248L512 444.128zM192 352h640V288H192z" fill="currentColor"></path>
+        </svg>
+    </a>
+
+    
+
+
+    
+     
+ 
+
+ 
+    
+    
+</footer>
+
+        </div>
+         
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+    
+ 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.4.1/dist/jquery.fancybox.min.js"></script>
+    <script>
+        let lazyloadT = Boolean('false'),
+            auto_fancybox = Boolean('false')
+        if (auto_fancybox) {
+            $(".post__content").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        } else {
+            $(".post__content").find("fancybox").find('img').each(function () {
+                var element = document.createElement("a");
+                $(element).attr("data-fancybox", "gallery");
+                $(element).attr("href", $(this).attr("src"));
+                if (lazyloadT) {
+                    $(element).attr("href", $(this).attr("data-srcset"));
+                }
+                $(this).wrap(element);
+            });
+        }
+    </script>
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+    
+
+    
+    
+    
+
+    
+    
+    
+    <script>
+        function loadComment() {
+            let e, i;
+            (e = document.createElement("script")).src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js',
+            document.body.appendChild(e);
+            e.onload = () => {
+                var gitalk = new Gitalk({
+                    clientID: 'Ov23liI237QRAh3QEQ7t',
+                    clientSecret: '7aae7eddec07299442e6b5640b053d71fd0a39c2',
+                    repo: 'https://github.com/nscribble/comments.git',
+                    owner: 'nscribble',
+                    admin: 'nscribble',
+                    id: window.location.pathname,
+                    distractionFreeMode: false
+                });
+                gitalk.render('gitalk-container');
+            };
+            (i = document.createElement("link")).rel = "stylesheet",
+            i.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css',
+            document.head.appendChild(i);
+        }
+    
+        var runningOnBrowser = typeof window !== "undefined";
+        var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+        var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    
+        setTimeout(function () {
+            if (!isBot && supportsIntersectionObserver) {
+                var comment_observer = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        loadComment();
+                        comment_observer.disconnect();
+                    }
+                }, { threshold: [0] });
+                comment_observer.observe(document.getElementById('comment'));
+            } else {
+                loadComment();
+            }
+        }, 1);
+    </script>
+
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+
+    </body>
+</html>
